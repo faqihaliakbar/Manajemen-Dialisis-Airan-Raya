@@ -235,7 +235,6 @@
                         </div>
                     </form>
                 </div>
-
                 <div class="bg-white rounded shadow p-6 mb-6">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="font-bold text-lg text-blue-800">Daftar Perawat</h3>
@@ -261,21 +260,27 @@
                         <div><label class="block text-gray-600">No. Registrasi</label><input type="text" id="psnReg" required class="w-full border p-2 rounded"></div>
                         <div><label class="block text-gray-600">No. RM</label><input type="text" id="psnRm" required class="w-full border p-2 rounded"></div>
                         <div><label class="block text-gray-600">Nama Lengkap</label><input type="text" id="psnNama" required class="w-full border p-2 rounded"></div>
+                        
                         <div><label class="block text-gray-600">Tanggal Lahir</label><input type="date" id="psnLahir" required class="w-full border p-2 rounded"></div>
+                        <div><label class="block text-gray-600">Umur (Tahun)</label><input type="number" id="psnUmur" class="w-full border p-2 rounded" placeholder="Otomatis" required></div>
+                        <div><label class="block text-gray-600">Tinggi Badan (cm)</label><input type="number" id="psnTinggi" class="w-full border p-2 rounded" required></div>
+                        
                         <div><label class="block text-gray-600">Jenis Kelamin</label>
                             <select id="psnJk" class="w-full border p-2 rounded"><option>Laki-laki</option><option>Perempuan</option></select>
                         </div>
                         <div><label class="block text-gray-600">Diagnosis</label><input type="text" id="psnDiag" required class="w-full border p-2 rounded"></div>
-                        <div class="col-span-2"><label class="block text-gray-600">Alamat</label><input type="text" id="psnAlamat" required class="w-full border p-2 rounded"></div>
+                        <div><label class="block text-gray-600">Alamat</label><input type="text" id="psnAlamat" required class="w-full border p-2 rounded"></div>
+                        
                         <div><label class="block text-gray-600">BB Kering (Kg)</label><input type="number" step="0.1" id="psnBb" required class="w-full border p-2 rounded"></div>
                         <div><label class="block text-gray-600">Jadwal Rutin</label>
                             <select id="psnJadwal" class="w-full border p-2 rounded"><option>Senin - Kamis</option><option>Selasa - Jumat</option><option>Rabu - Sabtu</option><option>Traveling</option></select>
                         </div>
                         <div><label class="block text-gray-600">Tanggal Ter-registrasi</label><input type="date" id="psnTglReg" required class="w-full border p-2 rounded"></div>
+                        
                         <div><label class="block text-gray-600">Status Pasien</label>
                             <select id="psnStatus" class="w-full border p-2 rounded"><option>Aktif</option><option>Tidak Aktif</option><option>Meninggal Dunia</option><option>Pindah</option></select>
                         </div>
-                        <div class="col-span-3 text-right">
+                        <div class="col-span-2 text-right mt-4">
                             <button type="button" onclick="resetFormPasien()" class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 mr-2">Batal</button>
                             <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"><i class="fas fa-save"></i> Simpan Pasien</button>
                         </div>
@@ -292,7 +297,7 @@
                     </div>
                     <div class="table-container">
                         <table class="w-full text-left border-collapse border">
-                            <thead><tr><th class="p-2 border">No RM</th><th class="p-2 border">Nama</th><th class="p-2 border">Diagnosis</th><th class="p-2 border">BB Kering</th><th class="p-2 border">Jadwal</th><th class="p-2 border">Status</th><th class="p-2 border text-center">Aksi</th></tr></thead>
+                            <thead><tr><th class="p-2 border">No RM</th><th class="p-2 border">Nama & Fisik</th><th class="p-2 border">Diagnosis</th><th class="p-2 border">BB Kering</th><th class="p-2 border">Jadwal</th><th class="p-2 border">Status</th><th class="p-2 border text-center">Aksi</th></tr></thead>
                             <tbody id="listPasien"></tbody>
                         </table>
                     </div>
@@ -360,7 +365,7 @@
                             </select>
                         </div>
 
-                        <div class="col-span-2 text-right">
+                        <div class="col-span-2 text-right mt-4">
                             <button type="button" onclick="resetFormJadwal()" class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 mr-2">Batal</button>
                             <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"><i class="fas fa-save"></i> Simpan Jadwal</button>
                         </div>
@@ -401,9 +406,13 @@
                         </div>
                         <div><label class="block text-gray-600">Jenis HD</label><select id="sesiJenis" class="w-full border p-2 rounded"><option>Reguler</option><option>Rutin</option><option>Inisiasi</option><option>Pre-Op</option></select></div>
                         
-                        <div><label class="block text-gray-600">Waktu (Jam)</label><input type="number" step="0.5" id="sesiWaktu" required class="w-full border p-2 rounded"></div>
-                        <div><label class="block text-gray-600">BB Pre HD (Kg)</label><input type="number" step="0.1" id="sesiPre" required class="w-full border p-2 rounded"></div>
-                        <div><label class="block text-gray-600">BB Post HD (Kg)</label><input type="number" step="0.1" id="sesiPost" required class="w-full border p-2 rounded"></div>
+                        <div><label class="block text-gray-600">Waktu (Jam)</label><input type="number" step="0.5" id="sesiWaktu" required class="w-full border p-2 rounded" oninput="calculateKtv()"></div>
+                        <div><label class="block text-gray-600">BB Pre HD (Kg)</label><input type="number" step="0.1" id="sesiPre" required class="w-full border p-2 rounded" oninput="calculateKtv()"></div>
+                        <div><label class="block text-gray-600">BB Post HD (Kg)</label><input type="number" step="0.1" id="sesiPost" required class="w-full border p-2 rounded" oninput="calculateKtv()"></div>
+                        
+                        <div><label class="block text-gray-600 text-blue-800 font-bold">Ureum Pre (mg/dL)</label><input type="number" step="0.1" id="sesiUreumPre" class="w-full border p-2 rounded bg-blue-50" oninput="calculateKtv()" placeholder="Isi untuk hitung Kt/V"></div>
+                        <div><label class="block text-gray-600 text-blue-800 font-bold">Ureum Post (mg/dL)</label><input type="number" step="0.1" id="sesiUreumPost" class="w-full border p-2 rounded bg-blue-50" oninput="calculateKtv()" placeholder="Isi untuk hitung Kt/V"></div>
+                        <div><label class="block text-green-700 font-bold">Hasil Kt/V Otomatis</label><input type="text" id="sesiKtv" readonly class="w-full border p-2 rounded bg-green-100 font-bold text-green-800" placeholder="Menunggu data..."></div>
                         
                         <div><label class="block text-gray-600">UF Goal</label><input type="number" step="0.1" id="sesiUf" required class="w-full border p-2 rounded"></div>
                         <div><label class="block text-gray-600">Qb</label><input type="number" id="sesiQb" required class="w-full border p-2 rounded"></div>
@@ -411,9 +420,9 @@
                         
                         <div><label class="block text-gray-600">Akses Vaskular</label><select id="sesiAkses" class="w-full border p-2 rounded"><option>Cimino</option><option>CDL</option><option>Femoral</option></select></div>
                         <div><label class="block text-gray-600">Heparin</label><select id="sesiHeparin" class="w-full border p-2 rounded"><option>Reguler</option><option>Minimal</option><option>Free</option></select></div>
-                        <div><label class="block text-gray-600">Catatan Tambahan</label><input type="text" id="sesiCatatan" class="w-full border p-2 rounded"></div>
+                        <div><label class="block text-gray-600">Catatan Tambahan</label><input type="text" id="sesiCatatan" class="w-full border p-2 rounded" placeholder="Keluhan / Observasi..."></div>
                         
-                        <div class="col-span-3 text-right">
+                        <div class="col-span-3 text-right mt-4">
                             <button type="button" onclick="resetFormSesi()" class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 mr-2">Batal</button>
                             <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"><i class="fas fa-save"></i> Simpan Sesi</button>
                         </div>
@@ -465,13 +474,11 @@
             sessions: JSON.parse(localStorage.getItem('rs_sessions')) || []
         };
 
-        // Buat Akun Admin Default jika belum ada
         if (db.users.length === 0) {
             db.users.push({username: 'admin', password: '1234', nama: 'Administrator', role: 'Admin', status: 'active', attempts: 0});
             localStorage.setItem('rs_users', JSON.stringify(db.users));
         }
 
-        // PATCH DATABASE LAMA UNTUK FITUR BARU (Status & Percobaan Login)
         let dataPatched = false;
         db.users.forEach(u => {
             if(!u.status) { u.status = 'active'; dataPatched = true; }
@@ -491,7 +498,37 @@
         document.getElementById('currentDate').innerText = new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
         document.getElementById('filterTglSesi').value = today;
 
-        // --- 2. LOGIC LOGIN, REGISTER & LIMIT ATTEMPT ---
+        // --- AUTOKALKULASI UMUR BERDASARKAN TGL LAHIR ---
+        document.getElementById('psnLahir').addEventListener('change', function() {
+            if(this.value) {
+                let birthDate = new Date(this.value);
+                let ageDifMs = Date.now() - birthDate.getTime();
+                let ageDate = new Date(ageDifMs);
+                document.getElementById('psnUmur').value = Math.abs(ageDate.getUTCFullYear() - 1970);
+            }
+        });
+
+        // --- FUNGSI AUTOKALKULASI Kt/V ---
+        function calculateKtv() {
+            let pre = parseFloat(document.getElementById('sesiPre').value) || 0;
+            let post = parseFloat(document.getElementById('sesiPost').value) || 0;
+            let waktu = parseFloat(document.getElementById('sesiWaktu').value) || 0;
+            let ureumPre = parseFloat(document.getElementById('sesiUreumPre').value) || 0;
+            let ureumPost = parseFloat(document.getElementById('sesiUreumPost').value) || 0;
+
+            if (ureumPre > 0 && ureumPost > 0 && waktu > 0 && post > 0) {
+                let r = ureumPost / ureumPre;
+                let uf = pre - post;
+                let w = post;
+                // Formula Daugirdas Generasi 2 untuk Kt/V
+                let ktv = -Math.log(r - 0.008 * waktu) + (4 - 3.5 * r) * (uf / w);
+                document.getElementById('sesiKtv').value = ktv.toFixed(2);
+            } else {
+                document.getElementById('sesiKtv').value = '';
+            }
+        }
+
+        // --- 2. LOGIC LOGIN & AUTH (Sama) ---
         function checkAuth() {
             if (!currentUser) {
                 document.getElementById('auth-overlay').classList.remove('hidden');
@@ -519,52 +556,29 @@
             let role = document.getElementById('regRole').value;
             let wrapSecretCode = document.getElementById('wrapSecretCode');
             let inputSecretCode = document.getElementById('regSecretCode');
-
-            if (role === 'Admin') {
-                wrapSecretCode.classList.remove('hidden');
-                inputSecretCode.setAttribute('required', 'true');
-            } else {
-                wrapSecretCode.classList.add('hidden');
-                inputSecretCode.removeAttribute('required');
-                inputSecretCode.value = '';
-            }
+            if (role === 'Admin') { wrapSecretCode.classList.remove('hidden'); inputSecretCode.setAttribute('required', 'true'); } 
+            else { wrapSecretCode.classList.add('hidden'); inputSecretCode.removeAttribute('required'); inputSecretCode.value = ''; }
         }
 
         function handleLogin(e) {
             e.preventDefault();
             let user = document.getElementById('loginUsername').value;
             let pass = document.getElementById('loginPassword').value;
-            
             let foundUser = db.users.find(u => u.username === user);
             
-            if (!foundUser) {
-                alert('GAGAL: Username tidak ditemukan dalam sistem!');
-                return;
-            }
-
-            // Cek status suspend
-            if (foundUser.status === 'suspended') {
-                alert('AKUN DITANGGUHKAN: Anda telah memasukkan password salah lebih dari 3 kali. Silakan hubungi Admin untuk membuka kunci akun.');
-                return;
-            }
-
-            // Cek password
+            if (!foundUser) return alert('GAGAL: Username tidak ditemukan dalam sistem!');
+            if (foundUser.status === 'suspended') return alert('AKUN DITANGGUHKAN: Anda telah memasukkan password salah lebih dari 3 kali.');
+            
             if (foundUser.password !== pass) {
                 foundUser.attempts += 1;
-                if (foundUser.attempts >= 3) {
-                    foundUser.status = 'suspended';
-                    alert('AKUN DITANGGUHKAN: Password salah 3 kali. Akun Anda telah dikunci demi keamanan.');
-                } else {
-                    alert(`GAGAL: Password salah! Sisa percobaan: ${3 - foundUser.attempts}`);
-                }
+                if (foundUser.attempts >= 3) { foundUser.status = 'suspended'; alert('AKUN DITANGGUHKAN: Password salah 3 kali.'); } 
+                else { alert(`GAGAL: Password salah! Sisa percobaan: ${3 - foundUser.attempts}`); }
                 localStorage.setItem('rs_users', JSON.stringify(db.users));
                 return;
             }
             
-            // Login Berhasil
-            foundUser.attempts = 0; // Reset percobaan
+            foundUser.attempts = 0;
             localStorage.setItem('rs_users', JSON.stringify(db.users));
-            
             currentUser = { username: foundUser.username, nama: foundUser.nama, role: foundUser.role };
             localStorage.setItem('rs_current_user', JSON.stringify(currentUser));
             document.getElementById('formLogin').reset();
@@ -578,48 +592,26 @@
             let pass = document.getElementById('regPassword').value;
             let role = document.getElementById('regRole').value;
 
-            if (db.users.find(u => u.username === username)) {
-                alert('Username/NIK sudah terdaftar!');
-                return;
-            }
-
+            if (db.users.find(u => u.username === username)) return alert('Username/NIK sudah terdaftar!');
             if (role === 'Admin') {
-                let secretCode = document.getElementById('regSecretCode').value;
-                if (secretCode !== 'jangandaftardisini') {
-                    alert('GAGAL: Kode Rahasia Admin tidak valid!');
-                    return; 
-                }
+                if (document.getElementById('regSecretCode').value !== 'jangandaftardisini') return alert('GAGAL: Kode Rahasia Admin tidak valid!');
             }
 
-            let newUser = { username, password: pass, nama, role, status: 'active', attempts: 0 };
-            db.users.push(newUser);
+            db.users.push({ username, password: pass, nama, role, status: 'active', attempts: 0 });
             localStorage.setItem('rs_users', JSON.stringify(db.users));
-            
             alert(`Pendaftaran berhasil! Akun ${role} Anda telah aktif. Silakan login.`);
-            
-            toggleAuthForm('login');
-            document.getElementById('formRegister').reset();
-            toggleSecretCode(); 
+            toggleAuthForm('login'); document.getElementById('formRegister').reset(); toggleSecretCode(); 
         }
 
-        function handleLogout() {
-            currentUser = null;
-            localStorage.removeItem('rs_current_user');
-            checkAuth();
-        }
+        function handleLogout() { currentUser = null; localStorage.removeItem('rs_current_user'); checkAuth(); }
 
         function applyRoleUI() {
             document.getElementById('userInfoDisplay').innerHTML = `<strong>${currentUser.nama}</strong><br>(${currentUser.role})`;
-            
             let adminOnlyElements = document.querySelectorAll('.admin-only');
             if (currentUser.role === 'Perawat') {
                 adminOnlyElements.forEach(el => el.style.display = 'none');
-                if (['akun', 'pasien', 'perawat', 'jadwal'].includes(document.querySelector('.page-section.active').id)) {
-                    switchPage('dashboard', document.getElementById('nav-dashboard'));
-                }
-            } else {
-                adminOnlyElements.forEach(el => el.style.display = 'block');
-            }
+                if (['akun', 'pasien', 'perawat', 'jadwal'].includes(document.querySelector('.page-section.active').id)) switchPage('dashboard', document.getElementById('nav-dashboard'));
+            } else { adminOnlyElements.forEach(el => el.style.display = 'block'); }
         }
 
         // --- 3. KODE SISTEM UTAMA & CRUD ---
@@ -628,7 +620,6 @@
             document.getElementById(pageId).classList.add('active');
             document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('nav-active'));
             if(element) element.classList.add('nav-active');
-            
             const titles = { 'dashboard': 'Dashboard Utama', 'akun': 'Manajemen Akun Sistem', 'pasien': 'Master Data Pasien', 'perawat': 'Data Perawat', 'jadwal': 'Jadwal Harian', 'registrasi': 'Registrasi Sesi Harian' };
             document.getElementById('pageTitle').innerText = titles[pageId];
             refreshUI();
@@ -643,83 +634,37 @@
             refreshUI();
         }
 
-        // --- CRUD MANAJEMEN AKUN ---
-        function setEditAkun(username) {
-            let u = db.users.find(x => x.username === username);
-            if(u) {
-                document.getElementById('formEditAkunContainer').classList.remove('hidden');
-                document.getElementById('editOldUsername').value = u.username;
-                document.getElementById('editUsername').value = u.username;
-                document.getElementById('editNama').value = u.nama;
-                document.getElementById('editPassword').value = ''; // Kosongkan
-                document.getElementById('editRole').value = u.role;
-                window.scrollTo(0, 0);
-            }
-        }
+        // --- CRUD MANAJEMEN AKUN (Sama) ---
+        function setEditAkun(username) { let u = db.users.find(x => x.username === username); if(u) { document.getElementById('formEditAkunContainer').classList.remove('hidden'); document.getElementById('editOldUsername').value = u.username; document.getElementById('editUsername').value = u.username; document.getElementById('editNama').value = u.nama; document.getElementById('editPassword').value = ''; document.getElementById('editRole').value = u.role; window.scrollTo(0, 0); } }
+        function batalEditAkun() { document.getElementById('formEditAkunContainer').classList.add('hidden'); document.getElementById('formEditAkun').reset(); }
+        function saveEditAkun(e) { e.preventDefault(); let oldUser = document.getElementById('editOldUsername').value; let index = db.users.findIndex(x => x.username === oldUser); if(index !== -1) { db.users[index].nama = document.getElementById('editNama').value; db.users[index].role = document.getElementById('editRole').value; let newPass = document.getElementById('editPassword').value; if(newPass.trim() !== "") db.users[index].password = newPass; if(oldUser === currentUser.username) { currentUser.nama = db.users[index].nama; currentUser.role = db.users[index].role; localStorage.setItem('rs_current_user', JSON.stringify(currentUser)); applyRoleUI(); } saveData(); batalEditAkun(); alert('Akun berhasil di-update!'); } }
+        function hapusAkun(username) { if(username === currentUser.username) return alert('GAGAL: Anda tidak boleh menghapus akun Anda sendiri saat sedang login!'); if(confirm(`Yakin ingin menghapus akun pengguna "${username}"?`)) { db.users = db.users.filter(x => x.username !== username); saveData(); } }
+        function aktifkanAkun(username) { let u = db.users.find(x => x.username === username); if(u && confirm(`Yakin ingin mengaktifkan kembali akun "${username}"?`)) { u.status = 'active'; u.attempts = 0; saveData(); alert(`Akun "${username}" telah diaktifkan kembali!`); } }
 
-        function batalEditAkun() {
-            document.getElementById('formEditAkunContainer').classList.add('hidden');
-            document.getElementById('formEditAkun').reset();
-        }
-
-        function saveEditAkun(e) {
-            e.preventDefault();
-            let oldUser = document.getElementById('editOldUsername').value;
-            let index = db.users.findIndex(x => x.username === oldUser);
-            
-            if(index !== -1) {
-                db.users[index].nama = document.getElementById('editNama').value;
-                db.users[index].role = document.getElementById('editRole').value;
-                
-                let newPass = document.getElementById('editPassword').value;
-                if(newPass.trim() !== "") {
-                    db.users[index].password = newPass; // Update password jika diisi
-                }
-                
-                // Jika sedang mengedit diri sendiri, perbarui data login saat ini
-                if(oldUser === currentUser.username) {
-                    currentUser.nama = db.users[index].nama;
-                    currentUser.role = db.users[index].role;
-                    localStorage.setItem('rs_current_user', JSON.stringify(currentUser));
-                    applyRoleUI();
-                }
-                
-                saveData();
-                batalEditAkun();
-                alert('Akun berhasil di-update!');
-            }
-        }
-
-        function hapusAkun(username) {
-            if(username === currentUser.username) {
-                alert('GAGAL: Anda tidak boleh menghapus akun Anda sendiri saat sedang login!');
-                return;
-            }
-            if(confirm(`Yakin ingin menghapus akun pengguna "${username}"?`)) {
-                db.users = db.users.filter(x => x.username !== username);
-                saveData();
-            }
-        }
-
-        function aktifkanAkun(username) {
-            let u = db.users.find(x => x.username === username);
-            if(u && confirm(`Yakin ingin mengaktifkan kembali akun "${username}"?`)) {
-                u.status = 'active';
-                u.attempts = 0;
-                saveData();
-                alert(`Akun "${username}" telah diaktifkan kembali!`);
-            }
-        }
-
-        // --- CRUD LAINNYA (Perawat, Pasien, Jadwal, Sesi) ---
-        // (Sama seperti sebelumnya)
+        // --- CRUD PERAWAT (Sama) ---
         function savePerawat(e) { e.preventDefault(); let id = document.getElementById('prwId').value; let data = { nama: document.getElementById('prwNama').value, nik: document.getElementById('prwNik').value, telp: document.getElementById('prwTelp').value, jabatan: document.getElementById('prwJabatan').value, pendidikan: document.getElementById('prwPendidikan').value }; if(id) { let index = db.nurses.findIndex(x => x.id === id); if(index !== -1) db.nurses[index] = { ...db.nurses[index], ...data }; } else { data.id = Date.now().toString(); db.nurses.push(data); } resetFormPerawat(); saveData(); alert('Data Perawat Berhasil Disimpan!'); }
         function editPerawat(id) { let p = db.nurses.find(x => x.id === id); if(p) { document.getElementById('prwId').value = p.id; document.getElementById('prwNama').value = p.nama; document.getElementById('prwNik').value = p.nik; document.getElementById('prwTelp').value = p.telp; document.getElementById('prwJabatan').value = p.jabatan; document.getElementById('prwPendidikan').value = p.pendidikan; window.scrollTo(0, 0); } }
         function hapusPerawat(id) { if(confirm('Yakin ingin menghapus perawat ini?')) { db.nurses = db.nurses.filter(x => x.id !== id); saveData(); } }
         function resetFormPerawat() { document.getElementById('formPerawat').reset(); document.getElementById('prwId').value = ''; }
         
-        function savePasien(e) { e.preventDefault(); let id = document.getElementById('psnId').value; let data = { reg: document.getElementById('psnReg').value, rm: document.getElementById('psnRm').value, nama: document.getElementById('psnNama').value, lahir: document.getElementById('psnLahir').value, jk: document.getElementById('psnJk').value, diag: document.getElementById('psnDiag').value, alamat: document.getElementById('psnAlamat').value, bb: document.getElementById('psnBb').value, jadwal: document.getElementById('psnJadwal').value, tglReg: document.getElementById('psnTglReg').value, status: document.getElementById('psnStatus').value }; if(id) { let index = db.patients.findIndex(x => x.id === id); if(index !== -1) db.patients[index] = { ...db.patients[index], ...data }; } else { data.id = Date.now().toString(); db.patients.push(data); } resetFormPasien(); saveData(); alert('Data Pasien Berhasil Disimpan!'); }
-        function editPasien(id) { let p = db.patients.find(x => x.id === id); if(p) { document.getElementById('psnId').value = p.id; document.getElementById('psnReg').value = p.reg; document.getElementById('psnRm').value = p.rm; document.getElementById('psnNama').value = p.nama; document.getElementById('psnLahir').value = p.lahir; document.getElementById('psnJk').value = p.jk; document.getElementById('psnDiag').value = p.diag; document.getElementById('psnAlamat').value = p.alamat; document.getElementById('psnBb').value = p.bb; document.getElementById('psnJadwal').value = p.jadwal; document.getElementById('psnTglReg').value = p.tglReg; document.getElementById('psnStatus').value = p.status; window.scrollTo(0, 0); } }
+        // --- CRUD PASIEN ---
+        function savePasien(e) { 
+            e.preventDefault(); 
+            let id = document.getElementById('psnId').value; 
+            let data = { 
+                reg: document.getElementById('psnReg').value, rm: document.getElementById('psnRm').value, 
+                nama: document.getElementById('psnNama').value, lahir: document.getElementById('psnLahir').value, 
+                umur: document.getElementById('psnUmur').value, tinggi: document.getElementById('psnTinggi').value, // Simpan Data Tinggi & Umur
+                jk: document.getElementById('psnJk').value, diag: document.getElementById('psnDiag').value, 
+                alamat: document.getElementById('psnAlamat').value, bb: document.getElementById('psnBb').value, 
+                jadwal: document.getElementById('psnJadwal').value, tglReg: document.getElementById('psnTglReg').value, 
+                status: document.getElementById('psnStatus').value 
+            }; 
+            if(id) { let index = db.patients.findIndex(x => x.id === id); if(index !== -1) db.patients[index] = { ...db.patients[index], ...data }; } 
+            else { data.id = Date.now().toString(); db.patients.push(data); } 
+            resetFormPasien(); saveData(); alert('Data Pasien Berhasil Disimpan!'); 
+        }
+        function editPasien(id) { let p = db.patients.find(x => x.id === id); if(p) { document.getElementById('psnId').value = p.id; document.getElementById('psnReg').value = p.reg; document.getElementById('psnRm').value = p.rm; document.getElementById('psnNama').value = p.nama; document.getElementById('psnLahir').value = p.lahir; document.getElementById('psnUmur').value = p.umur || ''; document.getElementById('psnTinggi').value = p.tinggi || ''; document.getElementById('psnJk').value = p.jk; document.getElementById('psnDiag').value = p.diag; document.getElementById('psnAlamat').value = p.alamat; document.getElementById('psnBb').value = p.bb; document.getElementById('psnJadwal').value = p.jadwal; document.getElementById('psnTglReg').value = p.tglReg; document.getElementById('psnStatus').value = p.status; window.scrollTo(0, 0); } }
         function hapusPasien(id) { if(confirm('Yakin ingin menghapus pasien ini?')) { db.patients = db.patients.filter(x => x.id !== id); saveData(); } }
         function resetFormPasien() { document.getElementById('formPasien').reset(); document.getElementById('psnId').value = ''; }
 
@@ -731,123 +676,99 @@
         function hapusJadwal(id) { if(confirm('Yakin ingin menghapus jadwal ini?')) { db.schedules = db.schedules.filter(x => x.id !== id); saveData(); } }
 
         function autoFillSesi() { let pId = document.getElementById('sesiPasien').value; if(pId.startsWith('manual_')) { let sId = pId.replace('manual_', ''); let j = db.schedules.find(x => x.id === sId); if(j) { document.getElementById('sesiRm').value = j.rm; let ket = j.keterangan ? ` - ${j.keterangan}` : ''; document.getElementById('sesiRiwayat').value = "Rawat Inap (" + j.asal + ")" + ket; document.getElementById('sesiBbKering').value = "-"; document.getElementById('sesiTgl').value = today; document.getElementById('sesiMesin').value = 'Rawat Inap'; document.getElementById('sesiAkses').value = j.akses || 'Cimino'; } } else { let p = db.patients.find(x => x.id === pId); if(p) { document.getElementById('sesiRm').value = p.rm; document.getElementById('sesiRiwayat').value = p.diag; document.getElementById('sesiBbKering').value = p.bb; document.getElementById('sesiTgl').value = today; let j = db.schedules.find(x => x.patientId === pId && x.date === today); if(j && j.mesin) document.getElementById('sesiMesin').value = j.mesin; } else { ['sesiRm', 'sesiRiwayat', 'sesiBbKering'].forEach(id => document.getElementById(id).value = ''); } } }
-        function saveSesi(e) { e.preventDefault(); let id = document.getElementById('sesiId').value; let data = { patientId: document.getElementById('sesiPasien').value, tgl: document.getElementById('sesiTgl').value, mesin: document.getElementById('sesiMesin').value, jenis: document.getElementById('sesiJenis').value, waktu: document.getElementById('sesiWaktu').value, pre: document.getElementById('sesiPre').value, post: document.getElementById('sesiPost').value, uf: document.getElementById('sesiUf').value, qb: document.getElementById('sesiQb').value, qd: document.getElementById('sesiQd').value, akses: document.getElementById('sesiAkses').value, heparin: document.getElementById('sesiHeparin').value, catatan: document.getElementById('sesiCatatan').value }; if(id) { let index = db.sessions.findIndex(x => x.id === id); if(index !== -1) db.sessions[index] = { ...db.sessions[index], ...data }; } else { data.id = Date.now().toString() + Math.floor(Math.random()*1000); db.sessions.push(data); } resetFormSesi(); saveData(); alert('Sesi HD Berhasil Disimpan!'); }
+        
+        // --- CRUD SESI HARIAN HD ---
+        function saveSesi(e) { 
+            e.preventDefault(); 
+            let id = document.getElementById('sesiId').value; 
+            
+            // Menggabungkan Catatan dengan Kt/V secara otomatis
+            let hasilKtv = document.getElementById('sesiKtv').value;
+            let catatanManual = document.getElementById('sesiCatatan').value;
+            let catatanFinal = catatanManual;
+            if (hasilKtv) {
+                catatanFinal = catatanManual ? `${catatanManual} | Info Tambahan: Kt/V Tercapai = ${hasilKtv}` : `Info Tambahan: Kt/V Tercapai = ${hasilKtv}`;
+            }
+
+            let data = { 
+                patientId: document.getElementById('sesiPasien').value, tgl: document.getElementById('sesiTgl').value, 
+                mesin: document.getElementById('sesiMesin').value, jenis: document.getElementById('sesiJenis').value, 
+                waktu: document.getElementById('sesiWaktu').value, pre: document.getElementById('sesiPre').value, 
+                post: document.getElementById('sesiPost').value, uf: document.getElementById('sesiUf').value, 
+                qb: document.getElementById('sesiQb').value, qd: document.getElementById('sesiQd').value, 
+                ureumPre: document.getElementById('sesiUreumPre').value, ureumPost: document.getElementById('sesiUreumPost').value, 
+                ktv: hasilKtv,
+                akses: document.getElementById('sesiAkses').value, heparin: document.getElementById('sesiHeparin').value, 
+                catatan: catatanFinal 
+            }; 
+            if(id) { let index = db.sessions.findIndex(x => x.id === id); if(index !== -1) db.sessions[index] = { ...db.sessions[index], ...data }; } 
+            else { data.id = Date.now().toString() + Math.floor(Math.random()*1000); db.sessions.push(data); } 
+            resetFormSesi(); saveData(); alert('Sesi HD Berhasil Disimpan!'); 
+        }
         function hapusSesi(id) { if(confirm('Yakin ingin menghapus sesi ini?')) { db.sessions = db.sessions.filter(x => x.id !== id); saveData(); } }
         function resetFormSesi() { document.getElementById('formSesi').reset(); document.getElementById('sesiId').value = ''; }
 
-        // Fitur Export & Print (Hanya Perawat, Pasien, Sesi)
         function getPrintExportData(type) {
-            let headers = [], data = [], title = "";
-            let tglFilter = document.getElementById('filterTglSesi').value || today;
+            let headers = [], data = [], title = ""; let tglFilter = document.getElementById('filterTglSesi').value || today;
             if (type === 'perawat') { title = "Data Perawat Dialisis RS Airan Raya"; headers = ["Nama", "NIK", "Jabatan", "Pendidikan", "No. Telepon"]; data = db.nurses.map(n => [n.nama, n.nik, n.jabatan, n.pendidikan, n.telp]); }
-            else if (type === 'pasien') { title = "Master Data Pasien Dialisis RS Airan Raya"; headers = ["No Reg", "No RM", "Nama Lengkap", "Tanggal Lahir", "Diagnosis", "BB Kering", "Jadwal", "Status"]; data = db.patients.map(p => [p.reg, p.rm, p.nama, p.lahir, p.diag, p.bb, p.jadwal, p.status]); }
-            else if (type === 'sesi') { title = "Riwayat Sesi Hemodialisis Tanggal " + tglFilter; headers = ["Mesin", "No RM", "Nama Pasien", "Jenis HD", "Waktu", "BB Pre", "BB Post", "UF Goal", "Qb", "Qd", "Akses", "Heparin"]; data = db.sessions.filter(s => s.tgl === tglFilter).map(s => { let nama = "-", rm = "-"; if(s.patientId.startsWith('manual_')) { let j = db.schedules.find(x => x.id === s.patientId.replace('manual_', '')); if(j){ nama = j.nama + " (Ranap)"; rm = j.rm; } } else { let p = db.patients.find(x => x.id === s.patientId); if(p){ nama = p.nama; rm = p.rm; } } return [s.mesin || '-', rm, nama, s.jenis, s.waktu, s.pre, s.post, s.uf, s.qb, s.qd, s.akses, s.heparin]; }); }
+            else if (type === 'pasien') { title = "Master Data Pasien Dialisis RS Airan Raya"; headers = ["No Reg", "No RM", "Nama Lengkap", "Tinggi/Umur", "Diagnosis", "BB Kering", "Jadwal", "Status"]; data = db.patients.map(p => [p.reg, p.rm, p.nama, `${p.tinggi||'-'}cm/${p.umur||'-'}th`, p.diag, p.bb, p.jadwal, p.status]); }
+            else if (type === 'sesi') { title = "Riwayat Sesi Hemodialisis Tanggal " + tglFilter; headers = ["Mesin", "No RM", "Nama Pasien", "Jenis HD", "Waktu", "BB Pre", "BB Post", "UF Goal", "Qb", "Qd", "Kt/V", "Catatan"]; data = db.sessions.filter(s => s.tgl === tglFilter).map(s => { let nama = "-", rm = "-"; if(s.patientId.startsWith('manual_')) { let j = db.schedules.find(x => x.id === s.patientId.replace('manual_', '')); if(j){ nama = j.nama + " (Ranap)"; rm = j.rm; } } else { let p = db.patients.find(x => x.id === s.patientId); if(p){ nama = p.nama; rm = p.rm; } } return [s.mesin || '-', rm, nama, s.jenis, s.waktu, s.pre, s.post, s.uf, s.qb, s.qd, s.ktv || '-', s.catatan || '-']; }); }
             return { title, headers, data };
         }
         function exportExcel(type) { const { title, headers, data } = getPrintExportData(type); if(data.length === 0) return alert("Tidak ada data untuk diexport!"); let csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\n" + data.map(e => e.map(item => `"${item}"`).join(",")).join("\n"); let encodedUri = encodeURI(csvContent); let link = document.createElement("a"); link.setAttribute("href", encodedUri); link.setAttribute("download", `${title.replace(/ /g, "_")}.csv`); document.body.appendChild(link); link.click(); document.body.removeChild(link); }
         function printData(type) { const { title, headers, data } = getPrintExportData(type); if(data.length === 0) return alert("Tidak ada data untuk dicetak!"); let printWindow = window.open('', '', 'height=600,width=800'); printWindow.document.write(`<html><head><title>${title}</title><style> body { font-family: Arial, sans-serif; padding: 20px; } h2 { text-align: center; } table { width: 100%; border-collapse: collapse; margin-top: 20px; } th, td { border: 1px solid #000; padding: 8px; text-align: left; font-size: 12px; } th { background-color: #f2f2f2; } </style></head><body><h2>${title}</h2><p>Dicetak pada: ${today}</p><table><thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${data.map(row => `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`).join('')}</tbody></table></body></html>`); printWindow.document.close(); setTimeout(() => { printWindow.print(); }, 500); }
 
-        // UI Refresher Utama
         function refreshUI() {
             if (!currentUser) return;
-
-            // Render Tabel Akun
             document.getElementById('listAkun').innerHTML = db.users.map(u => {
                 let st = u.status === 'suspended' ? `<span class="bg-red-100 text-red-700 px-2 py-1 rounded text-xs font-bold">Ditangguhkan</span>` : `<span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs">Aktif</span>`;
                 let att = u.status === 'suspended' ? '-' : `${u.attempts || 0}/3 Gagal`;
                 let actionBtns = `<button onclick="setEditAkun('${u.username}')" class="text-blue-500 hover:text-blue-700 mr-2" title="Edit Akun"><i class="fas fa-edit"></i></button>`;
-                
-                if (u.status === 'suspended') {
-                    actionBtns += `<button onclick="aktifkanAkun('${u.username}')" class="text-green-500 hover:text-green-700 mr-2" title="Aktifkan Semula"><i class="fas fa-unlock"></i></button>`;
-                }
-                
-                if (u.username !== currentUser.username) {
-                    actionBtns += `<button onclick="hapusAkun('${u.username}')" class="text-red-500 hover:text-red-700" title="Hapus"><i class="fas fa-trash"></i></button>`;
-                }
-                
-                return `<tr>
-                    <td class="p-2 border font-bold">${u.username}</td>
-                    <td class="p-2 border">${u.nama}</td>
-                    <td class="p-2 border">${u.role}</td>
-                    <td class="p-2 border">${st} <div class="text-[10px] text-gray-500 mt-1">${att}</div></td>
-                    <td class="p-2 border text-center">${actionBtns}</td>
-                </tr>`;
+                if (u.status === 'suspended') actionBtns += `<button onclick="aktifkanAkun('${u.username}')" class="text-green-500 hover:text-green-700 mr-2" title="Aktifkan Semula"><i class="fas fa-unlock"></i></button>`;
+                if (u.username !== currentUser.username) actionBtns += `<button onclick="hapusAkun('${u.username}')" class="text-red-500 hover:text-red-700" title="Hapus"><i class="fas fa-trash"></i></button>`;
+                return `<tr><td class="p-2 border font-bold">${u.username}</td><td class="p-2 border">${u.nama}</td><td class="p-2 border">${u.role}</td><td class="p-2 border">${st} <div class="text-[10px] text-gray-500 mt-1">${att}</div></td><td class="p-2 border text-center">${actionBtns}</td></tr>`;
             }).join('');
 
-            // Dropdown Setup
             document.getElementById('jdwPerawat').innerHTML = '<option value="">-- Pilih Perawat --</option>' + db.nurses.map(n => `<option value="${n.id}">${n.nama}</option>`).join('');
             let optPsn = '<option value="">-- Pilih --</option>' + db.patients.map(p => `<option value="${p.id}">${p.nama} (${p.rm})</option>`).join('');
             document.getElementById('jdwPasien').innerHTML = optPsn; 
-            
-            let optSesi = optPsn;
-            let todayRanap = db.schedules.filter(s => s.date === today && s.isManual);
-            if(todayRanap.length > 0) {
-                optSesi += '<optgroup label="Pasien Rawat Inap (Hari Ini)">';
-                todayRanap.forEach(s => { optSesi += `<option value="manual_${s.id}">${s.nama} (${s.rm}) - ${s.asal}</option>`; });
-                optSesi += '</optgroup>';
-            }
+            let optSesi = optPsn; let todayRanap = db.schedules.filter(s => s.date === today && s.isManual);
+            if(todayRanap.length > 0) { optSesi += '<optgroup label="Pasien Rawat Inap (Hari Ini)">'; todayRanap.forEach(s => { optSesi += `<option value="manual_${s.id}">${s.nama} (${s.rm}) - ${s.asal}</option>`; }); optSesi += '</optgroup>'; }
             document.getElementById('sesiPasien').innerHTML = optSesi;
 
-            // Tabel Data Master
             document.getElementById('listPerawat').innerHTML = db.nurses.map(n => `<tr><td class="p-2 border">${n.nama}</td><td class="p-2 border">${n.nik}</td><td class="p-2 border">${n.jabatan}</td><td class="p-2 border">${n.pendidikan}</td><td class="p-2 border">${n.telp}</td><td class="p-2 border text-center"><button onclick="editPerawat('${n.id}')" class="text-blue-500 hover:text-blue-700 mr-2"><i class="fas fa-edit"></i></button><button onclick="hapusPerawat('${n.id}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button></td></tr>`).join('') || '<tr><td colspan="6" class="p-2 text-center text-gray-500">Belum ada data</td></tr>';
-            document.getElementById('listPasien').innerHTML = db.patients.map(p => `<tr><td class="p-2 border">${p.rm}</td><td class="p-2 border">${p.nama}</td><td class="p-2 border">${p.diag}</td><td class="p-2 border">${p.bb}</td><td class="p-2 border">${p.jadwal}</td><td class="p-2 border">${p.status}</td><td class="p-2 border text-center"><button onclick="editPasien('${p.id}')" class="text-blue-500 hover:text-blue-700 mr-2"><i class="fas fa-edit"></i></button><button onclick="hapusPasien('${p.id}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button></td></tr>`).join('') || '<tr><td colspan="7" class="p-2 text-center text-gray-500">Belum ada data</td></tr>';
             
-            // Riwayat Sesi
-            let filterTgl = document.getElementById('filterTglSesi').value;
-            let filteredSesi = db.sessions.filter(s => s.tgl === filterTgl);
+            // Tambah Render Tinggi/Umur di Master Pasien
+            document.getElementById('listPasien').innerHTML = db.patients.map(p => `<tr><td class="p-2 border">${p.rm}</td><td class="p-2 border">${p.nama} <div class="text-[10px] text-gray-500 font-semibold">${p.tinggi||'-'} cm / ${p.umur||'-'} Thn</div></td><td class="p-2 border">${p.diag}</td><td class="p-2 border">${p.bb}</td><td class="p-2 border">${p.jadwal}</td><td class="p-2 border">${p.status}</td><td class="p-2 border text-center"><button onclick="editPasien('${p.id}')" class="text-blue-500 hover:text-blue-700 mr-2"><i class="fas fa-edit"></i></button><button onclick="hapusPasien('${p.id}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button></td></tr>`).join('') || '<tr><td colspan="7" class="p-2 text-center text-gray-500">Belum ada data</td></tr>';
+            
+            let filterTgl = document.getElementById('filterTglSesi').value; let filteredSesi = db.sessions.filter(s => s.tgl === filterTgl);
             const generateSesiRow = (s) => {
-                let nama = "-";
-                if(s.patientId.startsWith('manual_')) { let j = db.schedules.find(x => x.id === s.patientId.replace('manual_', '')); if(j) nama = j.nama + " <span class='text-blue-500'>(Ranap)</span>"; } else { let p = db.patients.find(x => x.id === s.patientId); if(p) nama = p.nama; }
-                let detailHD = `Jenis: <span class="font-semibold">${s.jenis}</span> | Waktu: <span class="font-semibold">${s.waktu} Jam</span><br>UFG: <span class="font-semibold text-blue-600">${s.uf}</span> | Qb: <span class="font-semibold">${s.qb}</span> | Qd: <span class="font-semibold">${s.qd}</span>`;
+                let nama = "-"; if(s.patientId.startsWith('manual_')) { let j = db.schedules.find(x => x.id === s.patientId.replace('manual_', '')); if(j) nama = j.nama + " <span class='text-blue-500'>(Ranap)</span>"; } else { let p = db.patients.find(x => x.id === s.patientId); if(p) nama = p.nama; }
+                
+                // Indikator Kt/V di dalam UI Sesi
+                let badgeKtv = s.ktv ? ` | Kt/V: <span class="font-bold bg-green-200 text-green-800 px-1 rounded">${s.ktv}</span>` : '';
+                let detailHD = `Jenis: <span class="font-semibold">${s.jenis}</span> | Waktu: <span class="font-semibold">${s.waktu} Jam</span><br>UFG: <span class="font-semibold text-blue-600">${s.uf}</span> | Qb: <span class="font-semibold">${s.qb}</span> | Qd: <span class="font-semibold">${s.qd}</span>${badgeKtv}<br><span class="text-gray-500 italic block mt-1"><i class="fas fa-comment-medical text-blue-400"></i> ${s.catatan || '-'}</span>`;
+                
                 return `<tr><td class="p-2 border"><div class="font-bold text-sm">${nama}</div><div class="text-[10px] text-gray-500">${s.mesin || '-'} | Akses: ${s.akses}</div></td><td class="p-2 border"><div class="mb-1 border-b border-gray-100 pb-1 text-[11px] font-semibold text-gray-600">Pre: ${s.pre} Kg | Post: ${s.post} Kg</div><div class="text-[11px] leading-relaxed text-gray-700">${detailHD}</div></td><td class="p-2 border text-center align-middle"><button onclick="hapusSesi('${s.id}')" class="text-red-500 hover:text-red-700 bg-red-50 px-2 py-1 rounded"><i class="fas fa-trash"></i></button></td></tr>`;
             };
             document.getElementById('listSesiNipro').innerHTML = filteredSesi.filter(s => s.mesin === 'Nipro').map(generateSesiRow).join('') || '<tr><td colspan="3" class="p-2 text-center text-gray-500">Belum ada data di tanggal ini</td></tr>';
             document.getElementById('listSesiFresenius').innerHTML = filteredSesi.filter(s => s.mesin !== 'Nipro').map(generateSesiRow).join('') || '<tr><td colspan="3" class="p-2 text-center text-gray-500">Belum ada data di tanggal ini</td></tr>';
 
-            // Jadwal
-            document.getElementById('listJadwalHarian').innerHTML = db.schedules.filter(s => s.date === today).map(s => {
-                let nama = s.isManual ? s.nama : (db.patients.find(x => x.id === s.patientId)?.nama || '-');
-                let rm = s.isManual ? s.rm : (db.patients.find(x => x.id === s.patientId)?.rm || '-');
-                let st = s.status || 'Menunggu'; let shift = s.shift || '-'; let pj = db.nurses.find(x => x.id === s.perawatId)?.nama || '-';
-                let ketRawatInap = s.isManual ? `<div class="text-xs text-gray-500">Akses: ${s.akses || '-'} | Ket: ${s.keterangan || '-'}</div>` : '';
-                return `<tr><td class="p-2 border">${s.mesin} ${s.isManual ? ' <span class="text-xs text-blue-500">('+s.asal+')</span>' : ''}</td><td class="p-2 border font-bold">${nama} ${ketRawatInap}</td><td class="p-2 border">${rm}</td><td class="p-2 border"><span class="bg-gray-200 px-2 py-1 rounded text-xs mr-1">${shift}</span> <span class="text-xs">${pj}</span></td><td class="p-2 border"><select onchange="updateStatusJadwal('${s.id}', this)" class="border p-1 rounded text-sm w-full ${st === 'Running' ? 'bg-green-100 text-green-800' : (st === 'Batal' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800')}"><option value="Menunggu" ${st === 'Menunggu' ? 'selected' : ''}>Menunggu</option><option value="Running" ${st === 'Running' ? 'selected' : ''}>Running</option><option value="Batal" ${st === 'Batal' ? 'selected' : ''}>Batal</option></select></td><td class="p-2 border text-center"><button onclick="editJadwal('${s.id}')" class="text-blue-500 hover:text-blue-700 mr-2"><i class="fas fa-edit"></i></button><button onclick="hapusJadwal('${s.id}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button></td></tr>`;
-            }).join('') || '<tr><td colspan="6" class="p-2 text-center text-gray-500">Belum ada jadwal hari ini</td></tr>';
+            document.getElementById('listJadwalHarian').innerHTML = db.schedules.filter(s => s.date === today).map(s => { let nama = s.isManual ? s.nama : (db.patients.find(x => x.id === s.patientId)?.nama || '-'); let rm = s.isManual ? s.rm : (db.patients.find(x => x.id === s.patientId)?.rm || '-'); let st = s.status || 'Menunggu'; let shift = s.shift || '-'; let pj = db.nurses.find(x => x.id === s.perawatId)?.nama || '-'; let ketRawatInap = s.isManual ? `<div class="text-xs text-gray-500">Akses: ${s.akses || '-'} | Ket: ${s.keterangan || '-'}</div>` : ''; return `<tr><td class="p-2 border">${s.mesin} ${s.isManual ? ' <span class="text-xs text-blue-500">('+s.asal+')</span>' : ''}</td><td class="p-2 border font-bold">${nama} ${ketRawatInap}</td><td class="p-2 border">${rm}</td><td class="p-2 border"><span class="bg-gray-200 px-2 py-1 rounded text-xs mr-1">${shift}</span> <span class="text-xs">${pj}</span></td><td class="p-2 border"><select onchange="updateStatusJadwal('${s.id}', this)" class="border p-1 rounded text-sm w-full ${st === 'Running' ? 'bg-green-100 text-green-800' : (st === 'Batal' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800')}"><option value="Menunggu" ${st === 'Menunggu' ? 'selected' : ''}>Menunggu</option><option value="Running" ${st === 'Running' ? 'selected' : ''}>Running</option><option value="Batal" ${st === 'Batal' ? 'selected' : ''}>Batal</option></select></td><td class="p-2 border text-center"><button onclick="editJadwal('${s.id}')" class="text-blue-500 hover:text-blue-700 mr-2"><i class="fas fa-edit"></i></button><button onclick="hapusJadwal('${s.id}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button></td></tr>`; }).join('') || '<tr><td colspan="6" class="p-2 text-center text-gray-500">Belum ada jadwal hari ini</td></tr>';
 
-            // Dashboard
             document.getElementById('dashPasienHariIni').innerText = db.schedules.filter(s => s.date === today).length;
             document.getElementById('dashPasienAktif').innerText = db.patients.filter(p => p.status === 'Aktif').length;
             document.getElementById('dashPerawatAktif').innerText = db.nurses.length;
-            let currentMonth = new Date().getMonth();
-            document.getElementById('dashPasienBulan').innerText = new Set(db.sessions.filter(s => new Date(s.tgl).getMonth() === currentMonth).map(s => s.patientId)).size;
+            let currentMonth = new Date().getMonth(); document.getElementById('dashPasienBulan').innerText = new Set(db.sessions.filter(s => new Date(s.tgl).getMonth() === currentMonth).map(s => s.patientId)).size;
 
             let tbNP = '', tbNS = '', tbFP = '', tbFS = '', tbRanap = '';
-            db.schedules.filter(s => s.date === today).forEach(s => {
-                let nama = s.isManual ? s.nama : (db.patients.find(x => x.id === s.patientId)?.nama || '-');
-                let rm = s.isManual ? (s.rm + ' (' + s.asal + ')') : (db.patients.find(x => x.id === s.patientId)?.rm || '-');
-                let st = s.status || 'Menunggu'; let shift = s.shift || 'Pagi'; let pj = db.nurses.find(x => x.id === s.perawatId)?.nama || '-';
-                let statusHtml = '';
-                if(st === 'Running') statusHtml = '<span class="text-green-600 font-bold"><i class="fas fa-play-circle"></i> Running</span>'; else if(st === 'Batal') statusHtml = '<span class="text-red-600"><i class="fas fa-times-circle"></i> Batal</span>'; else statusHtml = '<span class="text-yellow-600"><i class="fas fa-clock"></i> Menunggu</span>';
-                let rowRawatInap = `<tr><td class="p-2 border font-bold">${nama}</td><td class="p-2 border">${rm}</td><td class="p-2 border text-center"><span class="bg-gray-200 px-2 py-1 rounded block mb-1">${shift}</span><span class="text-xs text-gray-600">${pj}</span></td><td class="p-2 border">${statusHtml}</td></tr>`;
-                let rowNormal = `<tr><td class="p-2 border"><div class="font-bold">${nama}</div><div class="text-[10px] text-gray-400 font-normal">(${rm})</div></td><td class="p-2 border text-gray-700">${pj}</td><td class="p-2 border">${statusHtml}</td></tr>`;
-                if(s.mesin === 'Nipro' && shift === 'Pagi') tbNP += rowNormal; else if(s.mesin === 'Nipro' && shift === 'Siang') tbNS += rowNormal; else if(s.mesin === 'Fresenius' && shift === 'Pagi') tbFP += rowNormal; else if(s.mesin === 'Fresenius' && shift === 'Siang') tbFS += rowNormal; else tbRanap += rowRawatInap;
-            });
-            document.getElementById('tableDashNiproPagi').innerHTML = tbNP || '<tr><td colspan="3" class="p-2 text-center text-gray-500">Kosong</td></tr>';
-            document.getElementById('tableDashNiproSiang').innerHTML = tbNS || '<tr><td colspan="3" class="p-2 text-center text-gray-500">Kosong</td></tr>';
-            document.getElementById('tableDashFresPagi').innerHTML = tbFP || '<tr><td colspan="3" class="p-2 text-center text-gray-500">Kosong</td></tr>';
-            document.getElementById('tableDashFresSiang').innerHTML = tbFS || '<tr><td colspan="3" class="p-2 text-center text-gray-500">Kosong</td></tr>';
-            document.getElementById('tableDashRanap').innerHTML = tbRanap || '<tr><td colspan="4" class="p-2 text-center text-gray-500">Kosong</td></tr>';
+            db.schedules.filter(s => s.date === today).forEach(s => { let nama = s.isManual ? s.nama : (db.patients.find(x => x.id === s.patientId)?.nama || '-'); let rm = s.isManual ? (s.rm + ' (' + s.asal + ')') : (db.patients.find(x => x.id === s.patientId)?.rm || '-'); let st = s.status || 'Menunggu'; let shift = s.shift || 'Pagi'; let pj = db.nurses.find(x => x.id === s.perawatId)?.nama || '-'; let statusHtml = ''; if(st === 'Running') statusHtml = '<span class="text-green-600 font-bold"><i class="fas fa-play-circle"></i> Running</span>'; else if(st === 'Batal') statusHtml = '<span class="text-red-600"><i class="fas fa-times-circle"></i> Batal</span>'; else statusHtml = '<span class="text-yellow-600"><i class="fas fa-clock"></i> Menunggu</span>'; let rowRawatInap = `<tr><td class="p-2 border font-bold">${nama}</td><td class="p-2 border">${rm}</td><td class="p-2 border text-center"><span class="bg-gray-200 px-2 py-1 rounded block mb-1">${shift}</span><span class="text-xs text-gray-600">${pj}</span></td><td class="p-2 border">${statusHtml}</td></tr>`; let rowNormal = `<tr><td class="p-2 border"><div class="font-bold">${nama}</div><div class="text-[10px] text-gray-400 font-normal">(${rm})</div></td><td class="p-2 border text-gray-700">${pj}</td><td class="p-2 border">${statusHtml}</td></tr>`; if(s.mesin === 'Nipro' && shift === 'Pagi') tbNP += rowNormal; else if(s.mesin === 'Nipro' && shift === 'Siang') tbNS += rowNormal; else if(s.mesin === 'Fresenius' && shift === 'Pagi') tbFP += rowNormal; else if(s.mesin === 'Fresenius' && shift === 'Siang') tbFS += rowNormal; else tbRanap += rowRawatInap; });
+            document.getElementById('tableDashNiproPagi').innerHTML = tbNP || '<tr><td colspan="3" class="p-2 text-center text-gray-500">Kosong</td></tr>'; document.getElementById('tableDashNiproSiang').innerHTML = tbNS || '<tr><td colspan="3" class="p-2 text-center text-gray-500">Kosong</td></tr>'; document.getElementById('tableDashFresPagi').innerHTML = tbFP || '<tr><td colspan="3" class="p-2 text-center text-gray-500">Kosong</td></tr>'; document.getElementById('tableDashFresSiang').innerHTML = tbFS || '<tr><td colspan="3" class="p-2 text-center text-gray-500">Kosong</td></tr>'; document.getElementById('tableDashRanap').innerHTML = tbRanap || '<tr><td colspan="4" class="p-2 text-center text-gray-500">Kosong</td></tr>';
             
-            let notifs = '';
-            if(!db.patients.length) notifs += '<li class="text-red-500">Master Data Pasien kosong.</li>';
-            db.sessions.filter(s => s.tgl === today).slice(-3).reverse().forEach(s => { 
-                let nama = "-"; if(s.patientId.startsWith('manual_')) { let j = db.schedules.find(x => x.id === s.patientId.replace('manual_', '')); if(j) nama = j.nama; } else { let p = db.patients.find(x => x.id === s.patientId); if(p) nama = p.nama; }
-                notifs += `<li class="text-green-600"><i class="fas fa-check"></i> Sesi ${nama} diinput.</li>`; 
-            });
-            document.getElementById('notificationList').innerHTML = notifs || '<li class="text-gray-500">Tidak ada notifikasi baru hari ini.</li>';
+            let notifs = ''; if(!db.patients.length) notifs += '<li class="text-red-500">Master Data Pasien kosong.</li>'; db.sessions.filter(s => s.tgl === today).slice(-3).reverse().forEach(s => { let nama = "-"; if(s.patientId.startsWith('manual_')) { let j = db.schedules.find(x => x.id === s.patientId.replace('manual_', '')); if(j) nama = j.nama; } else { let p = db.patients.find(x => x.id === s.patientId); if(p) nama = p.nama; } notifs += `<li class="text-green-600"><i class="fas fa-check"></i> Sesi ${nama} diinput.</li>`; }); document.getElementById('notificationList').innerHTML = notifs || '<li class="text-gray-500">Tidak ada notifikasi baru hari ini.</li>';
         }
 
         checkAuth();
-
     </script>
 </body>
 </html>
