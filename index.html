@@ -13,6 +13,8 @@
         .table-container { max-height: 400px; overflow-y: auto; }
         table th { position: sticky; top: 0; background-color: #f3f4f6; z-index: 10; }
         #auth-overlay { transition: opacity 0.3s ease; }
+        .news-fade { animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body class="bg-gray-100 flex h-screen overflow-hidden text-sm">
@@ -105,12 +107,9 @@
             <section id="dashboard" class="page-section active">
                 
                 <div class="bg-blue-50 border-l-4 border-blue-600 p-4 rounded shadow mb-6">
-                    <h3 class="font-bold text-blue-800 mb-2"><i class="fas fa-info-circle"></i> Pojok Edukasi & Standar Dialisis (Pernefri / Kemenkes RI)</h3>
-                    <ul class="list-disc pl-5 text-gray-700 text-xs space-y-1">
-                        <li><strong>Adekuesi Dialisis:</strong> Target Kt/V ideal ≥ 1.2 untuk jadwal HD 3x seminggu (4-5 jam), atau Kt/V ≥ 1.8 untuk jadwal HD 2x seminggu (4-5 jam).</li>
-                        <li><strong>Laju Aliran Darah (Qb) & Dialisat (Qd):</strong> Standar Qb umumnya 150-300 ml/menit menyesuaikan akses vaskular, dan Qd ideal 500 ml/menit.</li>
-                        <li><strong>Interdialytic Weight Gain (IDWG):</strong> Pertambahan berat badan pasien di antara waktu sesi HD maksimal 5% dari berat badan kering (Dry Weight).</li>
-                    </ul>
+                    <h3 class="font-bold text-blue-800 mb-2"><i class="fas fa-info-circle"></i> Pojok Edukasi & Standar Dialisis</h3>
+                    <ul id="dashNewsList" class="list-disc pl-5 text-gray-700 text-xs space-y-1 news-fade">
+                        </ul>
                 </div>
 
                 <div class="grid grid-cols-4 gap-4 mb-6">
@@ -207,13 +206,7 @@
                     <div class="table-container">
                         <table class="w-full text-left border-collapse border">
                             <thead>
-                                <tr>
-                                    <th class="p-2 border">Username/NIK</th>
-                                    <th class="p-2 border">Nama Pengguna</th>
-                                    <th class="p-2 border">Role</th>
-                                    <th class="p-2 border">Status & Percobaan</th>
-                                    <th class="p-2 border text-center">Aksi</th>
-                                </tr>
+                                <tr><th class="p-2 border">Username/NIK</th><th class="p-2 border">Nama Pengguna</th><th class="p-2 border">Role</th><th class="p-2 border">Status & Percobaan</th><th class="p-2 border text-center">Aksi</th></tr>
                             </thead>
                             <tbody id="listAkun"></tbody>
                         </table>
@@ -233,9 +226,7 @@
                         <div class="col-span-2">
                             <label class="block text-gray-600">Pendidikan Terakhir</label>
                             <select id="prwPendidikan" class="w-full border p-2 rounded">
-                                <option value="D3 Keperawatan">D3 Keperawatan</option>
-                                <option value="S1 Keperawatan">S1 Keperawatan</option>
-                                <option value="Ners">Ners</option>
+                                <option value="D3 Keperawatan">D3 Keperawatan</option><option value="S1 Keperawatan">S1 Keperawatan</option><option value="Ners">Ners</option>
                             </select>
                         </div>
                         <div class="col-span-2 text-right">
@@ -344,9 +335,7 @@
                             </div>
                             <div><label class="block text-gray-600">Akses</label>
                                 <select id="jdwAksesManual" class="w-full border p-2 rounded">
-                                    <option value="Cimino">Cimino</option>
-                                    <option value="CDL">CDL</option>
-                                    <option value="Femoral">Femoral</option>
+                                    <option value="Cimino">Cimino</option><option value="CDL">CDL</option><option value="Femoral">Femoral</option>
                                 </select>
                             </div>
                             <div class="col-span-2"><label class="block text-gray-600">Keterangan Tambahan</label><input type="text" id="jdwKetManual" class="w-full border p-2 rounded"></div>
@@ -355,8 +344,7 @@
                         <div>
                             <label class="block text-gray-600">Shift</label>
                             <select id="jdwShift" required class="w-full border p-2 rounded">
-                                <option value="Pagi">Pagi</option>
-                                <option value="Siang">Siang</option>
+                                <option value="Pagi">Pagi</option><option value="Siang">Siang</option>
                             </select>
                         </div>
                         
@@ -368,9 +356,7 @@
                         <div>
                             <label class="block text-gray-600">Status Awal</label>
                             <select id="jdwStatus" required class="w-full border p-2 rounded">
-                                <option value="Menunggu">Menunggu</option>
-                                <option value="Running">Running</option>
-                                <option value="Batal">Batal</option>
+                                <option value="Menunggu">Menunggu</option><option value="Running">Running</option><option value="Batal">Batal</option>
                             </select>
                         </div>
 
@@ -394,7 +380,7 @@
 
             <section id="registrasi" class="page-section">
                 <div class="bg-white rounded shadow p-6 mb-6 border-l-4 border-blue-500">
-                    <h3 class="font-bold text-lg mb-4 text-blue-800">Input Catatan Sesi Hemodialisis (Kt/V OCM)</h3>
+                    <h3 class="font-bold text-lg mb-4 text-blue-800">Input Catatan Sesi Hemodialisis</h3>
                     <form id="formSesi" onsubmit="saveSesi(event)" class="grid grid-cols-3 gap-4">
                         <input type="hidden" id="sesiId">
                         
@@ -417,15 +403,15 @@
                         
                         <div><label class="block text-gray-600">Waktu (Jam)</label><input type="number" step="0.5" id="sesiWaktu" required class="w-full border p-2 rounded" oninput="calculateKtv()"></div>
                         <div><label class="block text-gray-600">BB Pre HD (Kg)</label><input type="number" step="0.1" id="sesiPre" required class="w-full border p-2 rounded" oninput="calculateKtv()"></div>
-                        <div><label class="block text-gray-600">BB Post HD (Kg)</label><input type="number" step="0.1" id="sesiPost" required class="w-full border p-2 rounded" oninput="calculateKtv()"></div>
+                        <div><label class="block text-gray-600">BB Post HD (Kg)</label><input type="number" step="0.1" id="sesiPost" required class="w-full border p-2 rounded"></div>
                         
-                        <div><label class="block text-gray-600 text-blue-800 font-bold">Clearance K OCM (ml/min)</label><input type="number" id="sesiClearance" class="w-full border p-2 rounded bg-blue-50" oninput="calculateKtv()" placeholder="Dari layar OCM mesin"></div>
-                        <div><label class="block text-gray-600 text-blue-800 font-bold">Volume (V) Liter</label><input type="number" step="0.1" id="sesiV" class="w-full border p-2 rounded bg-blue-50" oninput="calculateKtv(true)" placeholder="Watson Otomatis / Manual"></div>
-                        <div><label class="block text-green-700 font-bold">Hasil Kt/V OCM</label><input type="text" id="sesiKtv" readonly class="w-full border p-2 rounded bg-green-100 font-bold text-green-800" placeholder="Menunggu data..."></div>
-                        
+                        <div><label class="block text-gray-600">Qb</label><input type="number" id="sesiQb" required class="w-full border p-2 rounded" oninput="calculateKtv()"></div>
+                        <div><label class="block text-gray-600">Qd</label><input type="number" id="sesiQd" required class="w-full border p-2 rounded" oninput="calculateKtv()"></div>
                         <div><label class="block text-gray-600">UF Goal</label><input type="number" step="0.1" id="sesiUf" required class="w-full border p-2 rounded"></div>
-                        <div><label class="block text-gray-600">Qb</label><input type="number" id="sesiQb" required class="w-full border p-2 rounded"></div>
-                        <div><label class="block text-gray-600">Qd</label><input type="number" id="sesiQd" required class="w-full border p-2 rounded"></div>
+                        
+                        <div><label class="block text-gray-600 text-blue-800 font-bold">Clearance K (ml/min)</label><input type="number" id="sesiClearance" class="w-full border p-2 rounded bg-blue-50" oninput="calculateKtv()" placeholder="Bisa dikosongkan (Otomatis Estimasi)"></div>
+                        <div><label class="block text-gray-600 text-blue-800 font-bold">Volume (V) Liter</label><input type="number" step="0.1" id="sesiV" class="w-full border p-2 rounded bg-blue-50" oninput="calculateKtv(true)" placeholder="Otomatis Watson"></div>
+                        <div><label class="block text-green-700 font-bold">Estimasi Kt/V</label><input type="text" id="sesiKtv" readonly class="w-full border p-2 rounded bg-green-100 font-bold text-green-800" placeholder="Menunggu input data..."></div>
                         
                         <div><label class="block text-gray-600">Akses Vaskular</label><select id="sesiAkses" class="w-full border p-2 rounded"><option>Cimino</option><option>CDL</option><option>Femoral</option></select></div>
                         <div><label class="block text-gray-600">Heparin</label><select id="sesiHeparin" class="w-full border p-2 rounded"><option>Reguler</option><option>Minimal</option><option>Free</option></select></div>
@@ -502,10 +488,43 @@
             localStorage.setItem('rs_sessions', JSON.stringify(db.sessions)); 
         }
 
-        let currentUser = JSON.parse(localStorage.getItem('rs_current_user')) || null;
+        // FITUR BARU: Auto Logout setelah menutup Laman (Gunakan sessionStorage, bukan localStorage)
+        let currentUser = JSON.parse(sessionStorage.getItem('rs_current_user')) || null;
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('currentDate').innerText = new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
         document.getElementById('filterTglSesi').value = today;
+
+        // --- FITUR BARU: Berita Edukasi Dinamis ---
+        const newsContent = [
+            "<strong>Adekuesi Dialisis:</strong> Target Kt/V ideal ≥ 1.2 untuk jadwal HD 3x seminggu (4-5 jam).",
+            "<strong>Adekuesi Dialisis 2x Seminggu:</strong> Target Kt/V ≥ 1.8 untuk jadwal HD 2x seminggu.",
+            "<strong>Laju Aliran Darah (Qb):</strong> Standar Qb umumnya 150-300 ml/menit menyesuaikan akses vaskular.",
+            "<strong>Laju Aliran Dialisat (Qd):</strong> Qd standar dan ideal adalah 500 ml/menit.",
+            "<strong>Interdialytic Weight Gain (IDWG):</strong> Pertambahan berat maksimal 5% dari berat badan kering.",
+            "<strong>Mesin Nipro & Fresenius:</strong> Pastikan setting Clearance K diisi / dihitung otomatis dengan Qb dan Qd.",
+            "<strong>Manajemen Nutrisi:</strong> Batasi asupan cairan, kalium, fosfat, dan natrium pada pasien HD rutin."
+        ];
+        let currentNewsIndex = 0;
+        function updateDashboardNews() {
+            const ul = document.getElementById('dashNewsList');
+            if(!ul) return;
+            // Tampilkan 3 berita sekaligus dan dirotasi
+            ul.classList.remove('news-fade');
+            void ul.offsetWidth; // trigger DOM reflow
+            ul.classList.add('news-fade');
+            
+            let html = '';
+            for(let i=0; i<3; i++) {
+                let idx = (currentNewsIndex + i) % newsContent.length;
+                html += `<li>${newsContent[idx]}</li>`;
+            }
+            ul.innerHTML = html;
+            currentNewsIndex = (currentNewsIndex + 1) % newsContent.length;
+        }
+        // Ganti berita setiap 5 Detik
+        setInterval(updateDashboardNews, 5000);
+        updateDashboardNews();
+
 
         // --- AUTOKALKULASI UMUR BERDASARKAN TGL LAHIR ---
         document.getElementById('psnLahir').addEventListener('change', function() {
@@ -517,18 +536,23 @@
             }
         });
 
-        // --- FUNGSI AUTOKALKULASI Kt/V METODE OCM FRESENIUS (WATSON V) ---
+        // --- FITUR BARU: KALKULASI KT/V MENGGUNAKAN (QB, QD, WAKTU, BB, TINGGI, UMUR) ---
         function calculateKtv(isManualV = false) {
-            let k = parseFloat(document.getElementById('sesiClearance').value) || 0; // K dalam ml/min
             let waktu = parseFloat(document.getElementById('sesiWaktu').value) || 0; // t dalam Jam
             let bbPre = parseFloat(document.getElementById('sesiPre').value) || 0; 
             let vInput = parseFloat(document.getElementById('sesiV').value) || 0; // V dalam Liter
+            
+            let qb = parseFloat(document.getElementById('sesiQb').value) || 0;
+            let qd = parseFloat(document.getElementById('sesiQd').value) || 0;
+            let manualClearance = parseFloat(document.getElementById('sesiClearance').value) || 0;
+
             let t_min = waktu * 60;
 
             let pId = document.getElementById('sesiPasien').value;
-            let p = db.patients.find(x => x.id === pId);
+            let p = null;
+            if(!pId.startsWith('manual_')) p = db.patients.find(x => x.id === pId);
             
-            // Jika pasien dikenali dan V tidak diisi manual, kalkulasi Watson otomatis
+            // 1. Kalkulasi V (Volume Watson) jika tidak manual
             if (!isManualV && p && p.jk && p.tinggi && p.umur && bbPre > 0) {
                 let height = parseFloat(p.tinggi);
                 let age = parseFloat(p.umur);
@@ -546,7 +570,27 @@
                 }
             }
 
-            // Kt/V = (K * t) / V
+            // 2. Kalkulasi K (Clearance Estimasi) menggunakan Qb dan Qd untuk Mesin Nipro dsb
+            let k = manualClearance;
+            if (k === 0 && qb > 0) {
+                // Estimasi K standar dengan asumsi standar dialyzer KoA = 700 
+                // Formula Transfer Massa 1D sederhana.
+                let koa = 700; 
+                if (qd > 0 && qd !== qb) {
+                    let z = koa * ((1 / qb) - (1 / qd));
+                    let e_z = Math.exp(z);
+                    k = qb * ((e_z - 1) / (e_z - (qb / qd)));
+                } else {
+                    // Fallback kasar bila Qd belum diisi
+                    k = qb * 0.85; 
+                }
+                // Tunjukkan pada placeholder agar pengguna tahu sistem menghitungnya otomatis
+                document.getElementById('sesiClearance').placeholder = "Estimasi K: " + k.toFixed(1);
+            } else {
+                document.getElementById('sesiClearance').placeholder = "Bisa dikosongkan (Otomatis Estimasi)";
+            }
+
+            // 3. Eksekusi Rumus Kt/V = (K * t) / V
             if (k > 0 && waktu > 0 && vInput > 0) {
                 let ktv = (k * t_min) / (vInput * 1000); // 1000 konversi L ke ml untuk v
                 document.getElementById('sesiKtv').value = ktv.toFixed(2);
@@ -607,7 +651,9 @@
             foundUser.attempts = 0;
             localStorage.setItem('rs_users', JSON.stringify(db.users));
             currentUser = { username: foundUser.username, nama: foundUser.nama, role: foundUser.role };
-            localStorage.setItem('rs_current_user', JSON.stringify(currentUser));
+            
+            // Simpan ke SessionStorage agar otomatis logout saat tab ditutup
+            sessionStorage.setItem('rs_current_user', JSON.stringify(currentUser));
             document.getElementById('formLogin').reset();
             checkAuth();
         }
@@ -630,7 +676,11 @@
             toggleAuthForm('login'); document.getElementById('formRegister').reset(); toggleSecretCode(); 
         }
 
-        function handleLogout() { currentUser = null; localStorage.removeItem('rs_current_user'); checkAuth(); }
+        function handleLogout() { 
+            currentUser = null; 
+            sessionStorage.removeItem('rs_current_user'); 
+            checkAuth(); 
+        }
 
         function applyRoleUI() {
             document.getElementById('userInfoDisplay').innerHTML = `<strong>${currentUser.nama}</strong><br>(${currentUser.role})`;
@@ -664,7 +714,7 @@
         // --- CRUD MANAJEMEN AKUN ---
         function setEditAkun(username) { let u = db.users.find(x => x.username === username); if(u) { document.getElementById('formEditAkunContainer').classList.remove('hidden'); document.getElementById('editOldUsername').value = u.username; document.getElementById('editUsername').value = u.username; document.getElementById('editNama').value = u.nama; document.getElementById('editPassword').value = ''; document.getElementById('editRole').value = u.role; window.scrollTo(0, 0); } }
         function batalEditAkun() { document.getElementById('formEditAkunContainer').classList.add('hidden'); document.getElementById('formEditAkun').reset(); }
-        function saveEditAkun(e) { e.preventDefault(); let oldUser = document.getElementById('editOldUsername').value; let index = db.users.findIndex(x => x.username === oldUser); if(index !== -1) { db.users[index].nama = document.getElementById('editNama').value; db.users[index].role = document.getElementById('editRole').value; let newPass = document.getElementById('editPassword').value; if(newPass.trim() !== "") db.users[index].password = newPass; if(oldUser === currentUser.username) { currentUser.nama = db.users[index].nama; currentUser.role = db.users[index].role; localStorage.setItem('rs_current_user', JSON.stringify(currentUser)); applyRoleUI(); } saveData(); batalEditAkun(); alert('Akun berhasil di-update!'); } }
+        function saveEditAkun(e) { e.preventDefault(); let oldUser = document.getElementById('editOldUsername').value; let index = db.users.findIndex(x => x.username === oldUser); if(index !== -1) { db.users[index].nama = document.getElementById('editNama').value; db.users[index].role = document.getElementById('editRole').value; let newPass = document.getElementById('editPassword').value; if(newPass.trim() !== "") db.users[index].password = newPass; if(oldUser === currentUser.username) { currentUser.nama = db.users[index].nama; currentUser.role = db.users[index].role; sessionStorage.setItem('rs_current_user', JSON.stringify(currentUser)); applyRoleUI(); } saveData(); batalEditAkun(); alert('Akun berhasil di-update!'); } }
         function hapusAkun(username) { if(username === currentUser.username) return alert('GAGAL: Anda tidak boleh menghapus akun Anda sendiri saat sedang login!'); if(confirm(`Yakin ingin menghapus akun pengguna "${username}"?`)) { db.users = db.users.filter(x => x.username !== username); saveData(); } }
         function aktifkanAkun(username) { let u = db.users.find(x => x.username === username); if(u && confirm(`Yakin ingin mengaktifkan kembali akun "${username}"?`)) { u.status = 'active'; u.attempts = 0; saveData(); alert(`Akun "${username}" telah diaktifkan kembali!`); } }
 
@@ -741,7 +791,7 @@
             let catatanManual = document.getElementById('sesiCatatan').value;
             let catatanFinal = catatanManual;
             if (hasilKtv) {
-                catatanFinal = catatanManual ? `${catatanManual} | Info Tambahan: Kt/V Tercapai = ${hasilKtv}` : `Info Tambahan: Kt/V Tercapai = ${hasilKtv}`;
+                catatanFinal = catatanManual ? `${catatanManual} | Info Tambahan: Estimasi Kt/V = ${hasilKtv}` : `Info Tambahan: Estimasi Kt/V = ${hasilKtv}`;
             }
 
             let data = { 
