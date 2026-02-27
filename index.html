@@ -68,7 +68,6 @@
                 <p class="text-xs text-center text-gray-500 mt-4">Sudah punya akun? <a href="#" onclick="toggleAuthForm('login')" class="text-blue-600 font-bold">Kembali ke Login</a></p>
             </form>
         </div>
-        <div class="mt-4 text-xs text-blue-300">Default Login Admin: admin / 1234</div>
     </div>
 
     <aside class="w-64 bg-blue-900 text-white flex flex-col h-full shadow-lg">
@@ -104,6 +103,16 @@
         <div class="flex-1 overflow-y-auto p-6">
 
             <section id="dashboard" class="page-section active">
+                
+                <div class="bg-blue-50 border-l-4 border-blue-600 p-4 rounded shadow mb-6">
+                    <h3 class="font-bold text-blue-800 mb-2"><i class="fas fa-info-circle"></i> Pojok Edukasi & Standar Dialisis (Pernefri / Kemenkes RI)</h3>
+                    <ul class="list-disc pl-5 text-gray-700 text-xs space-y-1">
+                        <li><strong>Adekuesi Dialisis:</strong> Target Kt/V ideal ≥ 1.2 untuk jadwal HD 3x seminggu (4-5 jam), atau Kt/V ≥ 1.8 untuk jadwal HD 2x seminggu (4-5 jam).</li>
+                        <li><strong>Laju Aliran Darah (Qb) & Dialisat (Qd):</strong> Standar Qb umumnya 150-300 ml/menit menyesuaikan akses vaskular, dan Qd ideal 500 ml/menit.</li>
+                        <li><strong>Interdialytic Weight Gain (IDWG):</strong> Pertambahan berat badan pasien di antara waktu sesi HD maksimal 5% dari berat badan kering (Dry Weight).</li>
+                    </ul>
+                </div>
+
                 <div class="grid grid-cols-4 gap-4 mb-6">
                     <div class="bg-white p-4 rounded shadow border-l-4 border-yellow-500">
                         <p class="text-gray-500 text-xs font-semibold uppercase">Jadwal Pasien Hari Ini</p>
@@ -385,7 +394,7 @@
 
             <section id="registrasi" class="page-section">
                 <div class="bg-white rounded shadow p-6 mb-6 border-l-4 border-blue-500">
-                    <h3 class="font-bold text-lg mb-4 text-blue-800">Input Catatan Sesi Hemodialisis</h3>
+                    <h3 class="font-bold text-lg mb-4 text-blue-800">Input Catatan Sesi Hemodialisis (Kt/V OCM)</h3>
                     <form id="formSesi" onsubmit="saveSesi(event)" class="grid grid-cols-3 gap-4">
                         <input type="hidden" id="sesiId">
                         
@@ -410,9 +419,9 @@
                         <div><label class="block text-gray-600">BB Pre HD (Kg)</label><input type="number" step="0.1" id="sesiPre" required class="w-full border p-2 rounded" oninput="calculateKtv()"></div>
                         <div><label class="block text-gray-600">BB Post HD (Kg)</label><input type="number" step="0.1" id="sesiPost" required class="w-full border p-2 rounded" oninput="calculateKtv()"></div>
                         
-                        <div><label class="block text-gray-600 text-blue-800 font-bold">Ureum Pre (mg/dL)</label><input type="number" step="0.1" id="sesiUreumPre" class="w-full border p-2 rounded bg-blue-50" oninput="calculateKtv()" placeholder="Isi untuk hitung Kt/V"></div>
-                        <div><label class="block text-gray-600 text-blue-800 font-bold">Ureum Post (mg/dL)</label><input type="number" step="0.1" id="sesiUreumPost" class="w-full border p-2 rounded bg-blue-50" oninput="calculateKtv()" placeholder="Isi untuk hitung Kt/V"></div>
-                        <div><label class="block text-green-700 font-bold">Hasil Kt/V Otomatis</label><input type="text" id="sesiKtv" readonly class="w-full border p-2 rounded bg-green-100 font-bold text-green-800" placeholder="Menunggu data..."></div>
+                        <div><label class="block text-gray-600 text-blue-800 font-bold">Clearance K OCM (ml/min)</label><input type="number" id="sesiClearance" class="w-full border p-2 rounded bg-blue-50" oninput="calculateKtv()" placeholder="Dari layar OCM mesin"></div>
+                        <div><label class="block text-gray-600 text-blue-800 font-bold">Volume (V) Liter</label><input type="number" step="0.1" id="sesiV" class="w-full border p-2 rounded bg-blue-50" oninput="calculateKtv(true)" placeholder="Watson Otomatis / Manual"></div>
+                        <div><label class="block text-green-700 font-bold">Hasil Kt/V OCM</label><input type="text" id="sesiKtv" readonly class="w-full border p-2 rounded bg-green-100 font-bold text-green-800" placeholder="Menunggu data..."></div>
                         
                         <div><label class="block text-gray-600">UF Goal</label><input type="number" step="0.1" id="sesiUf" required class="w-full border p-2 rounded"></div>
                         <div><label class="block text-gray-600">Qb</label><input type="number" id="sesiQb" required class="w-full border p-2 rounded"></div>
@@ -508,27 +517,45 @@
             }
         });
 
-        // --- FUNGSI AUTOKALKULASI Kt/V ---
-        function calculateKtv() {
-            let pre = parseFloat(document.getElementById('sesiPre').value) || 0;
-            let post = parseFloat(document.getElementById('sesiPost').value) || 0;
-            let waktu = parseFloat(document.getElementById('sesiWaktu').value) || 0;
-            let ureumPre = parseFloat(document.getElementById('sesiUreumPre').value) || 0;
-            let ureumPost = parseFloat(document.getElementById('sesiUreumPost').value) || 0;
+        // --- FUNGSI AUTOKALKULASI Kt/V METODE OCM FRESENIUS (WATSON V) ---
+        function calculateKtv(isManualV = false) {
+            let k = parseFloat(document.getElementById('sesiClearance').value) || 0; // K dalam ml/min
+            let waktu = parseFloat(document.getElementById('sesiWaktu').value) || 0; // t dalam Jam
+            let bbPre = parseFloat(document.getElementById('sesiPre').value) || 0; 
+            let vInput = parseFloat(document.getElementById('sesiV').value) || 0; // V dalam Liter
+            let t_min = waktu * 60;
 
-            if (ureumPre > 0 && ureumPost > 0 && waktu > 0 && post > 0) {
-                let r = ureumPost / ureumPre;
-                let uf = pre - post;
-                let w = post;
-                // Formula Daugirdas Generasi 2 untuk Kt/V
-                let ktv = -Math.log(r - 0.008 * waktu) + (4 - 3.5 * r) * (uf / w);
+            let pId = document.getElementById('sesiPasien').value;
+            let p = db.patients.find(x => x.id === pId);
+            
+            // Jika pasien dikenali dan V tidak diisi manual, kalkulasi Watson otomatis
+            if (!isManualV && p && p.jk && p.tinggi && p.umur && bbPre > 0) {
+                let height = parseFloat(p.tinggi);
+                let age = parseFloat(p.umur);
+                let calculatedV = 0;
+                
+                if (p.jk === 'Laki-laki') {
+                    calculatedV = 2.447 - (0.09156 * age) + (0.1074 * height) + (0.3362 * bbPre);
+                } else {
+                    calculatedV = -2.097 + (0.1069 * height) + (0.2466 * bbPre);
+                }
+                
+                if (calculatedV > 0) {
+                    vInput = calculatedV;
+                    document.getElementById('sesiV').value = vInput.toFixed(2);
+                }
+            }
+
+            // Kt/V = (K * t) / V
+            if (k > 0 && waktu > 0 && vInput > 0) {
+                let ktv = (k * t_min) / (vInput * 1000); // 1000 konversi L ke ml untuk v
                 document.getElementById('sesiKtv').value = ktv.toFixed(2);
             } else {
                 document.getElementById('sesiKtv').value = '';
             }
         }
 
-        // --- 2. LOGIC LOGIN & AUTH (Sama) ---
+        // --- 2. LOGIC LOGIN & AUTH ---
         function checkAuth() {
             if (!currentUser) {
                 document.getElementById('auth-overlay').classList.remove('hidden');
@@ -634,14 +661,14 @@
             refreshUI();
         }
 
-        // --- CRUD MANAJEMEN AKUN (Sama) ---
+        // --- CRUD MANAJEMEN AKUN ---
         function setEditAkun(username) { let u = db.users.find(x => x.username === username); if(u) { document.getElementById('formEditAkunContainer').classList.remove('hidden'); document.getElementById('editOldUsername').value = u.username; document.getElementById('editUsername').value = u.username; document.getElementById('editNama').value = u.nama; document.getElementById('editPassword').value = ''; document.getElementById('editRole').value = u.role; window.scrollTo(0, 0); } }
         function batalEditAkun() { document.getElementById('formEditAkunContainer').classList.add('hidden'); document.getElementById('formEditAkun').reset(); }
         function saveEditAkun(e) { e.preventDefault(); let oldUser = document.getElementById('editOldUsername').value; let index = db.users.findIndex(x => x.username === oldUser); if(index !== -1) { db.users[index].nama = document.getElementById('editNama').value; db.users[index].role = document.getElementById('editRole').value; let newPass = document.getElementById('editPassword').value; if(newPass.trim() !== "") db.users[index].password = newPass; if(oldUser === currentUser.username) { currentUser.nama = db.users[index].nama; currentUser.role = db.users[index].role; localStorage.setItem('rs_current_user', JSON.stringify(currentUser)); applyRoleUI(); } saveData(); batalEditAkun(); alert('Akun berhasil di-update!'); } }
         function hapusAkun(username) { if(username === currentUser.username) return alert('GAGAL: Anda tidak boleh menghapus akun Anda sendiri saat sedang login!'); if(confirm(`Yakin ingin menghapus akun pengguna "${username}"?`)) { db.users = db.users.filter(x => x.username !== username); saveData(); } }
         function aktifkanAkun(username) { let u = db.users.find(x => x.username === username); if(u && confirm(`Yakin ingin mengaktifkan kembali akun "${username}"?`)) { u.status = 'active'; u.attempts = 0; saveData(); alert(`Akun "${username}" telah diaktifkan kembali!`); } }
 
-        // --- CRUD PERAWAT (Sama) ---
+        // --- CRUD PERAWAT ---
         function savePerawat(e) { e.preventDefault(); let id = document.getElementById('prwId').value; let data = { nama: document.getElementById('prwNama').value, nik: document.getElementById('prwNik').value, telp: document.getElementById('prwTelp').value, jabatan: document.getElementById('prwJabatan').value, pendidikan: document.getElementById('prwPendidikan').value }; if(id) { let index = db.nurses.findIndex(x => x.id === id); if(index !== -1) db.nurses[index] = { ...db.nurses[index], ...data }; } else { data.id = Date.now().toString(); db.nurses.push(data); } resetFormPerawat(); saveData(); alert('Data Perawat Berhasil Disimpan!'); }
         function editPerawat(id) { let p = db.nurses.find(x => x.id === id); if(p) { document.getElementById('prwId').value = p.id; document.getElementById('prwNama').value = p.nama; document.getElementById('prwNik').value = p.nik; document.getElementById('prwTelp').value = p.telp; document.getElementById('prwJabatan').value = p.jabatan; document.getElementById('prwPendidikan').value = p.pendidikan; window.scrollTo(0, 0); } }
         function hapusPerawat(id) { if(confirm('Yakin ingin menghapus perawat ini?')) { db.nurses = db.nurses.filter(x => x.id !== id); saveData(); } }
@@ -654,7 +681,7 @@
             let data = { 
                 reg: document.getElementById('psnReg').value, rm: document.getElementById('psnRm').value, 
                 nama: document.getElementById('psnNama').value, lahir: document.getElementById('psnLahir').value, 
-                umur: document.getElementById('psnUmur').value, tinggi: document.getElementById('psnTinggi').value, // Simpan Data Tinggi & Umur
+                umur: document.getElementById('psnUmur').value, tinggi: document.getElementById('psnTinggi').value,
                 jk: document.getElementById('psnJk').value, diag: document.getElementById('psnDiag').value, 
                 alamat: document.getElementById('psnAlamat').value, bb: document.getElementById('psnBb').value, 
                 jadwal: document.getElementById('psnJadwal').value, tglReg: document.getElementById('psnTglReg').value, 
@@ -675,14 +702,41 @@
         function updateStatusJadwal(id, selectElement) { let jdw = db.schedules.find(x => x.id === id); if(jdw) { jdw.status = selectElement.value; saveData(); } }
         function hapusJadwal(id) { if(confirm('Yakin ingin menghapus jadwal ini?')) { db.schedules = db.schedules.filter(x => x.id !== id); saveData(); } }
 
-        function autoFillSesi() { let pId = document.getElementById('sesiPasien').value; if(pId.startsWith('manual_')) { let sId = pId.replace('manual_', ''); let j = db.schedules.find(x => x.id === sId); if(j) { document.getElementById('sesiRm').value = j.rm; let ket = j.keterangan ? ` - ${j.keterangan}` : ''; document.getElementById('sesiRiwayat').value = "Rawat Inap (" + j.asal + ")" + ket; document.getElementById('sesiBbKering').value = "-"; document.getElementById('sesiTgl').value = today; document.getElementById('sesiMesin').value = 'Rawat Inap'; document.getElementById('sesiAkses').value = j.akses || 'Cimino'; } } else { let p = db.patients.find(x => x.id === pId); if(p) { document.getElementById('sesiRm').value = p.rm; document.getElementById('sesiRiwayat').value = p.diag; document.getElementById('sesiBbKering').value = p.bb; document.getElementById('sesiTgl').value = today; let j = db.schedules.find(x => x.patientId === pId && x.date === today); if(j && j.mesin) document.getElementById('sesiMesin').value = j.mesin; } else { ['sesiRm', 'sesiRiwayat', 'sesiBbKering'].forEach(id => document.getElementById(id).value = ''); } } }
+        function autoFillSesi() { 
+            let pId = document.getElementById('sesiPasien').value; 
+            if(pId.startsWith('manual_')) { 
+                let sId = pId.replace('manual_', ''); 
+                let j = db.schedules.find(x => x.id === sId); 
+                if(j) { 
+                    document.getElementById('sesiRm').value = j.rm; 
+                    let ket = j.keterangan ? ` - ${j.keterangan}` : ''; 
+                    document.getElementById('sesiRiwayat').value = "Rawat Inap (" + j.asal + ")" + ket; 
+                    document.getElementById('sesiBbKering').value = "-"; 
+                    document.getElementById('sesiTgl').value = today; 
+                    document.getElementById('sesiMesin').value = 'Rawat Inap'; 
+                    document.getElementById('sesiAkses').value = j.akses || 'Cimino'; 
+                } 
+            } else { 
+                let p = db.patients.find(x => x.id === pId); 
+                if(p) { 
+                    document.getElementById('sesiRm').value = p.rm; 
+                    document.getElementById('sesiRiwayat').value = p.diag; 
+                    document.getElementById('sesiBbKering').value = p.bb; 
+                    document.getElementById('sesiTgl').value = today; 
+                    let j = db.schedules.find(x => x.patientId === pId && x.date === today); 
+                    if(j && j.mesin) document.getElementById('sesiMesin').value = j.mesin; 
+                } else { 
+                    ['sesiRm', 'sesiRiwayat', 'sesiBbKering'].forEach(id => document.getElementById(id).value = ''); 
+                } 
+            }
+            calculateKtv(); // Panggil ulang untuk isi volume jika Master Pasien terpilih
+        }
         
         // --- CRUD SESI HARIAN HD ---
         function saveSesi(e) { 
             e.preventDefault(); 
             let id = document.getElementById('sesiId').value; 
             
-            // Menggabungkan Catatan dengan Kt/V secara otomatis
             let hasilKtv = document.getElementById('sesiKtv').value;
             let catatanManual = document.getElementById('sesiCatatan').value;
             let catatanFinal = catatanManual;
@@ -696,7 +750,7 @@
                 waktu: document.getElementById('sesiWaktu').value, pre: document.getElementById('sesiPre').value, 
                 post: document.getElementById('sesiPost').value, uf: document.getElementById('sesiUf').value, 
                 qb: document.getElementById('sesiQb').value, qd: document.getElementById('sesiQd').value, 
-                ureumPre: document.getElementById('sesiUreumPre').value, ureumPost: document.getElementById('sesiUreumPost').value, 
+                clearance: document.getElementById('sesiClearance').value, v: document.getElementById('sesiV').value, 
                 ktv: hasilKtv,
                 akses: document.getElementById('sesiAkses').value, heparin: document.getElementById('sesiHeparin').value, 
                 catatan: catatanFinal 
@@ -738,14 +792,12 @@
 
             document.getElementById('listPerawat').innerHTML = db.nurses.map(n => `<tr><td class="p-2 border">${n.nama}</td><td class="p-2 border">${n.nik}</td><td class="p-2 border">${n.jabatan}</td><td class="p-2 border">${n.pendidikan}</td><td class="p-2 border">${n.telp}</td><td class="p-2 border text-center"><button onclick="editPerawat('${n.id}')" class="text-blue-500 hover:text-blue-700 mr-2"><i class="fas fa-edit"></i></button><button onclick="hapusPerawat('${n.id}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button></td></tr>`).join('') || '<tr><td colspan="6" class="p-2 text-center text-gray-500">Belum ada data</td></tr>';
             
-            // Tambah Render Tinggi/Umur di Master Pasien
             document.getElementById('listPasien').innerHTML = db.patients.map(p => `<tr><td class="p-2 border">${p.rm}</td><td class="p-2 border">${p.nama} <div class="text-[10px] text-gray-500 font-semibold">${p.tinggi||'-'} cm / ${p.umur||'-'} Thn</div></td><td class="p-2 border">${p.diag}</td><td class="p-2 border">${p.bb}</td><td class="p-2 border">${p.jadwal}</td><td class="p-2 border">${p.status}</td><td class="p-2 border text-center"><button onclick="editPasien('${p.id}')" class="text-blue-500 hover:text-blue-700 mr-2"><i class="fas fa-edit"></i></button><button onclick="hapusPasien('${p.id}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button></td></tr>`).join('') || '<tr><td colspan="7" class="p-2 text-center text-gray-500">Belum ada data</td></tr>';
             
             let filterTgl = document.getElementById('filterTglSesi').value; let filteredSesi = db.sessions.filter(s => s.tgl === filterTgl);
             const generateSesiRow = (s) => {
                 let nama = "-"; if(s.patientId.startsWith('manual_')) { let j = db.schedules.find(x => x.id === s.patientId.replace('manual_', '')); if(j) nama = j.nama + " <span class='text-blue-500'>(Ranap)</span>"; } else { let p = db.patients.find(x => x.id === s.patientId); if(p) nama = p.nama; }
                 
-                // Indikator Kt/V di dalam UI Sesi
                 let badgeKtv = s.ktv ? ` | Kt/V: <span class="font-bold bg-green-200 text-green-800 px-1 rounded">${s.ktv}</span>` : '';
                 let detailHD = `Jenis: <span class="font-semibold">${s.jenis}</span> | Waktu: <span class="font-semibold">${s.waktu} Jam</span><br>UFG: <span class="font-semibold text-blue-600">${s.uf}</span> | Qb: <span class="font-semibold">${s.qb}</span> | Qd: <span class="font-semibold">${s.qd}</span>${badgeKtv}<br><span class="text-gray-500 italic block mt-1"><i class="fas fa-comment-medical text-blue-400"></i> ${s.catatan || '-'}</span>`;
                 
