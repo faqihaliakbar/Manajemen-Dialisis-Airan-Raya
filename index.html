@@ -151,6 +151,13 @@
 </head>
 <body class="bg-gray-50 flex h-screen overflow-hidden text-sm font-sans text-gray-700 relative">
 
+    <div id="imageModal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center backdrop-blur-sm transition-opacity" onclick="closeImageModal()">
+        <div class="relative max-w-4xl max-h-[90vh] w-[90%] p-2 flex justify-center" onclick="event.stopPropagation()">
+            <button onclick="closeImageModal()" class="absolute -top-12 right-0 text-white hover:text-red-500 text-4xl transition"><i class="fas fa-times"></i></button>
+            <img src="WhatsApp Image 2026-03-09 at 13.07.05.jpeg" alt="Keluarga Besar Dialisis" class="max-h-[85vh] w-auto object-contain rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.5)] border-4 border-white/20">
+        </div>
+    </div>
+
     <div id="loading-data" class="fixed inset-0 bg-white/90 backdrop-blur-sm z-[60] flex flex-col items-center justify-center">
         <div class="relative w-20 h-20 mb-4">
             <div class="absolute inset-0 border-4 border-gray-200 rounded-full"></div>
@@ -199,17 +206,34 @@
                     <img src="airanraya.png" alt="Logo RS Airan Raya" class="h-10">
                     <div class="leading-tight">
                         <div class="font-bold text-brand-dark text-lg md:text-xl">RS AIRAN RAYA</div>
-                        <div class="text-[10px] text-gray-500 tracking-widest uppercase">Airan Raya</div>
+                        <div class="text-[10px] text-gray-500 tracking-widest uppercase">Manajemen Unit Dialisis</div>
                     </div>
                 </div>
                 <div class="hidden lg:flex items-center gap-6 text-xs font-bold text-gray-600 tracking-wide">
                     <a href="#" class="text-brand-neon">HOME</a>
                     <span class="text-gray-300">|</span>
-                    <a href="#" class="hover:text-brand-neon transition">LAYANAN</a>
+                    
+                    <div class="relative group">
+                        <a href="#" class="hover:text-brand-neon transition py-2 flex items-center gap-1">LAYANAN <i class="fas fa-chevron-down text-[10px]"></i></a>
+                        <div class="absolute left-1/2 transform -translate-x-1/2 top-full mt-2 w-72 bg-white rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.15)] border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 overflow-hidden">
+                            <div class="bg-[#0284c7] text-white text-[10px] font-bold px-4 py-2 uppercase tracking-wider text-center">Layanan Kami</div>
+                            <a href="#" class="block px-4 py-3 hover:bg-gray-50 border-b border-gray-100 transition flex items-center gap-3">
+                                <div class="bg-blue-100 w-8 h-8 rounded-full flex items-center justify-center shrink-0"><i class="fas fa-procedures text-blue-600 text-sm"></i></div>
+                                <div class="text-left"><p class="text-xs font-bold text-gray-800">Hemodialisis</p></div>
+                            </a>
+                            <a href="#" class="block px-4 py-3 hover:bg-gray-50 border-b border-gray-100 transition flex items-center gap-3">
+                                <div class="bg-blue-100 w-8 h-8 rounded-full flex items-center justify-center shrink-0"><i class="fas fa-stethoscope text-blue-600 text-sm"></i></div>
+                                <div class="text-left"><p class="text-xs font-bold text-gray-800">Poli Ginjal Hipertensi</p></div>
+                            </a>
+                            <a href="#" class="block px-4 py-3 hover:bg-gray-50 transition flex items-center gap-3">
+                                <div class="bg-blue-100 w-8 h-8 rounded-full flex items-center justify-center shrink-0"><i class="fas fa-hand-holding-water text-blue-600 text-sm"></i></div>
+                                <div class="text-left"><p class="text-[11px] font-bold text-gray-800 leading-tight">CAPD (Continuous Ambulatory Peritoneal Dialisis)</p></div>
+                            </a>
+                        </div>
+                    </div>
+
                     <span class="text-gray-300">|</span>
                     <a href="#" class="hover:text-brand-neon transition">JADWAL</a>
-                    <span class="text-gray-300">|</span>
-                    <a href="#" class="hover:text-brand-neon transition">GALERI</a>
                     <span class="text-gray-300">|</span>
                     
                     <div class="relative group">
@@ -270,23 +294,23 @@
             </div>
         </div>
 
-        <div class="w-full max-w-7xl mx-auto px-4 md:px-8 pb-4 mt-8 z-10 relative">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div class="w-full max-w-5xl mx-auto px-4 md:px-8 pb-4 mt-8 z-10 relative">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div class="bg-white rounded-2xl p-6 text-center shadow-xl transform transition hover:-translate-y-1 flex flex-col justify-between h-full">
                     <div>
                         <div class="text-teal-700 text-4xl mb-4"><i class="fas fa-user-nurse"></i></div>
                         <h4 class="font-bold text-brand-dark mb-2 leading-tight text-lg">Perawat Dialisis<br>Profesional</h4>
                         <p class="text-sm text-gray-500 mb-6 px-2">Tim berpengalaman dan bersertifikat</p>
                     </div>
-                    <button class="bg-[#a3e635] hover:bg-[#84cc16] text-brand-dark text-xs font-bold py-2.5 px-6 rounded-full transition w-max mx-auto">LEARN MORE</button>
+                    <button type="button" onclick="openImageModal()" class="bg-[#a3e635] hover:bg-[#84cc16] text-brand-dark text-xs font-bold py-2.5 px-6 rounded-full transition w-max mx-auto">LEARN MORE</button>
                 </div>
                 <div class="bg-white rounded-2xl p-6 text-center shadow-xl transform transition hover:-translate-y-1 flex flex-col justify-between h-full">
                     <div>
                         <div class="text-teal-700 text-4xl mb-4"><i class="fas fa-hand-holding-medical"></i></div>
                         <h4 class="font-bold text-brand-dark mb-2 leading-tight text-lg">Kualitas<br>Terbaik</h4>
-                        <p class="text-sm text-gray-500 mb-6 px-2">Standar internasional untuk dialisis</p>
+                        <p class="text-sm text-gray-500 mb-6 px-2">Layanan Dialisis Terstandar</p>
                     </div>
-                    <button class="bg-[#a3e635] hover:bg-[#84cc16] text-brand-dark text-xs font-bold py-2.5 px-6 rounded-full transition w-max mx-auto">LEARN MORE</button>
+                    <button type="button" class="bg-[#a3e635] hover:bg-[#84cc16] text-brand-dark text-xs font-bold py-2.5 px-6 rounded-full transition w-max mx-auto">LEARN MORE</button>
                 </div>
                 <div class="bg-white rounded-2xl p-6 text-center shadow-xl transform transition hover:-translate-y-1 flex flex-col justify-between h-full">
                     <div>
@@ -294,19 +318,11 @@
                         <h4 class="font-bold text-brand-dark mb-2 leading-tight text-lg">Armada Dialisis<br>Terawat</h4>
                         <p class="text-sm text-gray-500 mb-6 px-2">Peralatan canggih dan higienis</p>
                     </div>
-                    <button class="bg-[#a3e635] hover:bg-[#84cc16] text-brand-dark text-xs font-bold py-2.5 px-6 rounded-full transition w-max mx-auto">LEARN MORE</button>
-                </div>
-                <div class="bg-white rounded-2xl p-6 text-center shadow-xl transform transition hover:-translate-y-1 flex flex-col justify-between h-full">
-                    <div>
-                        <div class="text-teal-700 text-4xl mb-4"><i class="fas fa-phone-volume"></i></div>
-                        <h4 class="font-bold text-brand-dark mb-2 leading-tight text-lg">Dukungan<br>Cepat</h4>
-                        <p class="text-sm text-gray-500 mb-6 px-2">Layanan darurat 24 jam</p>
-                    </div>
-                    <button class="bg-[#a3e635] hover:bg-[#84cc16] text-brand-dark text-xs font-bold py-2.5 px-6 rounded-full transition w-max mx-auto">LEARN MORE</button>
+                    <button type="button" class="bg-[#a3e635] hover:bg-[#84cc16] text-brand-dark text-xs font-bold py-2.5 px-6 rounded-full transition w-max mx-auto">LEARN MORE</button>
                 </div>
             </div>
             <div class="text-center text-white/80 text-xs font-medium tracking-wide">
-                Hak Cipta © 2024 RS Airan Raya
+                Hak Cipta © 2026 RS Airan Raya
             </div>
         </div>
     </div>
@@ -517,6 +533,14 @@
             if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`; return dateStr;
         }
 
+        // --- FUNGSI MODAL GAMBAR ---
+        function openImageModal() {
+            document.getElementById('imageModal').classList.remove('hidden');
+        }
+        function closeImageModal() {
+            document.getElementById('imageModal').classList.add('hidden');
+        }
+
         // --- 1. INISIALISASI FIREBASE CLOUD DATABASE ---
         const firebaseConfig = {
             apiKey: "AIzaSyAl8wAjWVLvhmebNVI7yBJk1UN1BepQmG0",
@@ -553,7 +577,7 @@
                 saveData(); 
             }
             
-            // Inisialisasi Select2 untuk form login (Bug typing/focus diperbaiki di CSS z-index & warna teks)
+            // Inisialisasi Select2 untuk form login
             if(!currentUser && db.users) {
                 let optUsers = '<option value=""></option>' + db.users.map(u => `<option value="${u.username}">${u.nama} (${u.username})</option>`).join('');
                 let $loginDropdown = $('#loginUsername');
