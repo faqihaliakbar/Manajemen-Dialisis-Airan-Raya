@@ -130,8 +130,8 @@
             overflow: hidden;
         }
         .select2-search__field {
-            color: #1f2937 !important; /* Teks pencarian jadi warna gelap */
-            background-color: #f8fafc !important; /* Latar pencarian agak abu terang */
+            color: #1f2937 !important; 
+            background-color: #f8fafc !important; 
             border: 1px solid #cbd5e1 !important;
             border-radius: 0.25rem !important;
             padding: 8px !important;
@@ -155,6 +155,14 @@
         <div class="relative max-w-4xl max-h-[90vh] w-[90%] p-2 flex justify-center" onclick="event.stopPropagation()">
             <button onclick="closeImageModal()" class="absolute -top-12 right-0 text-white hover:text-red-500 text-4xl transition"><i class="fas fa-times"></i></button>
             <img src="WhatsApp Image 2026-03-09 at 13.07.05.jpeg" alt="Keluarga Besar Dialisis" class="max-h-[85vh] w-auto object-contain rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.5)] border-4 border-white/20">
+        </div>
+    </div>
+
+    <div id="armadaModal" class="fixed inset-0 bg-black/90 z-[9999] hidden flex items-center justify-center backdrop-blur-sm transition-opacity" onclick="closeArmadaModal()">
+        <div class="relative max-w-6xl max-h-[90vh] w-[95%] p-2 flex flex-col md:flex-row justify-center items-center gap-6 overflow-y-auto" onclick="event.stopPropagation()">
+            <button onclick="closeArmadaModal()" class="absolute -top-12 right-0 md:right-4 text-white hover:text-red-500 text-4xl transition z-10"><i class="fas fa-times"></i></button>
+            <img src="FR.jpeg" alt="Mesin Fresenius" class="max-h-[80vh] w-auto object-contain rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.5)] border-4 border-white/20">
+            <img src="NPR.jpeg" alt="Mesin Nipro" class="max-h-[80vh] w-auto object-contain rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.5)] border-4 border-white/20">
         </div>
     </div>
 
@@ -195,8 +203,6 @@
             <div class="flex justify-between items-center px-6 md:px-10 py-2 text-white/90 text-xs">
                 <div><i class="fas fa-map-marker-alt mr-1"></i> Jl. Airan Raya No.99, Way Hui, Kec. Jati Agung, Kabupaten Lampung Selatan, Lampung 35131</div>
                 <div class="hidden md:flex gap-4">
-                    <a href="#" class="hover:text-white transition">Facebook</a>
-                    <a href="#" class="hover:text-white transition">Twitter</a>
                     <a href="#" class="hover:text-white transition">Instagram</a>
                 </div>
             </div>
@@ -206,7 +212,7 @@
                     <img src="airanraya.png" alt="Logo RS Airan Raya" class="h-10">
                     <div class="leading-tight">
                         <div class="font-bold text-brand-dark text-lg md:text-xl">RS AIRAN RAYA</div>
-                        <div class="text-[10px] text-gray-500 tracking-widest uppercase">Manajemen Unit Dialisis</div>
+                        <div class="text-[10px] text-gray-500 tracking-widest uppercase">Sistem Informasi Dialisis</div>
                     </div>
                 </div>
                 <div class="hidden lg:flex items-center gap-6 text-xs font-bold text-gray-600 tracking-wide">
@@ -233,7 +239,7 @@
                     </div>
 
                     <span class="text-gray-300">|</span>
-                    <a href="#" class="hover:text-brand-neon transition">JADWAL</a>
+                    <a href="http://192.168.5.20:8000/login" target="_blank" class="hover:text-brand-neon transition">ERM</a>
                     <span class="text-gray-300">|</span>
                     
                     <div class="relative group">
@@ -256,7 +262,7 @@
                     </div>
 
                     <span class="text-gray-300">|</span>
-                    <a href="#" class="hover:text-brand-neon transition">BOOKING</a>
+                    <a href="#" class="hover:text-brand-neon transition">MESIN TERSEDIA</a>
                     <button class="ml-2 text-gray-500 hover:text-brand-dark text-lg"><i class="fas fa-search"></i></button>
                 </div>
             </div>
@@ -288,9 +294,6 @@
                     </div>
                     <button type="submit" class="w-full bg-[#a3e635] hover:bg-[#84cc16] text-brand-dark text-lg font-extrabold py-3.5 rounded-xl transition-all shadow-[0_0_15px_rgba(163,230,53,0.5)] hover:-translate-y-0.5 mt-4">LOG IN</button>
                 </form>
-                <div class="mt-5">
-                    <a href="#" class="text-white/80 text-sm underline hover:text-white transition font-medium">Lupa kata sandi?</a>
-                </div>
             </div>
         </div>
 
@@ -318,7 +321,7 @@
                         <h4 class="font-bold text-brand-dark mb-2 leading-tight text-lg">Armada Dialisis<br>Terawat</h4>
                         <p class="text-sm text-gray-500 mb-6 px-2">Peralatan canggih dan higienis</p>
                     </div>
-                    <button type="button" class="bg-[#a3e635] hover:bg-[#84cc16] text-brand-dark text-xs font-bold py-2.5 px-6 rounded-full transition w-max mx-auto">LEARN MORE</button>
+                    <button type="button" onclick="openArmadaModal()" class="bg-[#a3e635] hover:bg-[#84cc16] text-brand-dark text-xs font-bold py-2.5 px-6 rounded-full transition w-max mx-auto">LEARN MORE</button>
                 </div>
             </div>
             <div class="text-center text-white/80 text-xs font-medium tracking-wide">
@@ -539,6 +542,14 @@
         }
         function closeImageModal() {
             document.getElementById('imageModal').classList.add('hidden');
+        }
+
+        // --- FUNGSI MODAL ARMADA BARU ---
+        function openArmadaModal() {
+            document.getElementById('armadaModal').classList.remove('hidden');
+        }
+        function closeArmadaModal() {
+            document.getElementById('armadaModal').classList.add('hidden');
         }
 
         // --- 1. INISIALISASI FIREBASE CLOUD DATABASE ---
