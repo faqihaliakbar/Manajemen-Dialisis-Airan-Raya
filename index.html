@@ -77,7 +77,7 @@
         input[readonly], input[disabled] { background-color: #f8fafc; color: #64748b; cursor: not-allowed; }
         label { display: block; color: #64748b; font-weight: 600; margin-bottom: 0.25rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
 
-        /* TEXT INPUT UNTUK PASSWORD LOGIN (Tampilan Kaca) */
+        /* TEXT INPUT UNTUK PASSWORD LOGIN */
         .login-input {
             background-color: rgba(255, 255, 255, 0.1) !important;
             border: 1px solid rgba(255, 255, 255, 0.4) !important;
@@ -120,7 +120,6 @@
             border-color: transparent transparent #ffffff transparent !important;
         }
 
-        /* MEMASTIKAN DROPDOWN PENCARIAN BISA DIKETIK DAN MUNCUL DI DEPAN */
         .select2-container--open { z-index: 999999 !important; }
         .select2-dropdown {
             background-color: #ffffff !important; 
@@ -147,9 +146,83 @@
         /* General dashboard select2 fixes */
         main .select2-container .select2-selection--single { height: 42px !important; border-color: #e2e8f0 !important; border-radius: 0.5rem !important; padding: 6px 12px !important; display: flex; align-items: center; }
         main .select2-container--default .select2-selection--single .select2-selection__arrow { top: 8px !important; right: 8px !important; }
+        
+        /* Denah Specific Styles */
+        .bed-box { transition: all 0.2s ease; cursor: pointer; }
+        .bed-box:hover { transform: translateY(-3px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
     </style>
 </head>
 <body class="bg-gray-50 flex h-screen overflow-hidden text-sm font-sans text-gray-700 relative">
+
+    <div id="denahMesinModal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center backdrop-blur-sm transition-opacity" onclick="closeDenahModal()">
+        <div class="bg-gray-50 rounded-2xl shadow-2xl w-[95%] max-w-5xl max-h-[90vh] overflow-hidden flex flex-col relative" onclick="event.stopPropagation()">
+            <div class="bg-gradient-to-r from-brand-dark to-brand-blue p-4 sm:p-5 flex justify-between items-center text-white shrink-0">
+                <div>
+                    <h3 class="font-bold text-lg sm:text-xl flex items-center gap-2"><i class="fas fa-th text-brand-neon"></i> Ketersediaan Mesin Dialisis</h3>
+                    <p class="text-[10px] sm:text-xs text-gray-300 mt-0.5">Pantau status penggunaan bed secara Real-Time</p>
+                </div>
+                <button onclick="closeDenahModal()" class="text-white hover:text-red-400 transition text-2xl"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div class="p-4 sm:p-6 overflow-y-auto flex-1 bg-gray-200">
+                
+                <div class="flex flex-wrap justify-center gap-4 mb-6 bg-white p-3 rounded-xl shadow-sm border border-gray-200 w-max mx-auto">
+                    <div class="flex items-center gap-2"><div class="w-4 h-4 bg-emerald-100 border border-emerald-400 rounded"></div><span class="text-xs font-bold text-gray-700">Kosong (Tersedia)</span></div>
+                    <div class="flex items-center gap-2"><div class="w-4 h-4 bg-rose-100 border border-rose-400 rounded"></div><span class="text-xs font-bold text-gray-700">Running (Terisi)</span></div>
+                    <div class="flex items-center gap-2"><div class="w-4 h-4 bg-blue-100 border border-blue-400 rounded"></div><span class="text-xs font-bold text-gray-700">Perbaikan</span></div>
+                </div>
+
+                <div class="flex flex-col lg:flex-row gap-6 justify-center items-start">
+
+                    <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-md border border-gray-300 flex-1 relative w-full flex flex-col items-center overflow-x-auto">
+                        <div class="bg-emerald-600 text-white px-6 py-1 rounded-full font-bold shadow-sm border-2 border-white text-xs tracking-widest mb-4 z-10 sticky left-0">
+                            RUANG FRESENIUS
+                        </div>
+
+                        <div class="flex gap-2 sm:gap-6 w-full justify-center min-w-max">
+                            <div class="flex flex-col gap-2 w-16 sm:w-20" id="render-fresenius-kiri"></div>
+
+                            <div class="w-8 sm:w-12 bg-gray-100 rounded-full border border-gray-200 flex flex-col justify-center items-center py-2">
+                                <i class="fas fa-arrow-up text-gray-400 mb-2 text-xs"></i>
+                                <span style="writing-mode: vertical-rl; text-orientation: upright;" class="text-[10px] font-bold text-gray-400 tracking-widest my-4">LORONG</span>
+                                <i class="fas fa-arrow-down text-gray-400 mt-2 text-xs"></i>
+                            </div>
+
+                            <div class="flex flex-col gap-2 w-16 sm:w-20" id="render-fresenius-kanan"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-6 flex-1 w-full">
+                        <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-md border border-gray-300 relative flex flex-col items-center overflow-x-auto">
+                            <div class="bg-blue-600 text-white px-6 py-1 rounded-full font-bold shadow-sm border-2 border-white text-xs tracking-widest mb-4 z-10 sticky left-0">
+                                RUANG NIPRO
+                            </div>
+
+                            <div class="flex gap-2 sm:gap-6 w-full justify-center min-w-max">
+                                <div class="flex flex-col gap-2 w-16 sm:w-20" id="render-nipro-kiri"></div>
+
+                                <div class="w-8 sm:w-12 bg-gray-100 rounded-full border border-gray-200 flex flex-col justify-center items-center py-2">
+                                    <i class="fas fa-arrow-up text-gray-400 mb-2 text-xs"></i>
+                                    <span style="writing-mode: vertical-rl; text-orientation: upright;" class="text-[10px] font-bold text-gray-400 tracking-widest my-4">LORONG</span>
+                                    <i class="fas fa-arrow-down text-gray-400 mt-2 text-xs"></i>
+                                </div>
+
+                                <div class="flex flex-col gap-2 w-16 sm:w-20" id="render-nipro-kanan"></div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-md border border-gray-300 relative flex flex-col items-center">
+                            <div class="bg-rose-600 text-white px-6 py-1 rounded-full font-bold shadow-sm border-2 border-white text-xs tracking-widest mb-4 z-10">
+                                RUANG KHUSUS
+                            </div>
+                            <div id="render-isolasi"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div id="imageModal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center backdrop-blur-sm transition-opacity" onclick="closeImageModal()">
         <div class="relative max-w-4xl max-h-[90vh] w-[90%] p-2 flex justify-center" onclick="event.stopPropagation()">
@@ -262,7 +335,7 @@
                     </div>
 
                     <span class="text-gray-300">|</span>
-                    <a href="#" class="hover:text-brand-neon transition">MESIN TERSEDIA</a>
+                    <a href="#" onclick="openDenahModal()" class="hover:text-brand-neon transition cursor-pointer">MESIN TERSEDIA</a>
                     <button class="ml-2 text-gray-500 hover:text-brand-dark text-lg"><i class="fas fa-search"></i></button>
                 </div>
             </div>
@@ -348,6 +421,7 @@
                 <li class="admin-only"><a href="#" onclick="switchPage('pasien', this)" id="nav-pasien" class="nav-link block px-6 py-3"><i class="fas fa-users w-7 opacity-80"></i> Master Pasien</a></li>
                 <li class="admin-only"><a href="#" onclick="switchPage('perawat', this)" id="nav-perawat" class="nav-link block px-6 py-3"><i class="fas fa-id-badge w-7 opacity-80"></i> Data Pegawai</a></li>
                 <p class="px-6 text-xs font-semibold text-gray-400 uppercase tracking-wider mt-6 mb-2">Operasional</p>
+                <li class="admin-only"><a href="#" onclick="switchPage('statusMesin', this)" id="nav-statusMesin" class="nav-link block px-6 py-3"><i class="fas fa-bed w-7 opacity-80 text-brand-neon"></i> Status Denah</a></li>
                 <li><a href="#" onclick="switchPage('jadwal', this)" id="nav-jadwal" class="nav-link block px-6 py-3"><i class="fas fa-calendar-check w-7 opacity-80"></i> Jadwal Harian</a></li>
                 <li><a href="#" onclick="switchPage('registrasi', this)" id="nav-registrasi" class="nav-link block px-6 py-3"><i class="fas fa-procedures w-7 opacity-80"></i> Registrasi Sesi HD</a></li>
                 <li><a href="#" onclick="switchPage('lembur', this)" id="nav-lembur" class="nav-link block px-6 py-3"><i class="fas fa-clock w-7 opacity-80"></i> Buku Lembur</a></li>
@@ -406,6 +480,16 @@
                     <div class="xl:col-span-1">
                         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-0"><h3 class="font-bold text-brand-dark border-b border-gray-100 pb-3 mb-4 flex items-center gap-2"><span class="text-yellow-500"><i class="fas fa-bell"></i></span> Notifikasi Terbaru</h3><ul id="notificationList" class="space-y-4 text-sm"></ul></div>
                     </div>
+                </div>
+            </section>
+
+            <section id="statusMesin" class="page-section">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8 admin-only">
+                    <h3 class="font-bold text-xl mb-2 text-brand-dark flex items-center gap-2"><i class="fas fa-cogs text-brand-neon"></i> Pengaturan Status Denah Mesin</h3>
+                    <p class="text-sm text-gray-500 mb-6 border-b border-gray-100 pb-4">Ketuk salah satu pilihan pada mesin di bawah untuk merubah status "Denah Mesin" di halaman depan.</p>
+                    
+                    <div id="admin-status-mesin-container" class="space-y-8">
+                        </div>
                 </div>
             </section>
 
@@ -474,7 +558,41 @@
             <section id="pasien" class="page-section">
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
                     <h3 class="font-bold text-xl mb-6 text-brand-dark border-b border-gray-100 pb-3">Form Data Induk Pasien</h3>
-                    <form id="formPasien" onsubmit="savePasien(event)" class="grid grid-cols-1 md:grid-cols-3 gap-6"><input type="hidden" id="psnId"><div><label>No. Registrasi</label><input type="text" id="psnReg" required></div><div><label>No. RM</label><input type="text" id="psnRm" required></div><div><label>Nama Lengkap</label><input type="text" id="psnNama" required></div><div><label>Tanggal Lahir</label><input type="date" id="psnLahir" required></div><div><label>Umur (Tahun)</label><input type="number" id="psnUmur" readonly placeholder="Otomatis" required></div><div><label>Tinggi Badan (cm)</label><input type="number" id="psnTinggi" required></div><div><label>Jenis Kelamin</label><select id="psnJk"><option>Laki-laki</option><option>Perempuan</option></select></div><div><label>Diagnosis</label><input type="text" id="psnDiag" required></div><div><label>Alamat</label><input type="text" id="psnAlamat" required></div><div><label>BB Kering (Kg)</label><input type="number" step="any" id="psnBb" required></div><div><label>Jadwal Rutin</label><select id="psnJadwal"><option>Senin - Kamis</option><option>Selasa - Jumat</option><option>Rabu - Sabtu</option><option>Traveling</option></select></div><div><label>Tanggal Ter-registrasi</label><input type="date" id="psnTglReg" required></div><div><label>Status Pasien</label><select id="psnStatus"><option>Aktif</option><option>Tidak Aktif</option><option>Meninggal Dunia</option><option>Pindah</option></select></div><div class="md:col-span-3 flex justify-end gap-3 mt-4 border-t pt-6"><button type="button" onclick="resetFormPasien()" class="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 font-medium transition">Batal</button><button type="submit" class="bg-brand-blue hover:bg-blue-800 text-white px-6 py-2.5 rounded-xl shadow-md font-medium transition flex items-center gap-2"><i class="fas fa-save"></i> Simpan Pasien</button></div></form>
+                    <form id="formPasien" onsubmit="savePasien(event)" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <input type="hidden" id="psnId">
+                        <div><label>No. Registrasi</label><input type="text" id="psnReg" required></div>
+                        <div><label>No. RM</label><input type="text" id="psnRm" required></div>
+                        <div><label>Nama Lengkap</label><input type="text" id="psnNama" required></div>
+                        <div><label>Tanggal Lahir</label><input type="date" id="psnLahir" required></div>
+                        <div><label>Umur (Tahun)</label><input type="number" id="psnUmur" readonly placeholder="Otomatis" required></div>
+                        <div><label>Tinggi Badan (cm)</label><input type="number" id="psnTinggi" required></div>
+                        <div><label>Jenis Kelamin</label><select id="psnJk"><option>Laki-laki</option><option>Perempuan</option></select></div>
+                        <div><label>Diagnosis</label><input type="text" id="psnDiag" required></div>
+                        <div><label>Alamat</label><input type="text" id="psnAlamat" required></div>
+                        <div><label>BB Kering (Kg)</label><input type="number" step="any" id="psnBb" required></div>
+                        <div><label>Jadwal Rutin</label><select id="psnJadwal"><option>Senin - Kamis</option><option>Selasa - Jumat</option><option>Rabu - Sabtu</option><option>Traveling</option></select></div>
+                        <div><label>Tanggal Ter-registrasi</label><input type="date" id="psnTglReg" required></div>
+                        
+                        <div class="md:col-span-3">
+                            <label>Status Pasien</label>
+                            <div class="flex flex-wrap gap-4 mt-2 bg-gray-50 p-3 rounded-xl border border-gray-200" id="psnStatusContainer">
+                                <label class="flex items-center gap-2 cursor-pointer normal-case font-medium text-gray-700 hover:text-emerald-600 transition">
+                                    <input type="radio" name="psnStatus" value="Aktif" checked class="w-4 h-4 accent-emerald-500 cursor-pointer"> Aktif
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer normal-case font-medium text-gray-700 hover:text-gray-900 transition">
+                                    <input type="radio" name="psnStatus" value="Tidak Aktif" class="w-4 h-4 accent-gray-500 cursor-pointer"> Tidak Aktif
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer normal-case font-medium text-gray-700 hover:text-rose-600 transition">
+                                    <input type="radio" name="psnStatus" value="Meninggal Dunia" class="w-4 h-4 accent-rose-500 cursor-pointer"> Meninggal Dunia
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer normal-case font-medium text-gray-700 hover:text-blue-600 transition">
+                                    <input type="radio" name="psnStatus" value="Pindah" class="w-4 h-4 accent-blue-500 cursor-pointer"> Pindah
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="md:col-span-3 flex justify-end gap-3 mt-4 border-t pt-6"><button type="button" onclick="resetFormPasien()" class="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 font-medium transition">Batal</button><button type="submit" class="bg-brand-blue hover:bg-blue-800 text-white px-6 py-2.5 rounded-xl shadow-md font-medium transition flex items-center gap-2"><i class="fas fa-save"></i> Simpan Pasien</button></div>
+                    </form>
                 </div>
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
                     <div class="flex justify-between items-center mb-6 gap-4"><h3 class="font-bold text-xl text-brand-dark">Daftar Pasien</h3><button onclick="downloadPDFPasien()" class="admin-only bg-rose-500 hover:bg-rose-600 text-white px-4 py-2.5 rounded-xl font-medium shadow-sm transition flex items-center gap-2"><i class="fas fa-file-pdf"></i> Export PDF</button></div>
@@ -536,21 +654,22 @@
             if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`; return dateStr;
         }
 
-        // --- FUNGSI MODAL GAMBAR ---
-        function openImageModal() {
-            document.getElementById('imageModal').classList.remove('hidden');
+        // --- FUNGSI MODAL DENAH MESIN ---
+        function openDenahModal() {
+            renderDenahMesin(); // Update warna setiap kali dibuka
+            document.getElementById('denahMesinModal').classList.remove('hidden');
         }
-        function closeImageModal() {
-            document.getElementById('imageModal').classList.add('hidden');
+        function closeDenahModal() {
+            document.getElementById('denahMesinModal').classList.add('hidden');
         }
 
-        // --- FUNGSI MODAL ARMADA BARU ---
-        function openArmadaModal() {
-            document.getElementById('armadaModal').classList.remove('hidden');
-        }
-        function closeArmadaModal() {
-            document.getElementById('armadaModal').classList.add('hidden');
-        }
+        // --- FUNGSI MODAL GAMBAR ---
+        function openImageModal() { document.getElementById('imageModal').classList.remove('hidden'); }
+        function closeImageModal() { document.getElementById('imageModal').classList.add('hidden'); }
+
+        // --- FUNGSI MODAL ARMADA ---
+        function openArmadaModal() { document.getElementById('armadaModal').classList.remove('hidden'); }
+        function closeArmadaModal() { document.getElementById('armadaModal').classList.add('hidden'); }
 
         // --- 1. INISIALISASI FIREBASE CLOUD DATABASE ---
         const firebaseConfig = {
@@ -565,7 +684,7 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        let db = { users: [], nurses: [], patients: [], schedules: [], sessions: [], lemburs: [] };
+        let db = { users: [], nurses: [], patients: [], schedules: [], sessions: [], lemburs: [], bedStatus: {} };
         let currentUser = JSON.parse(sessionStorage.getItem('rs_current_user')) || null;
         
         const today = new Date().toISOString().split('T')[0];
@@ -577,14 +696,25 @@
 
         document.getElementById('loading-data').style.display = 'flex';
 
+        // Fungsi Helper untuk Inisiasi Status Mesin Default
+        function getDefaultBedStatus() {
+            let status = {};
+            for(let i=1; i<=15; i++) status[`F-${i}`] = 'Kosong';
+            for(let i=1; i<=15; i++) status[`N-${i}`] = 'Kosong';
+            status['ISOLASI'] = 'Kosong';
+            return status;
+        }
+
         // FITUR REAL-TIME
         database.ref('rs_airan_raya').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
                 db.users = data.users || []; db.nurses = data.nurses || []; db.patients = data.patients || [];
                 db.schedules = data.schedules || []; db.sessions = data.sessions || []; db.lemburs = data.lemburs || []; 
+                db.bedStatus = data.bedStatus || getDefaultBedStatus();
             } else {
                 db.users.push({username: 'admin', password: '1234', nama: 'Administrator', role: 'Admin', status: 'active', attempts: 0});
+                db.bedStatus = getDefaultBedStatus();
                 saveData(); 
             }
             
@@ -611,6 +741,7 @@
             document.getElementById('loading-data').style.display = 'none';
 
             if(currentUser) { applyRoleUI(); refreshUI(); }
+            renderDenahMesin(); // Update Modal Denah saat data berubah
         });
 
         function saveData() {
@@ -626,9 +757,131 @@
             });
         }
 
-        function getSesiCategory(s) { if (s.isManualSesi || (s.patientId && s.patientId.startsWith('manual_'))) return 'Rawat Inap'; return s.mesin; }
+        // --- SISTEM RENDER DENAH (DINAMIS BERDASARKAN STATUS) ---
+        function getBedColorClass(status) {
+            if (status === 'Running') return { bg: 'bg-rose-50', border: 'border-rose-400', icon: 'text-rose-600', text: 'text-rose-800' };
+            if (status === 'Perbaikan') return { bg: 'bg-blue-50', border: 'border-blue-400', icon: 'text-blue-600', text: 'text-blue-800' };
+            return { bg: 'bg-emerald-50', border: 'border-emerald-300', icon: 'text-emerald-500', text: 'text-emerald-700' }; // Kosong
+        }
+
+        function createBedHTML(bedId, label, icon = 'fa-procedures', extraClass = '') {
+            let status = db.bedStatus ? (db.bedStatus[bedId] || 'Kosong') : 'Kosong';
+            let c = getBedColorClass(status);
+            let displayLabel = label.replace('<br>', ' '); // For tooltips
+            return `
+                <div class="bed-box flex flex-col items-center justify-center py-2 px-1 ${c.bg} border ${c.border} rounded-lg group shadow-sm ${extraClass}" title="${bedId}: ${status}">
+                    <i class="fas ${icon} text-xl sm:text-2xl ${c.icon} mb-1 group-hover:scale-110 transition-transform"></i>
+                    <span class="text-[10px] font-bold ${c.text} leading-tight text-center">${label}</span>
+                </div>
+            `;
+        }
+
+        function renderDenahMesin() {
+            let fl = '', fr = '', nl = '', nr = '', iso = '';
+            
+            // Fresenius Kiri (F-9 to F-15)
+            for(let i=9; i<=15; i++) fl += createBedHTML(`F-${i}`, `F-${i}`);
+            // Fresenius Kanan (F-8 down to F-2)
+            for(let i=8; i>=2; i--) fr += createBedHTML(`F-${i}`, `F-${i}`);
+            // Kubikal
+            fr += createBedHTML('F-1', `KUBIKAL<br>(F-1)`, 'fa-door-closed', 'border-2 shadow-md');
+
+            // Nipro Kiri (N-10 to N-15)
+            for(let i=10; i<=15; i++) nl += createBedHTML(`N-${i}`, `N-${i}`);
+            // Nipro Kanan (N-9 down to N-2)
+            for(let i=9; i>=2; i--) nr += createBedHTML(`N-${i}`, `N-${i}`);
+            // Anak
+            nr += createBedHTML('N-1', `ANAK<br>(N-1)`, 'fa-child', 'border-2 shadow-md');
+
+            // Isolasi
+            iso = createBedHTML('ISOLASI', `ISOLASI`, 'fa-biohazard', 'border-2 shadow-[0_0_15px_rgba(244,63,94,0.15)] w-20 py-4');
+
+            document.getElementById('render-fresenius-kiri').innerHTML = fl;
+            document.getElementById('render-fresenius-kanan').innerHTML = fr;
+            document.getElementById('render-nipro-kiri').innerHTML = nl;
+            document.getElementById('render-nipro-kanan').innerHTML = nr;
+            document.getElementById('render-isolasi').innerHTML = iso;
+        }
+
+        // --- MANAJEMEN STATUS MESIN (ADMIN) ---
+        function updateBedStatus(bedId, status) {
+            if(!db.bedStatus) db.bedStatus = getDefaultBedStatus();
+            db.bedStatus[bedId] = status;
+            saveData();
+            // renderDenahMesin() will be called automatically by Firebase on('value')
+        }
+
+        function renderAdminStatusMesin() {
+            if (!currentUser || currentUser.role !== 'Admin') return;
+            
+            let html = '';
+            
+            const createRadioGroup = (id, label) => {
+                let currentStatus = db.bedStatus ? (db.bedStatus[id] || 'Kosong') : 'Kosong';
+                return `
+                    <div class="flex flex-col p-3 border border-gray-200 rounded-xl hover:shadow-md transition bg-white shadow-sm">
+                        <div class="flex justify-between items-center border-b border-gray-100 pb-2 mb-2">
+                            <span class="font-bold text-gray-800 text-xs">${label}</span>
+                            <i class="fas fa-bed text-gray-300"></i>
+                        </div>
+                        <div class="grid grid-cols-3 gap-1 bg-gray-100/80 p-1 rounded-lg">
+                            <label class="cursor-pointer text-center" title="Tersedia (Kosong)">
+                                <input type="radio" name="bed_${id}" value="Kosong" onchange="updateBedStatus('${id}', 'Kosong')" class="peer sr-only" ${currentStatus === 'Kosong' ? 'checked' : ''}>
+                                <div class="py-1.5 text-[10px] font-bold rounded-md peer-checked:bg-emerald-500 peer-checked:text-white text-gray-500 hover:bg-gray-200 transition-all tracking-wide">KOSONG</div>
+                            </label>
+                            <label class="cursor-pointer text-center" title="Terisi (Running)">
+                                <input type="radio" name="bed_${id}" value="Running" onchange="updateBedStatus('${id}', 'Running')" class="peer sr-only" ${currentStatus === 'Running' ? 'checked' : ''}>
+                                <div class="py-1.5 text-[10px] font-bold rounded-md peer-checked:bg-rose-500 peer-checked:text-white text-gray-500 hover:bg-gray-200 transition-all tracking-wide">RUN</div>
+                            </label>
+                            <label class="cursor-pointer text-center" title="Dalam Perbaikan">
+                                <input type="radio" name="bed_${id}" value="Perbaikan" onchange="updateBedStatus('${id}', 'Perbaikan')" class="peer sr-only" ${currentStatus === 'Perbaikan' ? 'checked' : ''}>
+                                <div class="py-1.5 text-[10px] font-bold rounded-md peer-checked:bg-blue-500 peer-checked:text-white text-gray-500 hover:bg-gray-200 transition-all tracking-wide"><i class="fas fa-wrench"></i></div>
+                            </label>
+                        </div>
+                    </div>
+                `;
+            };
+
+            html += `
+                <div class="bg-emerald-50/50 p-5 rounded-2xl border border-emerald-100 mb-8">
+                    <h3 class="font-bold text-emerald-800 mb-4 text-lg border-b border-emerald-200 pb-2 flex items-center gap-2"><i class="fas fa-door-open"></i> Ruang Fresenius</h3>
+                    
+                    <h4 class="text-xs font-bold text-emerald-600 mb-3 uppercase tracking-wider flex items-center gap-2"><i class="fas fa-arrow-right"></i> Baris Kanan</h4>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4 mb-6">
+                        ${createRadioGroup('F-1', 'F-1 (KUBIKAL)')}
+                        ${[2,3,4,5,6,7,8].map(i => createRadioGroup(`F-${i}`, `Bed F-${i}`)).join('')}
+                    </div>
+                    
+                    <h4 class="text-xs font-bold text-emerald-600 mb-3 uppercase tracking-wider flex items-center gap-2"><i class="fas fa-arrow-left"></i> Baris Kiri</h4>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4">
+                        ${[9,10,11,12,13,14,15].map(i => createRadioGroup(`F-${i}`, `Bed F-${i}`)).join('')}
+                    </div>
+                </div>
+
+                <div class="bg-blue-50/50 p-5 rounded-2xl border border-blue-100">
+                    <h3 class="font-bold text-blue-800 mb-4 text-lg border-b border-blue-200 pb-2 flex items-center gap-2"><i class="fas fa-door-open"></i> Ruang Nipro & Khusus</h3>
+                    
+                    <h4 class="text-xs font-bold text-blue-600 mb-3 uppercase tracking-wider flex items-center gap-2"><i class="fas fa-arrow-right"></i> Baris Kanan</h4>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4 mb-6">
+                        ${createRadioGroup('N-1', 'N-1 (ANAK)')}
+                        ${[2,3,4,5,6,7,8,9].map(i => createRadioGroup(`N-${i}`, `Bed N-${i}`)).join('')}
+                    </div>
+                    
+                    <h4 class="text-xs font-bold text-blue-600 mb-3 uppercase tracking-wider flex items-center gap-2"><i class="fas fa-arrow-left"></i> Baris Kiri & Isolasi</h4>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4">
+                        ${[10,11,12,13,14,15].map(i => createRadioGroup(`N-${i}`, `Bed N-${i}`)).join('')}
+                        ${createRadioGroup('ISOLASI', 'ISOLASI (Khusus)')}
+                    </div>
+                </div>
+            `;
+
+            let container = document.getElementById('admin-status-mesin-container');
+            if(container) container.innerHTML = html;
+        }
 
         // --- PDF EXPORT ---
+        function getSesiCategory(s) { if (s.isManualSesi || (s.patientId && s.patientId.startsWith('manual_'))) return 'Rawat Inap'; return s.mesin; }
+
         function downloadPDFPasien() {
             if(!db.patients || db.patients.length === 0) return alert('Data pasien kosong!');
             const { jsPDF } = window.jspdf; const doc = new jsPDF('landscape');
@@ -735,14 +988,21 @@
         function handleLogout() { currentUser = null; sessionStorage.removeItem('rs_current_user'); location.reload(); }
         
         function applyRoleUI() {
-            if(!currentUser) return; document.getElementById('userInfoDisplay').innerHTML = `<span class="font-bold text-white tracking-wide">${currentUser.nama}</span><br><span class="text-brand-neon font-medium text-[10px] uppercase">${currentUser.role}</span>`;
-            let adminOnlyElements = document.querySelectorAll('.admin-only'); if (currentUser.role === 'Perawat') { adminOnlyElements.forEach(el => el.classList.add('hidden')); if (['akun', 'pasien', 'perawat'].includes(document.querySelector('.page-section.active').id)) switchPage('dashboard', document.getElementById('nav-dashboard')); } else { adminOnlyElements.forEach(el => el.classList.remove('hidden')); }
+            if(!currentUser) return; 
+            document.getElementById('userInfoDisplay').innerHTML = `<span class="font-bold text-white tracking-wide">${currentUser.nama}</span><br><span class="text-brand-neon font-medium text-[10px] uppercase">${currentUser.role}</span>`;
+            let adminOnlyElements = document.querySelectorAll('.admin-only'); 
+            if (currentUser.role === 'Perawat') { 
+                adminOnlyElements.forEach(el => el.classList.add('hidden')); 
+                if (['akun', 'pasien', 'perawat', 'statusMesin'].includes(document.querySelector('.page-section.active').id)) switchPage('dashboard', document.getElementById('nav-dashboard')); 
+            } else { 
+                adminOnlyElements.forEach(el => el.classList.remove('hidden')); 
+            }
         }
         
         function switchPage(pageId, element) {
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active')); document.getElementById(pageId).classList.add('active');
             document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('nav-active')); if(element) element.classList.add('nav-active');
-            const titles = { 'dashboard': 'Dashboard Utama', 'akun': 'Manajemen Akun Sistem', 'pasien': 'Master Data Pasien', 'perawat': 'Data Pegawai', 'jadwal': 'Jadwal Harian', 'registrasi': 'Registrasi Sesi Harian', 'lembur': 'Buku Lembur Pegawai' };
+            const titles = { 'dashboard': 'Dashboard Utama', 'akun': 'Manajemen Akun Sistem', 'pasien': 'Master Data Pasien', 'perawat': 'Data Pegawai', 'jadwal': 'Jadwal Harian', 'registrasi': 'Registrasi Sesi Harian', 'lembur': 'Buku Lembur Pegawai', 'statusMesin': 'Status Denah Mesin' };
             document.getElementById('pageTitle').innerText = titles[pageId]; refreshUI();
         }
 
@@ -799,8 +1059,55 @@
         function hapusPerawat(id) { if(confirm('Yakin hapus?')) { db.nurses = db.nurses.filter(x => x.id !== id); saveData(); } }
         function resetFormPerawat() { document.getElementById('formPerawat').reset(); document.getElementById('prwId').value = ''; }
         
-        function savePasien(e) { e.preventDefault(); let id = document.getElementById('psnId').value; let data = { reg: document.getElementById('psnReg').value, rm: document.getElementById('psnRm').value, nama: document.getElementById('psnNama').value, lahir: document.getElementById('psnLahir').value, umur: document.getElementById('psnUmur').value, tinggi: document.getElementById('psnTinggi').value, jk: document.getElementById('psnJk').value, diag: document.getElementById('psnDiag').value, alamat: document.getElementById('psnAlamat').value, bb: document.getElementById('psnBb').value, jadwal: document.getElementById('psnJadwal').value, tglReg: document.getElementById('psnTglReg').value, status: document.getElementById('psnStatus').value }; if(id) { let index = db.patients.findIndex(x => x.id === id); if(index !== -1) db.patients[index] = { ...db.patients[index], ...data }; } else { data.id = Date.now().toString(); db.patients.push(data); } resetFormPasien(); saveData(); alert('Disimpan!'); }
-        function editPasien(id) { let p = db.patients.find(x => x.id === id); if(p) { document.getElementById('psnId').value = p.id; document.getElementById('psnReg').value = p.reg; document.getElementById('psnRm').value = p.rm; document.getElementById('psnNama').value = p.nama; document.getElementById('psnLahir').value = p.lahir; document.getElementById('psnUmur').value = p.umur || ''; document.getElementById('psnTinggi').value = p.tinggi || ''; document.getElementById('psnJk').value = p.jk; document.getElementById('psnDiag').value = p.diag; document.getElementById('psnAlamat').value = p.alamat; document.getElementById('psnBb').value = p.bb; document.getElementById('psnJadwal').value = p.jadwal; document.getElementById('psnTglReg').value = p.tglReg; document.getElementById('psnStatus').value = p.status; window.scrollTo(0, 0); } }
+        function savePasien(e) { 
+            e.preventDefault(); 
+            let id = document.getElementById('psnId').value; 
+            let data = { 
+                reg: document.getElementById('psnReg').value, 
+                rm: document.getElementById('psnRm').value, 
+                nama: document.getElementById('psnNama').value, 
+                lahir: document.getElementById('psnLahir').value, 
+                umur: document.getElementById('psnUmur').value, 
+                tinggi: document.getElementById('psnTinggi').value, 
+                jk: document.getElementById('psnJk').value, 
+                diag: document.getElementById('psnDiag').value, 
+                alamat: document.getElementById('psnAlamat').value, 
+                bb: document.getElementById('psnBb').value, 
+                jadwal: document.getElementById('psnJadwal').value, 
+                tglReg: document.getElementById('psnTglReg').value, 
+                status: document.querySelector('input[name="psnStatus"]:checked') ? document.querySelector('input[name="psnStatus"]:checked').value : 'Aktif' 
+            }; 
+            if(id) { 
+                let index = db.patients.findIndex(x => x.id === id); 
+                if(index !== -1) db.patients[index] = { ...db.patients[index], ...data }; 
+            } else { 
+                data.id = Date.now().toString(); db.patients.push(data); 
+            } 
+            resetFormPasien(); 
+            saveData(); 
+            alert('Disimpan!'); 
+        }
+        function editPasien(id) { 
+            let p = db.patients.find(x => x.id === id); 
+            if(p) { 
+                document.getElementById('psnId').value = p.id; 
+                document.getElementById('psnReg').value = p.reg; 
+                document.getElementById('psnRm').value = p.rm; 
+                document.getElementById('psnNama').value = p.nama; 
+                document.getElementById('psnLahir').value = p.lahir; 
+                document.getElementById('psnUmur').value = p.umur || ''; 
+                document.getElementById('psnTinggi').value = p.tinggi || ''; 
+                document.getElementById('psnJk').value = p.jk; 
+                document.getElementById('psnDiag').value = p.diag; 
+                document.getElementById('psnAlamat').value = p.alamat; 
+                document.getElementById('psnBb').value = p.bb; 
+                document.getElementById('psnJadwal').value = p.jadwal; 
+                document.getElementById('psnTglReg').value = p.tglReg; 
+                let statusRadio = document.querySelector('input[name="psnStatus"][value="' + p.status + '"]'); 
+                if(statusRadio) statusRadio.checked = true; 
+                window.scrollTo(0, 0); 
+            } 
+        }
         function hapusPasien(id) { if(confirm('Yakin hapus?')) { db.patients = db.patients.filter(x => x.id !== id); saveData(); } }
         function resetFormPasien() { document.getElementById('formPasien').reset(); document.getElementById('psnId').value = ''; }
 
@@ -821,6 +1128,11 @@
         function refreshUI() {
             if (!currentUser || !db.users) return;
             
+            // 1. Render Status Mesin (Admin)
+            renderAdminStatusMesin();
+            // 2. Render Denah Mesin
+            renderDenahMesin();
+
             // Render Akun
             document.getElementById('listAkun').innerHTML = db.users.map(u => {
                 let st = u.status === 'suspended' ? `<span class="bg-red-50 text-red-600 px-3 py-1 rounded-full text-xs font-semibold border border-red-100">Ditangguhkan</span>` : `<span class="bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full text-xs font-semibold border border-emerald-100">Aktif</span>`;
@@ -831,7 +1143,7 @@
                 return `<tr><td class="p-4 font-semibold text-gray-800">${u.username}</td><td class="p-4">${u.nama}</td><td class="p-4"><span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs font-medium">${u.role}</span></td><td class="p-4">${st} <div class="text-[10px] text-gray-400 mt-1.5"><i class="fas fa-shield-alt"></i> ${att}</div></td><td class="p-4 text-center">${actionBtns}</td></tr>`;
             }).join('');
 
-            // Pegawai PJ (Hanya Tampilkan Selain Pramusiwi di form Jadwal Harian)
+            // Pegawai PJ
             let allPegawaiOptions = '<option value="">-- Pilih Pegawai --</option>' + db.nurses.map(n => `<option value="${n.id}">${n.nama}</option>`).join('');
             let pjOptions = '<option value="">-- Pilih Pegawai PJ --</option>' + db.nurses.filter(n => n.jabatan !== 'Pramusiwi').map(n => `<option value="${n.id}">${n.nama}</option>`).join('');
             
