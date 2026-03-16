@@ -289,6 +289,42 @@
         </div>
     </div>
 
+    <div id="modalMotivasi" class="fixed inset-0 bg-black/70 z-[10000] hidden flex items-center justify-center backdrop-blur-sm transition-opacity">
+        <div class="bg-white rounded-3xl shadow-2xl p-8 w-[450px] max-w-[90%] text-center transform scale-95 transition-transform duration-300 relative overflow-hidden border border-emerald-100">
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-400 to-teal-500"></div>
+            <div class="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-emerald-100 shadow-inner">
+                <i class="fas fa-medal text-4xl text-emerald-500"></i>
+            </div>
+            <h3 class="font-bold text-2xl text-gray-800 mb-2">Kerja Bagus!</h3>
+            <p class="text-sm text-gray-500 mb-6 font-medium">Data lembur berhasil disimpan ke sistem.</p>
+            <div class="bg-blue-50/70 border border-blue-100 p-5 rounded-2xl relative shadow-sm">
+                <i class="fas fa-quote-left text-blue-200 text-3xl absolute -top-2 -left-2 opacity-60"></i>
+                <p id="teksMotivasiPopup" class="text-blue-800 font-medium italic relative z-10 text-sm leading-relaxed"></p>
+            </div>
+            <button onclick="closeModalMotivasi()" class="mt-8 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-8 py-3.5 rounded-xl font-bold transition-all shadow-lg hover:shadow-emerald-500/30 w-full tracking-wide flex items-center justify-center gap-2"><i class="fas fa-check"></i> TUTUP & LANJUTKAN</button>
+        </div>
+    </div>
+
+    <div id="layananModal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center backdrop-blur-sm transition-opacity" onclick="closeLayananModal()">
+        <div class="w-[90%] max-w-5xl rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.5)] flex flex-col md:flex-row relative overflow-hidden bg-gradient-to-r from-[#d1eee0] to-[#b3e0c4] transform scale-95 transition-transform duration-300" onclick="event.stopPropagation()">
+
+            <div class="w-full md:w-[45%] h-60 md:h-[450px] relative">
+                <img id="layananImage" src="" alt="Layanan RS Airan Raya" class="w-full h-full object-cover object-center">
+                <div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-black/10 via-transparent to-[#d1eee0] md:to-[#d1eee0]"></div>
+                <div class="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-r from-transparent to-[#d1eee0] hidden md:block"></div>
+            </div>
+
+            <div class="w-full md:w-[55%] p-8 md:p-12 flex flex-col justify-center relative z-10">
+                <h2 id="layananTitle" class="text-3xl md:text-4xl font-bold text-gray-800 mb-6 tracking-tight">Judul Layanan</h2>
+                <p id="layananDesc" class="text-gray-700 text-sm md:text-base leading-relaxed font-medium"></p>
+                <div class="mt-8 flex gap-4">
+                    <button onclick="closeLayananModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-full font-bold shadow-lg transition-all transform hover:-translate-y-0.5 text-sm tracking-wide">TUTUP</button>
+                    <a href="https://wa.me/62895606186132" target="_blank" class="bg-white hover:bg-gray-50 text-emerald-700 px-6 py-3 rounded-full font-bold shadow-md transition-all text-sm tracking-wide flex items-center gap-2"><i class="fab fa-whatsapp text-lg"></i> HUBUNGI</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="auth-overlay" class="fixed inset-0 z-50 flex flex-col justify-between bg-cover bg-center overflow-y-auto" style="background-image: linear-gradient(rgba(6, 78, 59, 0.8), rgba(14, 165, 233, 0.7)), url('RUMAH-SAKIT-AIRAN-RAYA-MEDICASTORE (1).jpg');">
         
         <div class="w-full max-w-7xl mx-auto pt-2 z-20 relative">
@@ -315,15 +351,15 @@
                         <a href="#" class="hover:text-brand-neon transition py-2 flex items-center gap-1">LAYANAN <i class="fas fa-chevron-down text-[10px]"></i></a>
                         <div class="absolute left-1/2 transform -translate-x-1/2 top-full mt-2 w-72 bg-white rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.15)] border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 overflow-hidden">
                             <div class="bg-[#0284c7] text-white text-[10px] font-bold px-4 py-2 uppercase tracking-wider text-center">Layanan Kami</div>
-                            <a href="#" class="block px-4 py-3 hover:bg-gray-50 border-b border-gray-100 transition flex items-center gap-3">
+                            <a href="javascript:void(0)" onclick="openLayananModal('hd')" class="block px-4 py-3 hover:bg-gray-50 border-b border-gray-100 transition flex items-center gap-3">
                                 <div class="bg-blue-100 w-8 h-8 rounded-full flex items-center justify-center shrink-0"><i class="fas fa-procedures text-blue-600 text-sm"></i></div>
                                 <div class="text-left"><p class="text-xs font-bold text-gray-800">Hemodialisis</p></div>
                             </a>
-                            <a href="#" class="block px-4 py-3 hover:bg-gray-50 border-b border-gray-100 transition flex items-center gap-3">
+                            <a href="javascript:void(0)" onclick="openLayananModal('poli')" class="block px-4 py-3 hover:bg-gray-50 border-b border-gray-100 transition flex items-center gap-3">
                                 <div class="bg-blue-100 w-8 h-8 rounded-full flex items-center justify-center shrink-0"><i class="fas fa-stethoscope text-blue-600 text-sm"></i></div>
                                 <div class="text-left"><p class="text-xs font-bold text-gray-800">Poli Ginjal Hipertensi</p></div>
                             </a>
-                            <a href="#" class="block px-4 py-3 hover:bg-gray-50 transition flex items-center gap-3">
+                            <a href="javascript:void(0)" onclick="openLayananModal('capd')" class="block px-4 py-3 hover:bg-gray-50 transition flex items-center gap-3">
                                 <div class="bg-blue-100 w-8 h-8 rounded-full flex items-center justify-center shrink-0"><i class="fas fa-hand-holding-water text-blue-600 text-sm"></i></div>
                                 <div class="text-left"><p class="text-[11px] font-bold text-gray-800 leading-tight">CAPD (Continuous Ambulatory Peritoneal Dialisis)</p></div>
                             </a>
@@ -360,7 +396,7 @@
             </div>
         </div>
 
-        <div class="flex-1 flex items-center justify-center relative py-16 mt-12 z-10">
+        <div class="flex-1 flex flex-col items-center justify-center relative py-16 mt-12 z-10">
             <div class="bg-white/10 backdrop-blur-md border border-white/30 rounded-[2rem] p-8 pt-14 relative w-[420px] max-w-[90%] shadow-2xl text-center mt-8">
                 <div class="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-gradient-to-br from-white to-gray-100 p-1.5 rounded-full shadow-[0_0_20px_rgba(255,255,255,0.4)] border border-white/50">
                     <img src="airanraya.png" alt="Logo" class="w-20 h-20 object-contain rounded-full bg-white shadow-inner">
@@ -386,6 +422,12 @@
                     </div>
                     <button type="submit" class="w-full bg-[#a3e635] hover:bg-[#84cc16] text-brand-dark text-lg font-extrabold py-3.5 rounded-xl transition-all shadow-[0_0_15px_rgba(163,230,53,0.5)] hover:-translate-y-0.5 mt-4">LOG IN</button>
                 </form>
+            </div>
+
+            <div class="w-[420px] max-w-[90%] mt-6 overflow-hidden rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white/90 py-3 px-6 shadow-xl relative z-10 flex items-center">
+                <i class="fas fa-quote-left text-[#a3e635] mr-3 text-sm shrink-0"></i>
+                <marquee behavior="scroll" direction="left" scrollamount="4" class="text-sm font-medium tracking-wide flex-1" id="loginMarquee"></marquee>
+                <i class="fas fa-quote-right text-[#a3e635] ml-3 text-sm shrink-0"></i>
             </div>
         </div>
 
@@ -668,6 +710,86 @@
     </main>
 
     <script>
+        // --- DATA KATA MOTIVASI ---
+        const kataMotivasi = [
+            "Lelahmu hari ini adalah tabungan masa depanmu. Tetap semangat melayani pasien!",
+            "Pelayanan tulusmu adalah penyembuh bagi mereka yang membutuhkan. Bekerjalah dengan ikhlas.",
+            "Setiap tetes keringat bernilai ibadah. Teruslah berbuat yang terbaik untuk RS Airan Raya.",
+            "Bukan tentang seberapa cepat kita sampai, tapi seberapa jauh manfaat yang kita berikan.",
+            "Tantangan hari ini adalah pembelajaran untuk menjadi lebih tangguh esok hari.",
+            "Kerja keras tidak akan pernah mengkhianati hasil. Banggalah dengan dedikasimu hari ini!",
+            "Senyum pasien yang puas adalah bayaran termahal dari setiap rasa lelah kita."
+        ];
+        
+        function getRandomMotivasi() {
+            return kataMotivasi[Math.floor(Math.random() * kataMotivasi.length)];
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginMarquee = document.getElementById('loginMarquee');
+            if (loginMarquee) {
+                // Menggabungkan array motivasi dengan icon pembatas untuk marquee
+                loginMarquee.innerHTML = kataMotivasi.join(' &nbsp; &nbsp; <i class="fas fa-heartbeat text-[#a3e635] mx-4 text-xs"></i> &nbsp; &nbsp; ');
+            }
+        });
+
+        // --- FUNGSI MODAL MOTIVASI (POPUP LEMBUR) ---
+        function openModalMotivasi() {
+            document.getElementById('teksMotivasiPopup').innerText = getRandomMotivasi();
+            let modal = document.getElementById('modalMotivasi');
+            modal.classList.remove('hidden');
+            // Sedikit delay agar transisi CSS terbaca
+            setTimeout(() => modal.firstElementChild.classList.replace('scale-95', 'scale-100'), 10);
+        }
+
+        function closeModalMotivasi() {
+            let modal = document.getElementById('modalMotivasi');
+            modal.firstElementChild.classList.replace('scale-100', 'scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 200);
+        }
+
+        // --- DATA & FUNGSI MODAL LAYANAN ---
+        const dataLayanan = {
+            hd: {
+                title: "Hemodialisis",
+                image: "1.jpg", 
+                desc: "Unit Hemodialisa RS Airan Raya didedikasikan secara khusus bagi pasien dengan gangguan fungsi ginjal yang memerlukan terapi cuci darah secara rutin. Dengan dukungan armada mesin dialisis modern berteknologi mutakhir, serta pemantauan intensif dari dokter spesialis penyakit dalam dan perawat tersertifikasi, layanan kami berfokus pada standar medis tertinggi. Kami berkomitmen menjaga kualitas hidup pasien melalui pelayanan yang aman, ramah, dan penuh empati."
+            },
+            poli: {
+                title: "Poli Ginjal & Hipertensi",
+                image: "3.jpg",
+                desc: "Solusi terpadu untuk konsultasi, deteksi dini, pencegahan, hingga penanganan berbagai spektrum penyakit ginjal dan tekanan darah tinggi (Hipertensi). Bersama tim dokter Konsultan Ginjal Hipertensi (KGH) yang berpengalaman, setiap pasien akan mendapatkan rencana tatalaksana medis yang akurat dan personal. Jangan tunggu hingga parah, percayakan manajemen kesehatan ginjal Anda pada ahlinya."
+            },
+            capd: {
+                title: "Layanan CAPD",
+                image: "2.jpg",
+                desc: "CAPD (Continuous Ambulatory Peritoneal Dialysis) menawarkan kebebasan dan fleksibilitas bagi Anda untuk melakukan proses dialisis secara mandiri di rumah maupun tempat kerja. RS Airan Raya siap memfasilitasi kebutuhan ini melalui pelatihan intensif bagi pasien dan keluarga, pendampingan medis yang suportif, serta monitoring berkala agar Anda tetap bisa beraktivitas secara produktif dengan kualitas kesehatan yang terjaga."
+            }
+        };
+
+        function openLayananModal(type) {
+            const data = dataLayanan[type];
+            if(!data) return;
+
+            document.getElementById('layananTitle').innerText = data.title;
+            document.getElementById('layananDesc').innerText = data.desc;
+            document.getElementById('layananImage').src = data.image;
+
+            let modal = document.getElementById('layananModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.firstElementChild.classList.replace('scale-95', 'scale-100');
+            }, 10);
+        }
+
+        function closeLayananModal() {
+            let modal = document.getElementById('layananModal');
+            modal.firstElementChild.classList.replace('scale-100', 'scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
         // --- HELPER FORMAT TANGGAL ---
         function formatDateIndo(dateStr) {
             if (!dateStr) return '-'; let parts = dateStr.split('-');
@@ -815,9 +937,9 @@
         function renderDenahMesin() {
             let fl = '', fr = '', nl = '', nr = '', iso = '';
             
-            // Fresenius Kiri (F-1 Kubikal + F-9 to F-15)
-            fl += createBedHTML('F-1', `KUBIKAL<br>(F-1)`, 'fa-door-closed', 'border-2 shadow-md');
+            // Fresenius Kiri (F-9 to F-15 + F-1 Kubikal di bawah)
             for(let i=9; i<=15; i++) fl += createBedHTML(`F-${i}`, `F-${i}`);
+            fl += createBedHTML('F-1', `KUBIKAL<br>(F-1)`, 'fa-door-closed', 'border-2 shadow-md');
             
             // Fresenius Kanan (F-8 down to F-2)
             for(let i=8; i>=2; i--) fr += createBedHTML(`F-${i}`, `F-${i}`);
@@ -889,8 +1011,8 @@
                     
                     <h4 class="text-xs font-bold text-emerald-600 mb-3 uppercase tracking-wider flex items-center gap-2"><i class="fas fa-arrow-left"></i> Baris Kiri</h4>
                     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4">
-                        ${createRadioGroup('F-1', 'F-1 (KUBIKAL)')}
                         ${[9,10,11,12,13,14,15].map(i => createRadioGroup(`F-${i}`, `Bed F-${i}`)).join('')}
+                        ${createRadioGroup('F-1', 'F-1 (KUBIKAL)')}
                     </div>
                 </div>
 
@@ -959,7 +1081,7 @@
             for (let pId in groupedLembur) {
                 let pNama = db.nurses.find(x => x.id === pId)?.nama || 'Unknown'; let dataLembur = groupedLembur[pId]; let subTotal = 0; let tableRows = [];
                 dataLembur.sort((a,b) => new Date(a.tgl) - new Date(b.tgl)).forEach((l, idx) => { let d = parseFloat(l.durasi) || 0; subTotal += d; let displayTotal = Number(d.toFixed(2)); let rowData = [ idx + 1 ]; if (idx === 0) { rowData.push({ rowSpan: dataLembur.length, content: pNama, styles: { valign: 'middle', fontStyle: 'bold' } }); } rowData.push(formatDateIndo(l.tgl), l.mulai, l.selesai, displayTotal, l.ket); tableRows.push(rowData); });
-                tableRows.push([{ content: `TOTAL LEMBUR`, colSpan: 5, styles: {halign: 'right', fontStyle: 'bold', fillColor: [240, 240, 240]} }, { content: Number(subTotal.toFixed(2)).toString(), styles: {fontStyle: 'bold', fillColor: [240, 240, 240], halign: 'center'} }, { content: '', styles: {fillColor: [240, 240, 240]} }]);
+                tableRows.push([{ content: `TOTAL LEMBUR`, colSpan: 5, styles: {halign: 'right', fontStyle: 'bold', fillColor: [240, 240, 240]} }, { content: Number(subTotal.toFixed(2)).toString(), styles: {fontStyle: 'bold', fillColor: [240, 240, 240], halign: 'center'} }, { content: '', styles: {fillColor: [240, 240]} }]);
                 if (startY > 250) { doc.addPage(); startY = 20; }
                 doc.autoTable({ head: [tableColumn], body: tableRows, startY: startY, theme: 'grid', styles: { fontSize: 9 }, headStyles: { fillColor: [6, 78, 59] }, columnStyles: { 0: {cellWidth: 10, halign: 'center'}, 3: {halign: 'center'}, 4: {halign: 'center'}, 5: {halign: 'center'} } }); startY = doc.lastAutoTable.finalY + 10;
             }
@@ -1046,7 +1168,23 @@
         function hitungDurasiLembur() { let mulai = document.getElementById('lmbMulai').value; let selesai = document.getElementById('lmbSelesai').value; if(mulai && selesai) { let m = mulai.split(':'); let s = selesai.split(':'); let startDate = new Date(0, 0, 0, m[0], m[1], 0); let endDate = new Date(0, 0, 0, s[0], s[1], 0); let diff = endDate.getTime() - startDate.getTime(); if (diff < 0) { diff += 24 * 60 * 60 * 1000; } let hours = diff / (1000 * 60 * 60); document.getElementById('lmbDurasi').value = Number(hours.toFixed(2)); } }
         function hitungDurasiEditLembur() { let mulai = document.getElementById('editLmbMulai').value; let selesai = document.getElementById('editLmbSelesai').value; if(mulai && selesai) { let m = mulai.split(':'); let s = selesai.split(':'); let startDate = new Date(0, 0, 0, m[0], m[1], 0); let endDate = new Date(0, 0, 0, s[0], s[1], 0); let diff = endDate.getTime() - startDate.getTime(); if (diff < 0) { diff += 24 * 60 * 60 * 1000; } let hours = diff / (1000 * 60 * 60); document.getElementById('editLmbDurasi').value = Number(hours.toFixed(2)); } }
         
-        function saveLembur(e) { e.preventDefault(); let id = document.getElementById('lmbId').value; let data = { tgl: document.getElementById('lmbTgl').value, perawatId: document.getElementById('lmbPerawat').value, mulai: document.getElementById('lmbMulai').value, selesai: document.getElementById('lmbSelesai').value, durasi: document.getElementById('lmbDurasi').value, ket: document.getElementById('lmbKet').value }; if(id) { let index = db.lemburs.findIndex(x => x.id === id); if(index !== -1) db.lemburs[index] = { ...db.lemburs[index], ...data }; } else { data.id = 'lmb_' + Date.now().toString(); db.lemburs.push(data); } resetFormLembur(); saveData(); alert('Data Lembur Baru Berhasil Disimpan!'); }
+        function saveLembur(e) { 
+            e.preventDefault(); 
+            let id = document.getElementById('lmbId').value; 
+            let data = { tgl: document.getElementById('lmbTgl').value, perawatId: document.getElementById('lmbPerawat').value, mulai: document.getElementById('lmbMulai').value, selesai: document.getElementById('lmbSelesai').value, durasi: document.getElementById('lmbDurasi').value, ket: document.getElementById('lmbKet').value }; 
+            if(id) { 
+                let index = db.lemburs.findIndex(x => x.id === id); 
+                if(index !== -1) db.lemburs[index] = { ...db.lemburs[index], ...data }; 
+            } else { 
+                data.id = 'lmb_' + Date.now().toString(); 
+                db.lemburs.push(data); 
+            } 
+            resetFormLembur(); 
+            saveData(); 
+            
+            // Tampilkan popup motivasi
+            openModalMotivasi();
+        }
         
         function editLembur(id) { 
             let l = db.lemburs.find(x => x.id === id); 
