@@ -691,7 +691,10 @@
             <section id="lembur" class="page-section">
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
                     <h3 class="font-bold text-xl mb-6 text-brand-dark border-b border-gray-100 pb-3 flex items-center gap-2"><i class="fas fa-clock text-brand-neon"></i> Form Input Lembur Baru</h3>
-                    <form id="formLembur" onsubmit="saveLembur(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6"><input type="hidden" id="lmbId"><div><label>Tanggal Lembur</label><input type="date" id="lmbTgl" required></div><div><label>Nama Pegawai</label><select id="lmbPerawat" required class="w-full"></select></div><div><label>Jam Mulai</label><input type="time" id="lmbMulai" required onchange="hitungDurasiLembur()"></div><div><label>Jam Selesai</label><input type="time" id="lmbSelesai" required onchange="hitungDurasiLembur()"></div><div><label class="text-brand-blue">Total Durasi (Jam)</label><input type="number" step="any" id="lmbDurasi" required class="bg-blue-50/50 border-blue-200 font-bold text-blue-800" readonly placeholder="Otomatis"></div><div class="md:col-span-2"><label>Keterangan / Tugas Pokok</label><input type="text" id="lmbKet" required placeholder="Contoh: Cito ICU / Cuci mesin dll..."></div><div class="md:col-span-2 flex justify-end gap-3 mt-4 border-t pt-6"><button type="button" onclick="resetFormLembur()" class="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 font-medium transition">Batal</button><button type="submit" class="bg-brand-blue hover:bg-blue-800 text-white px-6 py-2.5 rounded-xl shadow-md font-medium transition flex items-center gap-2"><i class="fas fa-save"></i> Tambah Data Baru</button></div></form>
+                    <form id="formLembur" onsubmit="saveLembur(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6"><input type="hidden" id="lmbId"><div><label>Tanggal Lembur</label><input type="date" id="lmbTgl" required></div><div><label>Nama Pegawai</label><select id="lmbPerawat" required class="w-full"></select></div><div><label>Jam Mulai</label><input type="time" id="lmbMulai" required onchange="hitungDurasiLembur()"></div><div><label>Jam Selesai</label><input type="time" id="lmbSelesai" required onchange="hitungDurasiLembur()"></div><div><label class="text-brand-blue">Total Durasi (Jam)</label><input type="number" step="any" id="lmbDurasi" required class="bg-blue-50/50 border-blue-200 font-bold text-blue-800" readonly placeholder="Otomatis"></div><div class="md:col-span-2"><label>Keterangan / Tugas Pokok</label><input type="text" id="lmbKet" required placeholder="Contoh: Cito ICU / Cuci mesin dll..."></div><div class="md:col-span-2 flex justify-end gap-3 mt-4 border-t pt-6">
+                        <button type="button" onclick="resetFormLembur()" class="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 font-medium transition">Batal</button>
+                        <button type="submit" class="bg-brand-blue hover:bg-blue-800 text-white px-6 py-2.5 rounded-xl shadow-md font-medium transition flex items-center gap-2"><i class="fas fa-save"></i> Simpan</button>
+                    </div></form>
                 </div>
                 
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
@@ -1063,37 +1066,160 @@
             doc.autoTable({ head: [tableColumn], body: tableRows, startY: 35, theme: 'grid', styles: { fontSize: 8 }, headStyles: { fillColor: [16, 185, 129] } });
             doc.save(`Sesi_Dialisis_${kategori}_${tgl}.pdf`);
         }
+
+        // --- FUNGSI UPDATE PDF LEMBUR ---
         function downloadPDFLembur() {
-            let tglMulai = document.getElementById('filterTglMulai').value; let tglAkhir = document.getElementById('filterTglAkhir').value;
+            let tglMulai = document.getElementById('filterTglMulai').value;
+            let tglAkhir = document.getElementById('filterTglAkhir').value;
             let searchKeyword = document.getElementById('searchLemburPerawat') ? document.getElementById('searchLemburPerawat').value.toLowerCase() : '';
             if(!tglMulai || !tglAkhir) return alert('Silakan lengkapi rentang tanggal terlebih dahulu!');
+            
             let filteredLembur = db.lemburs.filter(l => l.tgl >= tglMulai && l.tgl <= tglAkhir);
             if(filteredLembur.length === 0) return alert('Tidak ada data lembur di rentang tanggal tersebut!');
-            let groupedLembur = {}; filteredLembur.forEach(l => { let pNama = db.nurses.find(x => x.id === l.perawatId)?.nama || 'Unknown'; if (searchKeyword && !pNama.toLowerCase().includes(searchKeyword)) return; if(!groupedLembur[l.perawatId]) groupedLembur[l.perawatId] = []; groupedLembur[l.perawatId].push(l); });
+
+            // Ambil bulan dari tanggal mulai untuk header
+            let monthNames = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
+            let namaBulan = monthNames[new Date(tglMulai).getMonth()];
+
+            let groupedLembur = {};
+            filteredLembur.forEach(l => {
+                let pNama = db.nurses.find(x => x.id === l.perawatId)?.nama || 'Unknown';
+                if (searchKeyword && !pNama.toLowerCase().includes(searchKeyword)) return;
+                if(!groupedLembur[l.perawatId]) groupedLembur[l.perawatId] = [];
+                groupedLembur[l.perawatId].push(l);
+            });
+
             if(Object.keys(groupedLembur).length === 0) return alert('Tidak ada data lembur untuk pegawai yang dicari.');
-            const { jsPDF } = window.jspdf; const doc = new jsPDF('p', 'mm', 'a4');
-            let now = new Date(); let monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']; let strDate = `WAY HUWI, ${now.getDate().toString().padStart(2, '0')} ${monthNames[now.getMonth()]} ${now.getFullYear()}`;
-            doc.setFontSize(14); doc.setTextColor(6, 78, 59); doc.setFont("helvetica", "bold"); doc.text("RS AIRAN RAYA - UNIT DIALISIS", 105, 15, {align: 'center'});
-            doc.setFontSize(12); doc.setTextColor(0,0,0); doc.text("SURAT TUGAS & REKAPITULASI LEMBUR PEGAWAI", 105, 22, {align: 'center'});
-            doc.setFontSize(10); doc.setFont("helvetica", "normal"); doc.text(`Periode Tanggal : ${formatDateIndo(tglMulai)} s/d ${formatDateIndo(tglAkhir)}`, 14, 32); doc.text(`Unit Kerja      : Dialisis`, 14, 37);
-            let splitTitle = doc.splitTextToSize("Dengan ini menugaskan pegawai yang namanya tercantum di bawah ini untuk melaksanakan kerja lembur / tugas tambahan dengan rincian jadwal sebagai berikut:", 180); doc.text(splitTitle, 14, 45);
-            let startY = 55; const tableColumn = ["No", "Nama Pegawai", "Tanggal", "Jam Mulai", "Jam Selesai", "Total (Jam)", "Keterangan"];
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4');
+
+            // Tanggal Hari Ini untuk keperluan surat (Dinamis)
+            let now = new Date();
+            let monthNamesIndo = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            let strDate = `WAY HUWI, ${now.getDate().toString().padStart(2, '0')} ${monthNamesIndo[now.getMonth()]} ${now.getFullYear()}`;
+
+            // --- KOP SURAT ---
+            doc.setFontSize(11);
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(0,0,0);
+            doc.text("RUMAH SAKIT AIRAN RAYA", 35, 15);
+            doc.setFontSize(9);
+            doc.setFont("helvetica", "normal");
+            doc.text("JL AIRAN RAYA NO 99 WAY HUI", 35, 20);
+            doc.text("LAMPUNG SELATAN", 35, 25);
+            doc.text("TELP (0721) 561 7799, 561 7999", 35, 30);
+
+            // Garis Pembatas Kop
+            doc.setLineWidth(0.5);
+            doc.line(14, 33, 196, 33);
+            doc.setLineWidth(1.0);
+            doc.line(14, 34, 196, 34);
+
+            // --- HEADER SURAT ---
+            doc.setFontSize(14);
+            doc.setFont("helvetica", "normal");
+            doc.text("SURAT PERINTAH LEMBUR", 105, 45, {align: 'center'});
+
+            doc.setFontSize(11);
+            doc.setFont("helvetica", "bold");
+            doc.text("BULAN", 14, 55); doc.text(":", 30, 55); doc.text(namaBulan, 33, 55);
+            doc.text("UNIT", 14, 61); doc.text(":", 30, 61); doc.text("DIALISIS", 33, 61);
+
+            // Teks Pengantar
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(10);
+            let introText = "Dengan surat ini, kami menugaskan beberapa karyawan di bawah ini untuk melakukan pekerjaan lembur. Pekerjaan lembur dilaksanakan sesuai dengan rincian di bawah ini :";
+            let splitIntro = doc.splitTextToSize(introText, 182);
+            doc.text(splitIntro, 14, 70);
+
+            let startY = 80;
+            // SESUAIKAN HEADER TABEL DENGAN GAMBAR
+            const tableColumn = ["NO", "NAMA PEGAWAI", "TANGGAL", "JAM DIMULAI", "JAM SELESAI", "JUMLAH JAM", "KEPERLUAN"];
+            let tableRows = [];
+            let globalIndex = 1;
+
             for (let pId in groupedLembur) {
-                let pNama = db.nurses.find(x => x.id === pId)?.nama || 'Unknown'; let dataLembur = groupedLembur[pId]; let subTotal = 0; let tableRows = [];
-                dataLembur.sort((a,b) => new Date(a.tgl) - new Date(b.tgl)).forEach((l, idx) => { let d = parseFloat(l.durasi) || 0; subTotal += d; let displayTotal = Number(d.toFixed(2)); let rowData = [ idx + 1 ]; if (idx === 0) { rowData.push({ rowSpan: dataLembur.length, content: pNama, styles: { valign: 'middle', fontStyle: 'bold' } }); } rowData.push(formatDateIndo(l.tgl), l.mulai, l.selesai, displayTotal, l.ket); tableRows.push(rowData); });
-                tableRows.push([{ content: `TOTAL LEMBUR`, colSpan: 5, styles: {halign: 'right', fontStyle: 'bold', fillColor: [240, 240, 240]} }, { content: Number(subTotal.toFixed(2)).toString(), styles: {fontStyle: 'bold', fillColor: [240, 240, 240], halign: 'center'} }, { content: '', styles: {fillColor: [240, 240]} }]);
-                if (startY > 250) { doc.addPage(); startY = 20; }
-                doc.autoTable({ head: [tableColumn], body: tableRows, startY: startY, theme: 'grid', styles: { fontSize: 9 }, headStyles: { fillColor: [6, 78, 59] }, columnStyles: { 0: {cellWidth: 10, halign: 'center'}, 3: {halign: 'center'}, 4: {halign: 'center'}, 5: {halign: 'center'} } }); startY = doc.lastAutoTable.finalY + 10;
+                let pNama = db.nurses.find(x => x.id === pId)?.nama || 'Unknown';
+                let dataLembur = groupedLembur[pId];
+
+                dataLembur.sort((a,b) => new Date(a.tgl) - new Date(b.tgl)).forEach((l, idx) => {
+                    let d = parseFloat(l.durasi) || 0;
+                    let displayTotal = Number(d.toFixed(2));
+                    let rowData = [ globalIndex ];
+
+                    if (idx === 0) {
+                        rowData.push({ rowSpan: dataLembur.length, content: pNama, styles: { valign: 'middle', fontStyle: 'bold' } });
+                    }
+
+                    rowData.push(formatDateIndo(l.tgl), l.mulai, l.selesai, displayTotal, l.ket);
+                    tableRows.push(rowData);
+                    globalIndex++;
+                });
             }
-            if (startY > 200) { doc.addPage(); startY = 20; }
-            doc.setFontSize(10); doc.setTextColor(0,0,0); doc.setFont("helvetica", "normal");
-            let splitClose = doc.splitTextToSize("Demikian surat tugas lembur ini dibuat untuk dapat dilaksanakan dengan sebaik-baiknya. Atas perhatian dan kerjasamanya diucapkan terimakasih.", 180); doc.text(splitClose, 14, startY + 5);
-            doc.text(strDate, 155, startY + 20, {align: 'center'});
-            doc.text("Mengetahui,", 55, startY + 25, {align: 'center'}); doc.text("Kasie / Kasubag", 55, startY + 30, {align: 'center'}); doc.setFont("helvetica", "bold"); doc.text("Ns.Forna Apriyani.S.Kep", 55, startY + 55, {align: 'center'});
-            doc.setFont("helvetica", "normal"); doc.text("Dibuat Oleh,", 155, startY + 25, {align: 'center'}); doc.text("Karu / Kaur / PJ", 155, startY + 30, {align: 'center'}); doc.setFont("helvetica", "bold"); doc.text("Ns.Indah Pralistiawati, S.Kep.", 155, startY + 55, {align: 'center'});
-            let row2Y = startY + 70; doc.setFont("helvetica", "normal"); doc.text("Menyetujui,", 55, row2Y, {align: 'center'}); doc.text("Kabid Pelayanan Medis", 55, row2Y + 5, {align: 'center'}); doc.setFont("helvetica", "bold"); doc.text("dr. Titi Multi Sari, M.M", 55, row2Y + 30, {align: 'center'});
-            doc.setFont("helvetica", "normal"); doc.text("Menyetujui,", 155, row2Y, {align: 'center'}); doc.text("Kabag Umum, SDM dan Keuangan", 155, row2Y + 5, {align: 'center'}); doc.setFont("helvetica", "bold"); doc.text("dr. Chinta Ariestassia, MMRS", 155, row2Y + 30, {align: 'center'});
-            doc.save(`Rekap_Lembur_${tglMulai}_sd_${tglAkhir}.pdf`);
+
+            // Render Tabel
+            doc.autoTable({
+                head: [tableColumn],
+                body: tableRows,
+                startY: startY,
+                theme: 'grid',
+                styles: { fontSize: 9, textColor: [0, 0, 0], lineColor: [0, 0, 0], lineWidth: 0.2 },
+                // Tambahkan background abu-abu [211, 211, 211] pada header agar sama dengan gambar
+                headStyles: { fillColor: [211, 211, 211], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center', lineColor: [0, 0, 0], lineWidth: 0.2 },
+                columnStyles: {
+                    0: {cellWidth: 10, halign: 'center'},
+                    3: {halign: 'center'},
+                    4: {halign: 'center'},
+                    5: {halign: 'center'}
+                }
+            });
+
+            startY = doc.lastAutoTable.finalY + 10;
+
+            if (startY > 180) {
+                doc.addPage();
+                startY = 20;
+            }
+
+            // --- FOOTER & TANDA TANGAN ---
+            doc.setFontSize(10);
+            doc.setTextColor(0,0,0);
+            doc.setFont("helvetica", "normal");
+
+            let splitClose = doc.splitTextToSize("Demikian surat tugas lembur ini disampaikan. Atas perhatian dan kerjasamanya diucapkan terimakasih", 182);
+            doc.text(splitClose, 14, startY);
+
+            // Tanggal Surat
+            doc.text(strDate, 155, startY + 12, {align: 'center'});
+
+            // Baris Tanda Tangan 1
+            doc.text("Mengetahui,", 55, startY + 20, {align: 'center'});
+            doc.text("Kasie / Kasubag", 55, startY + 25, {align: 'center'});
+            doc.setFont("helvetica", "bold");
+            doc.text("Ns.Forna Apriyani.S.Kep", 55, startY + 50, {align: 'center'});
+
+            doc.setFont("helvetica", "normal");
+            doc.text("Dibuat Oleh,", 155, startY + 20, {align: 'center'});
+            doc.text("Karu / Kaur / PJ", 155, startY + 25, {align: 'center'});
+            doc.setFont("helvetica", "bold");
+            doc.text("Ns.Indah Pralistiawati, S.Kep.", 155, startY + 50, {align: 'center'});
+
+            // Baris Tanda Tangan 2
+            let row2Y = startY + 65;
+            doc.setFont("helvetica", "normal");
+            doc.text("Menyetujui,", 55, row2Y, {align: 'center'});
+            doc.text("Kabid Pelayanan Medis", 55, row2Y + 5, {align: 'center'});
+            doc.setFont("helvetica", "bold");
+            doc.text("dr. Titi Multi Sari, M.M", 55, row2Y + 30, {align: 'center'});
+
+            doc.setFont("helvetica", "normal");
+            doc.text("Menyetujui,", 155, row2Y, {align: 'center'});
+            doc.text("Kabag Umum, SDM dan Keuangan", 155, row2Y + 5, {align: 'center'});
+            doc.setFont("helvetica", "bold");
+            doc.text("dr. Chinta Ariestassia, MMRS", 155, row2Y + 30, {align: 'center'});
+
+            doc.save(`Surat_Perintah_Lembur_${tglMulai}_sd_${tglAkhir}.pdf`);
         }
 
         const newsContent = ["<strong>Adekuesi Dialisis:</strong> Target Kt/V ideal ≥ 1.2 untuk jadwal HD 3x seminggu (4-5 jam).", "<strong>Adekuesi Dialisis 2x Seminggu:</strong> Target Kt/V ≥ 1.8 untuk jadwal HD 2x seminggu.", "<strong>Laju Aliran Darah (Qb):</strong> Standar Qb umumnya 150-300 ml/menit menyesuaikan akses vaskular."];
