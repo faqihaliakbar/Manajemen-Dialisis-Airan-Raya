@@ -1022,14 +1022,15 @@
             
             // Inisialisasi Select2 untuk form login
             if(!currentUser && db.users) {
-                let optUsers = '<option value=""></option>' + db.users.map(u => `<option value="${u.username}">${u.nama} (${u.username})</option>`).join('');
+                // FIX: Menampilkan usernamenya saja di dropdown login
+                let optUsers = '<option value=""></option>' + db.users.map(u => `<option value="${u.username}">${u.username}</option>`).join('');
                 let $loginDropdown = $('#loginUsername');
                 if ($loginDropdown.hasClass("select2-hidden-accessible")) { $loginDropdown.select2('destroy'); }
                 $loginDropdown.html(optUsers);
                 
                 $loginDropdown.select2({ 
                     width: '100%', 
-                    placeholder: "Ketik 3 huruf nama/NIK...",
+                    placeholder: "Ketik 3 huruf Username/NIK...",
                     minimumInputLength: 3,
                     language: {
                         inputTooShort: function() { return "Ketik minimal 3 huruf untuk mencari..."; },
