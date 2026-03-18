@@ -92,7 +92,7 @@
         }
         .login-input::placeholder { color: rgba(255, 255, 255, 0.7) !important; }
 
-        /* PERBAIKAN BUG SELECT2 LOGIN */
+        /* PERBAIKAN BUG SELECT2 LOGIN & MODAL */
         #auth-overlay .select2-container--default .select2-selection--single {
             background-color: rgba(255, 255, 255, 0.1) !important;
             border: 1px solid rgba(255, 255, 255, 0.4) !important;
@@ -144,8 +144,8 @@
         .select2-results__message { color: #64748b !important; font-weight: 500; text-align: center; }
 
         /* General dashboard select2 fixes */
-        main .select2-container .select2-selection--single { height: 42px !important; border-color: #e2e8f0 !important; border-radius: 0.5rem !important; padding: 6px 12px !important; display: flex; align-items: center; }
-        main .select2-container--default .select2-selection--single .select2-selection__arrow { top: 8px !important; right: 8px !important; }
+        .select2-container .select2-selection--single { height: 42px !important; border-color: #e2e8f0 !important; border-radius: 0.5rem !important; padding: 6px 12px !important; display: flex; align-items: center; }
+        .select2-container--default .select2-selection--single .select2-selection__arrow { top: 8px !important; right: 8px !important; }
         
         /* Denah Specific Styles */
         .bed-box { transition: all 0.2s ease; cursor: pointer; }
@@ -155,6 +155,160 @@
 <body class="bg-gray-50 flex h-screen overflow-hidden text-sm font-sans text-gray-700 relative">
 
     <img id="logoPdfLembur" src="11.png" style="display:none;" crossorigin="anonymous">
+
+    <div id="modalEditAkun" class="fixed inset-0 bg-black/60 z-[100] hidden flex items-center justify-center backdrop-blur-sm transition-opacity">
+        <div class="bg-white rounded-2xl shadow-2xl p-6 md:p-8 w-[600px] max-w-[95%] border border-blue-100">
+            <div class="flex justify-between items-center mb-6 border-b pb-3">
+                <h3 class="font-bold text-xl text-blue-800 flex items-center gap-2"><i class="fas fa-edit text-blue-500"></i> Edit Data Pengguna</h3>
+                <button onclick="closeModalEditAkun()" class="text-gray-400 hover:text-red-500 transition"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <form id="formEditAkun" onsubmit="saveEditAkun(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <input type="hidden" id="editOldUsername">
+                <div><label>Username / NIK</label><input type="text" id="editUsername" required readonly></div>
+                <div><label>Nama Lengkap</label><input type="text" id="editNama" required></div>
+                <div><label>Password Baru <span class="normal-case font-normal text-gray-400">(Kosongkan jika tidak diganti)</span></label><input type="password" id="editPassword"></div>
+                <div><label>Hak Akses (Role)</label><select id="editRole" required><option value="Perawat">Perawat</option><option value="Admin">Admin</option></select></div>
+                <div class="md:col-span-2 flex justify-end gap-3 mt-4 border-t pt-5">
+                    <button type="button" onclick="closeModalEditAkun()" class="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 font-medium transition">Batal</button>
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl shadow-md font-medium transition flex items-center gap-2"><i class="fas fa-save"></i> Update Akun</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modalEditPerawat" class="fixed inset-0 bg-black/60 z-[100] hidden flex items-center justify-center backdrop-blur-sm transition-opacity">
+        <div class="bg-white rounded-2xl shadow-2xl p-6 md:p-8 w-[600px] max-w-[95%] border border-blue-100">
+            <div class="flex justify-between items-center mb-6 border-b pb-3">
+                <h3 class="font-bold text-xl text-brand-dark flex items-center gap-2"><i class="fas fa-edit text-brand-neon"></i> Edit Data Pegawai</h3>
+                <button onclick="closeModalEditPerawat()" class="text-gray-400 hover:text-red-500 transition"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <form id="formEditPerawat" onsubmit="saveEditPerawat(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <input type="hidden" id="editPrwId">
+                <div><label>Nama Lengkap</label><input type="text" id="editPrwNama" required></div>
+                <div><label>NIK</label><input type="text" id="editPrwNik" required></div>
+                <div>
+                    <label>Jabatan</label>
+                    <select id="editPrwJabatan" required>
+                        <option value="Kepala Ruangan">Kepala Ruangan</option>
+                        <option value="Ka.Tim">Ka.Tim</option>
+                        <option value="Perawat Pelaksana">Perawat Pelaksana</option>
+                        <option value="Pramusiwi">Pramusiwi</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Pendidikan Terakhir</label>
+                    <select id="editPrwPendidikan">
+                        <option value="SMA">SMA</option>
+                        <option value="D3 Keperawatan">D3 Keperawatan</option>
+                        <option value="S1 Keperawatan">S1 Keperawatan</option>
+                        <option value="Ners">Ners</option>
+                    </select>
+                </div>
+                <div class="md:col-span-2 flex justify-end gap-3 mt-4 border-t pt-5">
+                    <button type="button" onclick="closeModalEditPerawat()" class="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 font-medium transition">Batal</button>
+                    <button type="submit" class="bg-brand-blue hover:bg-blue-800 text-white px-6 py-2.5 rounded-xl shadow-md font-medium transition flex items-center gap-2"><i class="fas fa-save"></i> Update Data</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modalEditPasien" class="fixed inset-0 bg-black/60 z-[100] hidden flex items-center justify-center backdrop-blur-sm transition-opacity">
+        <div class="bg-white rounded-2xl shadow-2xl p-6 md:p-8 w-[800px] max-w-[95%] border border-blue-100 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6 border-b pb-3 sticky top-0 bg-white z-10">
+                <h3 class="font-bold text-xl text-brand-dark flex items-center gap-2"><i class="fas fa-edit text-brand-neon"></i> Edit Data Pasien</h3>
+                <button onclick="closeModalEditPasien()" class="text-gray-400 hover:text-red-500 transition"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <form id="formEditPasien" onsubmit="saveEditPasien(event)" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <input type="hidden" id="editPsnId">
+                <div><label>No. Registrasi</label><input type="text" id="editPsnReg" required></div>
+                <div><label>No. RM</label><input type="text" id="editPsnRm" required></div>
+                <div><label>Nama Lengkap</label><input type="text" id="editPsnNama" required></div>
+                <div><label>Tanggal Lahir</label><input type="date" id="editPsnLahir" required></div>
+                <div><label>Umur (Tahun)</label><input type="number" id="editPsnUmur" readonly required></div>
+                <div><label>Tinggi Badan (cm)</label><input type="number" id="editPsnTinggi" required></div>
+                <div><label>Jenis Kelamin</label><select id="editPsnJk"><option>Laki-laki</option><option>Perempuan</option></select></div>
+                <div><label>Diagnosis</label><input type="text" id="editPsnDiag" required></div>
+                <div><label>Alamat</label><input type="text" id="editPsnAlamat" required></div>
+                <div><label>BB Kering (Kg)</label><input type="number" step="any" id="editPsnBb" required></div>
+                <div><label>Jadwal Rutin</label><select id="editPsnJadwal"><option>Senin - Kamis</option><option>Selasa - Jumat</option><option>Rabu - Sabtu</option><option>Traveling</option></select></div>
+                <div><label>Tanggal Ter-registrasi</label><input type="date" id="editPsnTglReg" required></div>
+                
+                <div class="md:col-span-3">
+                    <label>Status Pasien</label>
+                    <div class="flex flex-wrap gap-4 mt-2 bg-gray-50 p-3 rounded-xl border border-gray-200" id="editPsnStatusContainer">
+                        <label class="flex items-center gap-2 cursor-pointer normal-case font-medium text-gray-700 hover:text-emerald-600 transition">
+                            <input type="radio" name="editPsnStatus" value="Aktif" class="w-4 h-4 accent-emerald-500 cursor-pointer"> Aktif
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer normal-case font-medium text-gray-700 hover:text-gray-900 transition">
+                            <input type="radio" name="editPsnStatus" value="Tidak Aktif" class="w-4 h-4 accent-gray-500 cursor-pointer"> Tidak Aktif
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer normal-case font-medium text-gray-700 hover:text-rose-600 transition">
+                            <input type="radio" name="editPsnStatus" value="Meninggal Dunia" class="w-4 h-4 accent-rose-500 cursor-pointer"> Meninggal Dunia
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer normal-case font-medium text-gray-700 hover:text-blue-600 transition">
+                            <input type="radio" name="editPsnStatus" value="Pindah" class="w-4 h-4 accent-blue-500 cursor-pointer"> Pindah
+                        </label>
+                    </div>
+                </div>
+
+                <div class="md:col-span-3 flex justify-end gap-3 mt-4 border-t pt-6">
+                    <button type="button" onclick="closeModalEditPasien()" class="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 font-medium transition">Batal</button>
+                    <button type="submit" class="bg-brand-blue hover:bg-blue-800 text-white px-6 py-2.5 rounded-xl shadow-md font-medium transition flex items-center gap-2"><i class="fas fa-save"></i> Update Pasien</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modalEditJadwal" class="fixed inset-0 bg-black/60 z-[100] hidden flex items-center justify-center backdrop-blur-sm transition-opacity">
+        <div class="bg-white rounded-2xl shadow-2xl p-6 md:p-8 w-[700px] max-w-[95%] border border-blue-100 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6 border-b pb-3 sticky top-0 bg-white z-10">
+                <h3 class="font-bold text-xl text-brand-dark flex items-center gap-2"><i class="fas fa-edit text-brand-neon"></i> Edit Jadwal</h3>
+                <button onclick="closeModalEditJadwal()" class="text-gray-400 hover:text-red-500 transition"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <form id="formEditJadwal" onsubmit="saveEditJadwalModal(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <input type="hidden" id="editJdwId">
+                <div><label>Mesin / Kategori</label><select id="editJdwMesin" required onchange="toggleManualInputEdit()"><option value="Nipro">Nipro</option><option value="Fresenius">Fresenius</option><option value="Rawat Inap">Rawat Inap</option></select></div>
+                <div id="editWrapMasterPasien"><label>Pilih Pasien</label><select id="editJdwPasien" style="width:100%"></select></div>
+                <div id="editWrapManualPasien" class="md:col-span-2 hidden grid grid-cols-1 md:grid-cols-2 gap-6 bg-rose-50/50 p-6 border rounded-xl border-rose-100">
+                    <div class="md:col-span-2 text-rose-800 font-bold border-b border-rose-200 pb-2"><i class="fas fa-info-circle"></i> Input Manual Pasien Rawat Inap</div>
+                    <div><label>Nama Pasien</label><input type="text" id="editJdwNamaManual"></div>
+                    <div><label>No RM</label><input type="text" id="editJdwRmManual"></div>
+                    <div><label>Asal Ranap</label><select id="editJdwAsalRanap"><option>IGD</option><option>ICU</option><option>Ranap 2 Depan</option><option>Ranap 2 Belakang</option><option>Ranap 3 Depan</option><option>Ranap 3 Belakang</option><option>Ranap 4</option><option>VIP</option><option>VVIP</option><option>POLI</option></select></div>
+                    <div><label>Akses</label><select id="editJdwAksesManual"><option value="Cimino">Cimino</option><option value="CDL">CDL</option><option value="Femoral">Femoral</option></select></div>
+                    <div class="md:col-span-2"><label>Keterangan Tambahan</label><input type="text" id="editJdwKetManual"></div>
+                </div>
+                <div><label>Shift</label><select id="editJdwShift" required><option value="Pagi">Pagi</option><option value="Siang">Siang</option></select></div>
+                <div><label>Pegawai PJ</label><select id="editJdwPerawat" required style="width:100%"></select></div>
+                <div><label>Status Awal</label><select id="editJdwStatus" required><option value="Menunggu">Menunggu</option><option value="Running">Running</option><option value="Selesai">Selesai</option><option value="Batal">Batal</option></select></div>
+                <div class="md:col-span-2 flex justify-end gap-3 mt-4 border-t pt-6">
+                    <button type="button" onclick="closeModalEditJadwal()" class="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 font-medium transition">Batal</button>
+                    <button type="submit" class="bg-brand-blue hover:bg-blue-800 text-white px-6 py-2.5 rounded-xl shadow-md font-medium transition flex items-center gap-2"><i class="fas fa-save"></i> Update Jadwal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modalEditLembur" class="fixed inset-0 bg-black/60 z-[100] hidden flex items-center justify-center backdrop-blur-sm transition-opacity">
+        <div class="bg-white rounded-2xl shadow-2xl p-6 md:p-8 w-[500px] max-w-[95%] border border-blue-100">
+            <div class="flex justify-between items-center mb-6 border-b pb-3">
+                <h3 class="font-bold text-xl text-brand-dark flex items-center gap-2"><i class="fas fa-edit text-brand-neon"></i> Edit Data Lembur</h3>
+                <button onclick="closeModalEditLembur()" class="text-gray-400 hover:text-red-500 transition"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <form id="formEditLemburModal" onsubmit="saveEditLemburModal(event)" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <input type="hidden" id="editLmbId">
+                <div class="md:col-span-2"><label>Tanggal Lembur</label><input type="date" id="editLmbTgl" required></div>
+                <div class="md:col-span-2"><label>Nama Pegawai</label><select id="editLmbPerawat" required style="width:100%"></select></div>
+                <div><label>Jam Mulai</label><input type="time" id="editLmbMulai" required onchange="hitungDurasiEditLembur()"></div>
+                <div><label>Jam Selesai</label><input type="time" id="editLmbSelesai" required onchange="hitungDurasiEditLembur()"></div>
+                <div class="md:col-span-2"><label class="text-brand-blue">Total Durasi (Jam)</label><input type="number" step="any" id="editLmbDurasi" required class="bg-blue-50 border-blue-200 font-bold text-blue-800" readonly></div>
+                <div class="md:col-span-2"><label>Keterangan / Tugas</label><input type="text" id="editLmbKet" required></div>
+                <div class="md:col-span-2 flex justify-end gap-3 mt-4 border-t pt-5">
+                    <button type="button" onclick="closeModalEditLembur()" class="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 font-medium transition">Batal</button>
+                    <button type="submit" class="bg-brand-blue hover:bg-blue-800 text-white px-6 py-2.5 rounded-xl shadow-md font-medium transition flex items-center gap-2"><i class="fas fa-save"></i> Update Data</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <div id="denahMesinModal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center backdrop-blur-sm transition-opacity" onclick="closeDenahModal()">
         <div class="bg-gray-50 rounded-2xl shadow-2xl w-[95%] max-w-5xl max-h-[90vh] overflow-hidden flex flex-col relative" onclick="event.stopPropagation()">
@@ -264,28 +418,6 @@
                 <div class="flex justify-end gap-3 mt-4 border-t pt-5">
                     <button type="button" onclick="closeModalGantiPassword()" class="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 font-medium transition">Batal</button>
                     <button type="submit" class="bg-brand-blue hover:bg-blue-800 text-white px-6 py-2.5 rounded-xl shadow-md font-medium transition flex items-center gap-2"><i class="fas fa-save"></i> Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div id="modalEditLembur" class="fixed inset-0 bg-black/60 z-[100] hidden flex items-center justify-center backdrop-blur-sm transition-opacity">
-        <div class="bg-white rounded-2xl shadow-2xl p-6 md:p-8 w-[500px] max-w-[95%] border border-blue-100">
-            <div class="flex justify-between items-center mb-6 border-b pb-3">
-                <h3 class="font-bold text-xl text-brand-dark flex items-center gap-2"><i class="fas fa-edit text-brand-neon"></i> Edit Data Lembur</h3>
-                <button onclick="closeModalEditLembur()" class="text-gray-400 hover:text-red-500 transition"><i class="fas fa-times text-xl"></i></button>
-            </div>
-            <form id="formEditLemburModal" onsubmit="saveEditLemburModal(event)" class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <input type="hidden" id="editLmbId">
-                <div class="md:col-span-2"><label>Tanggal Lembur</label><input type="date" id="editLmbTgl" required></div>
-                <div class="md:col-span-2"><label>Nama Pegawai</label><select id="editLmbPerawat" required class="w-full"></select></div>
-                <div><label>Jam Mulai</label><input type="time" id="editLmbMulai" required onchange="hitungDurasiEditLembur()"></div>
-                <div><label>Jam Selesai</label><input type="time" id="editLmbSelesai" required onchange="hitungDurasiEditLembur()"></div>
-                <div class="md:col-span-2"><label class="text-brand-blue">Total Durasi (Jam)</label><input type="number" step="any" id="editLmbDurasi" required class="bg-blue-50 border-blue-200 font-bold text-blue-800" readonly></div>
-                <div class="md:col-span-2"><label>Keterangan / Tugas</label><input type="text" id="editLmbKet" required></div>
-                <div class="md:col-span-2 flex justify-end gap-3 mt-4 border-t pt-5">
-                    <button type="button" onclick="closeModalEditLembur()" class="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 font-medium transition">Batal</button>
-                    <button type="submit" class="bg-brand-blue hover:bg-blue-800 text-white px-6 py-2.5 rounded-xl shadow-md font-medium transition flex items-center gap-2"><i class="fas fa-save"></i> Update Data</button>
                 </div>
             </form>
         </div>
@@ -568,17 +700,7 @@
                         <div class="md:col-span-2 flex justify-end gap-3 mt-4"><button type="button" onclick="toggleFormTambahAkun()" class="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 font-medium transition">Batal</button><button type="submit" class="bg-brand-neon hover:bg-brand-neonHover text-white px-6 py-2.5 rounded-xl shadow-md font-medium transition flex items-center gap-2"><i class="fas fa-save"></i> Simpan Akun</button></div>
                     </form>
                 </div>
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8 hidden ring-2 ring-blue-400" id="formEditAkunContainer">
-                    <h3 class="font-bold text-xl mb-6 text-blue-800 border-b border-gray-100 pb-3">Edit Data Pengguna</h3>
-                    <form id="formEditAkun" onsubmit="saveEditAkun(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <input type="hidden" id="editOldUsername">
-                        <div><label>Username / NIK</label><input type="text" id="editUsername" required readonly></div>
-                        <div><label>Nama Lengkap</label><input type="text" id="editNama" required></div>
-                        <div><label>Password Baru <span class="normal-case font-normal text-gray-400">(Kosongkan jika tidak diganti)</span></label><input type="password" id="editPassword"></div>
-                        <div><label>Hak Akses (Role)</label><select id="editRole" required><option value="Perawat">Perawat</option><option value="Admin">Admin</option></select></div>
-                        <div class="md:col-span-2 flex justify-end gap-3 mt-4"><button type="button" onclick="batalEditAkun()" class="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 font-medium transition">Batal</button><button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl shadow-md font-medium transition flex items-center gap-2"><i class="fas fa-save"></i> Update Akun</button></div>
-                    </form>
-                </div>
+
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4"><h3 class="font-bold text-xl text-brand-dark">Daftar Akun Pengguna</h3><button onclick="toggleFormTambahAkun()" class="bg-brand-neon hover:bg-brand-neonHover text-white px-4 py-2 rounded-xl font-medium shadow-sm transition flex items-center gap-2"><i class="fas fa-plus"></i> Tambah Akun</button></div>
                     <div class="overflow-x-auto rounded-xl border border-gray-100"><table class="w-full text-left"><thead><tr><th>Username/NIK</th><th>Nama Pengguna</th><th>Role</th><th>Status & Login</th><th class="text-center">Aksi</th></tr></thead><tbody id="listAkun"></tbody></table></div>
@@ -589,7 +711,6 @@
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
                     <h3 class="font-bold text-xl mb-6 text-brand-dark border-b border-gray-100 pb-3">Form Data Pegawai Dialisis</h3>
                     <form id="formPerawat" onsubmit="savePerawat(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <input type="hidden" id="prwId">
                         <div><label>Nama Lengkap</label><input type="text" id="prwNama" required></div>
                         <div><label>NIK</label><input type="text" id="prwNik" required></div>
                         <div>
@@ -623,7 +744,6 @@
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
                     <h3 class="font-bold text-xl mb-6 text-brand-dark border-b border-gray-100 pb-3">Form Data Induk Pasien</h3>
                     <form id="formPasien" onsubmit="savePasien(event)" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <input type="hidden" id="psnId">
                         <div><label>No. Registrasi</label><input type="text" id="psnReg" required></div>
                         <div><label>No. RM</label><input type="text" id="psnRm" required></div>
                         <div><label>Nama Lengkap</label><input type="text" id="psnNama" required></div>
@@ -639,7 +759,7 @@
                         
                         <div class="md:col-span-3">
                             <label>Status Pasien</label>
-                            <div class="flex flex-wrap gap-4 mt-2 bg-gray-50 p-3 rounded-xl border border-gray-200" id="psnStatusContainer">
+                            <div class="flex flex-wrap gap-4 mt-2 bg-gray-50 p-3 rounded-xl border border-gray-200">
                                 <label class="flex items-center gap-2 cursor-pointer normal-case font-medium text-gray-700 hover:text-emerald-600 transition">
                                     <input type="radio" name="psnStatus" value="Aktif" checked class="w-4 h-4 accent-emerald-500 cursor-pointer"> Aktif
                                 </label>
@@ -667,7 +787,15 @@
             <section id="jadwal" class="page-section">
                 <div class="admin-only bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8" id="formJadwalContainer">
                     <h3 class="font-bold text-xl mb-6 text-brand-dark border-b border-gray-100 pb-3">Plotting Jadwal Mesin Hari Ini</h3>
-                    <form id="formJadwal" onsubmit="saveJadwal(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6"><input type="hidden" id="jdwId"><div><label>Mesin / Kategori</label><select id="jdwMesin" required onchange="toggleManualInput()"><option value="Nipro">Nipro</option><option value="Fresenius">Fresenius</option><option value="Rawat Inap">Rawat Inap</option></select></div><div id="wrapMasterPasien"><label>Pilih Pasien</label><select id="jdwPasien"></select></div><div id="wrapManualPasien" class="md:col-span-2 hidden grid grid-cols-1 md:grid-cols-2 gap-6 bg-rose-50/50 p-6 border rounded-xl border-rose-100"><div class="md:col-span-2 text-rose-800 font-bold border-b border-rose-200 pb-2"><i class="fas fa-info-circle"></i> Input Manual Pasien Rawat Inap</div><div><label>Nama Pasien</label><input type="text" id="jdwNamaManual"></div><div><label>No RM</label><input type="text" id="jdwRmManual"></div><div><label>Asal Ranap</label><select id="jdwAsalRanap"><option>IGD</option><option>ICU</option><option>Ranap 2 Depan</option><option>Ranap 2 Belakang</option><option>Ranap 3 Depan</option><option>Ranap 3 Belakang</option><option>Ranap 4</option><option>VIP</option><option>VVIP</option><option>POLI</option></select></div><div><label>Akses</label><select id="jdwAksesManual"><option value="Cimino">Cimino</option><option value="CDL">CDL</option><option value="Femoral">Femoral</option></select></div><div class="md:col-span-2"><label>Keterangan Tambahan</label><input type="text" id="jdwKetManual"></div></div><div><label>Shift</label><select id="jdwShift" required><option value="Pagi">Pagi</option><option value="Siang">Siang</option></select></div><div><label>Pegawai PJ</label><select id="jdwPerawat" required></select></div><div><label>Status Awal</label><select id="jdwStatus" required><option value="Menunggu">Menunggu</option><option value="Running">Running</option><option value="Selesai">Selesai</option><option value="Batal">Batal</option></select></div><div class="md:col-span-2 flex justify-end gap-3 mt-4 border-t pt-6"><button type="button" onclick="resetFormJadwal()" class="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 font-medium transition">Batal</button><button type="submit" class="bg-brand-blue hover:bg-blue-800 text-white px-6 py-2.5 rounded-xl shadow-md font-medium transition flex items-center gap-2"><i class="fas fa-save"></i> Simpan Jadwal</button></div></form>
+                    <form id="formJadwal" onsubmit="saveJadwal(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div><label>Mesin / Kategori</label><select id="jdwMesin" required onchange="toggleManualInput()"><option value="Nipro">Nipro</option><option value="Fresenius">Fresenius</option><option value="Rawat Inap">Rawat Inap</option></select></div>
+                        <div id="wrapMasterPasien"><label>Pilih Pasien</label><select id="jdwPasien"></select></div>
+                        <div id="wrapManualPasien" class="md:col-span-2 hidden grid grid-cols-1 md:grid-cols-2 gap-6 bg-rose-50/50 p-6 border rounded-xl border-rose-100"><div class="md:col-span-2 text-rose-800 font-bold border-b border-rose-200 pb-2"><i class="fas fa-info-circle"></i> Input Manual Pasien Rawat Inap</div><div><label>Nama Pasien</label><input type="text" id="jdwNamaManual"></div><div><label>No RM</label><input type="text" id="jdwRmManual"></div><div><label>Asal Ranap</label><select id="jdwAsalRanap"><option>IGD</option><option>ICU</option><option>Ranap 2 Depan</option><option>Ranap 2 Belakang</option><option>Ranap 3 Depan</option><option>Ranap 3 Belakang</option><option>Ranap 4</option><option>VIP</option><option>VVIP</option><option>POLI</option></select></div><div><label>Akses</label><select id="jdwAksesManual"><option value="Cimino">Cimino</option><option value="CDL">CDL</option><option value="Femoral">Femoral</option></select></div><div class="md:col-span-2"><label>Keterangan Tambahan</label><input type="text" id="jdwKetManual"></div></div>
+                        <div><label>Shift</label><select id="jdwShift" required><option value="Pagi">Pagi</option><option value="Siang">Siang</option></select></div>
+                        <div><label>Pegawai PJ</label><select id="jdwPerawat" required></select></div>
+                        <div><label>Status Awal</label><select id="jdwStatus" required><option value="Menunggu">Menunggu</option><option value="Running">Running</option><option value="Selesai">Selesai</option><option value="Batal">Batal</option></select></div>
+                        <div class="md:col-span-2 flex justify-end gap-3 mt-4 border-t pt-6"><button type="button" onclick="resetFormJadwal()" class="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 font-medium transition">Batal</button><button type="submit" class="bg-brand-blue hover:bg-blue-800 text-white px-6 py-2.5 rounded-xl shadow-md font-medium transition flex items-center gap-2"><i class="fas fa-save"></i> Simpan Jadwal</button></div>
+                    </form>
                 </div>
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
                     <h3 class="font-bold text-xl mb-6 text-brand-dark">Daftar Jadwal Hari Ini</h3>
@@ -971,7 +1099,6 @@
             if(!db.bedStatus) db.bedStatus = getDefaultBedStatus();
             db.bedStatus[bedId] = status;
             saveData();
-            // renderDenahMesin() will be called automatically by Firebase on('value')
         }
 
         function renderAdminStatusMesin() {
@@ -1115,17 +1242,13 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('p', 'mm', 'a4');
 
-            // Tanggal Surat
             let now = new Date();
             let monthNamesIndo = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
             let strDate = `WAY HUWI, ${now.getDate().toString().padStart(2, '0')} ${monthNamesIndo[now.getMonth()]} ${now.getFullYear()}`;
 
             // --- KOP SURAT ---
             let logoData = getBase64Logo();
-            if (logoData) {
-                // Posisi Logo: X:14, Y:12, Lebar:20, Tinggi:20
-                doc.addImage(logoData, 'PNG', 14, 12, 18, 18); 
-            }
+            if (logoData) { doc.addImage(logoData, 'PNG', 14, 12, 18, 18); }
 
             doc.setFontSize(11);
             doc.setFont("helvetica", "bold");
@@ -1153,7 +1276,6 @@
             doc.text("BULAN", 14, 55); doc.text(":", 30, 55); doc.text(namaBulan, 33, 55);
             doc.text("UNIT", 14, 61); doc.text(":", 30, 61); doc.text("DIALISIS", 33, 61);
 
-            // Teks Pengantar
             doc.setFont("helvetica", "normal");
             doc.setFontSize(10);
             let introText = "Dengan surat ini, kami menugaskan beberapa karyawan di bawah ini untuk melakukan pekerjaan lembur. Pekerjaan lembur dilaksanakan sesuai dengan rincian di bawah ini :";
@@ -1167,18 +1289,9 @@
                 let pNama = db.nurses.find(x => x.id === pId)?.nama || 'Unknown';
                 let dataLembur = groupedLembur[pId];
 
-                // Cek sisa halaman, buat halaman baru jika tidak cukup
-                if (startY > 240) {
-                    doc.addPage();
-                    startY = 20;
-                }
+                if (startY > 240) { doc.addPage(); startY = 20; }
 
-                doc.setFontSize(10);
-                doc.setFont("helvetica", "bold");
-                doc.text(`Nama Pegawai : ${pNama}`, 14, startY);
-                startY += 4;
-
-                const tableColumn = ["NO", "TANGGAL", "JAM MULAI", "JAM SELESAI", "TOTAL (JAM)", "KEPERLUAN"];
+                const tableColumn = ["NO", "NAMA PEGAWAI", "TANGGAL", "JAM MULAI", "JAM SELESAI", "TOTAL (JAM)", "KEPERLUAN"];
                 let tableRows = [];
                 let totalDurasi = 0;
 
@@ -1187,19 +1300,26 @@
                     totalDurasi += d;
                     let displayTotal = Number(d.toFixed(2));
                     
-                    tableRows.push([
-                        idx + 1,
+                    let rowData = [ idx + 1 ];
+                    
+                    if (idx === 0) {
+                        // Nama perawat menggunakan rowspan seperti tampilan awal
+                        rowData.push({ rowSpan: dataLembur.length, content: pNama, styles: { valign: 'middle', fontStyle: 'bold' } });
+                    }
+
+                    rowData.push(
                         formatDateIndo(l.tgl),
                         l.mulai,
                         l.selesai,
                         displayTotal,
                         l.ket
-                    ]);
+                    );
+                    tableRows.push(rowData);
                 });
 
                 // Baris Footer Total Jam
                 tableRows.push([
-                    { content: 'TOTAL JAM LEMBUR', colSpan: 4, styles: { halign: 'right', fontStyle: 'bold', fillColor: [230, 230, 230] } },
+                    { content: 'TOTAL JAM LEMBUR', colSpan: 5, styles: { halign: 'right', fontStyle: 'bold', fillColor: [230, 230, 230] } },
                     { content: Number(totalDurasi.toFixed(2)), styles: { halign: 'center', fontStyle: 'bold', fillColor: [230, 230, 230] } },
                     { content: '', styles: { fillColor: [230, 230, 230] } }
                 ]);
@@ -1213,14 +1333,14 @@
                     headStyles: { fillColor: [211, 211, 211], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center', lineColor: [0, 0, 0], lineWidth: 0.2 },
                     columnStyles: {
                         0: {cellWidth: 10, halign: 'center'},
-                        1: {cellWidth: 25, halign: 'center'},
+                        // 1: Nama Pegawai menyesuaikan lebar teks otomatis
                         2: {cellWidth: 25, halign: 'center'},
                         3: {cellWidth: 25, halign: 'center'},
-                        4: {cellWidth: 25, halign: 'center'}
+                        4: {cellWidth: 25, halign: 'center'},
+                        5: {cellWidth: 25, halign: 'center'}
                     }
                 });
 
-                // Tambahkan jarak antar tabel perawat
                 startY = doc.lastAutoTable.finalY + 12; 
             }
 
@@ -1270,7 +1390,9 @@
         let currentNewsIndex = 0;
         function updateDashboardNews() { const ul = document.getElementById('dashNewsList'); if(!ul) return; ul.classList.remove('news-fade'); void ul.offsetWidth; ul.classList.add('news-fade'); let html = ''; for(let i=0; i<2; i++) { let idx = (currentNewsIndex + i) % newsContent.length; html += `<li>${newsContent[idx]}</li>`; } ul.innerHTML = html; currentNewsIndex = (currentNewsIndex + 1) % newsContent.length; } setInterval(updateDashboardNews, 5000); updateDashboardNews();
 
+        // Autocomplete Umur Data Pasien Baru & Edit
         document.getElementById('psnLahir').addEventListener('change', function() { if(this.value) { let birthDate = new Date(this.value); let ageDifMs = Date.now() - birthDate.getTime(); let ageDate = new Date(ageDifMs); document.getElementById('psnUmur').value = Math.abs(ageDate.getUTCFullYear() - 1970); } });
+        document.getElementById('editPsnLahir').addEventListener('change', function() { if(this.value) { let birthDate = new Date(this.value); let ageDifMs = Date.now() - birthDate.getTime(); let ageDate = new Date(ageDifMs); document.getElementById('editPsnUmur').value = Math.abs(ageDate.getUTCFullYear() - 1970); } });
 
         function calculateKtv(isManualV = false) {
             let waktu = parseFloat(document.getElementById('sesiWaktu').value) || 0; let bbPre = parseFloat(document.getElementById('sesiPre').value) || 0; let vInput = parseFloat(document.getElementById('sesiV').value) || 0; let qb = parseFloat(document.getElementById('sesiQb').value) || 0; let qd = parseFloat(document.getElementById('sesiQd').value) || 0; let manualClearance = parseFloat(document.getElementById('sesiClearance').value) || 0; let t_min = waktu * 60; let pId = document.getElementById('sesiPasien').value; let p = null; let isManualSesi = document.getElementById('sesiTipeInput').value === 'manual';
@@ -1361,10 +1483,7 @@
             if(l) { 
                 document.getElementById('editLmbId').value = l.id; 
                 document.getElementById('editLmbTgl').value = l.tgl; 
-                
-                // Set nilai select2 lembur
                 $('#editLmbPerawat').val(l.perawatId).trigger('change'); 
-
                 document.getElementById('editLmbMulai').value = l.mulai; 
                 document.getElementById('editLmbSelesai').value = l.selesai; 
                 document.getElementById('editLmbDurasi').value = l.durasi; 
@@ -1393,22 +1512,83 @@
         function hapusLembur(id) { if(confirm('Yakin hapus data lembur ini?')) { db.lemburs = db.lemburs.filter(x => x.id !== id); saveData(); } }
         function resetFormLembur() { document.getElementById('formLembur').reset(); document.getElementById('lmbId').value = ''; document.getElementById('lmbTgl').value = today; $('#lmbPerawat').val(null).trigger('change'); }
 
-        function toggleFormTambahAkun() { let container = document.getElementById('formTambahAkunContainer'); if(container.classList.contains('hidden')) { container.classList.remove('hidden'); document.getElementById('formEditAkunContainer').classList.add('hidden'); document.getElementById('formTambahAkun').reset(); window.scrollTo(0, 0); } else { container.classList.add('hidden'); } }
+        // --- MANAJEMEN AKUN (MODAL) ---
+        function toggleFormTambahAkun() { let container = document.getElementById('formTambahAkunContainer'); if(container.classList.contains('hidden')) { container.classList.remove('hidden'); document.getElementById('formTambahAkun').reset(); window.scrollTo(0, 0); } else { container.classList.add('hidden'); } }
         function saveTambahAkun(e) { e.preventDefault(); let username = document.getElementById('tambahUsername').value; let nama = document.getElementById('tambahNama').value; let pass = document.getElementById('tambahPassword').value; let role = document.getElementById('tambahRole').value; if (db.users.find(u => u.username === username)) return alert('Username sudah terdaftar!'); db.users.push({ username: username, password: pass, nama: nama, role: role, status: 'active', attempts: 0 }); saveData(); toggleFormTambahAkun(); alert('Akun ditambahkan!'); }
-        function setEditAkun(username) { let u = db.users.find(x => x.username === username); if(u) { document.getElementById('formEditAkunContainer').classList.remove('hidden'); document.getElementById('formTambahAkunContainer').classList.add('hidden'); document.getElementById('editOldUsername').value = u.username; document.getElementById('editUsername').value = u.username; document.getElementById('editNama').value = u.nama; document.getElementById('editPassword').value = ''; document.getElementById('editRole').value = u.role; window.scrollTo(0, 0); } }
-        function batalEditAkun() { document.getElementById('formEditAkunContainer').classList.add('hidden'); document.getElementById('formEditAkun').reset(); }
-        function saveEditAkun(e) { e.preventDefault(); let oldUser = document.getElementById('editOldUsername').value; let index = db.users.findIndex(x => x.username === oldUser); if(index !== -1) { db.users[index].nama = document.getElementById('editNama').value; db.users[index].role = document.getElementById('editRole').value; let newPass = document.getElementById('editPassword').value; if(newPass.trim() !== "") db.users[index].password = newPass; if(oldUser === currentUser.username) { currentUser.nama = db.users[index].nama; currentUser.role = db.users[index].role; sessionStorage.setItem('rs_current_user', JSON.stringify(currentUser)); applyRoleUI(); } saveData(); batalEditAkun(); alert('Akun di-update!'); } }
+        
+        function setEditAkun(username) { 
+            let u = db.users.find(x => x.username === username); 
+            if(u) { 
+                document.getElementById('modalEditAkun').classList.remove('hidden'); 
+                document.getElementById('editOldUsername').value = u.username; 
+                document.getElementById('editUsername').value = u.username; 
+                document.getElementById('editNama').value = u.nama; 
+                document.getElementById('editPassword').value = ''; 
+                document.getElementById('editRole').value = u.role; 
+            } 
+        }
+        function closeModalEditAkun() { document.getElementById('modalEditAkun').classList.add('hidden'); document.getElementById('formEditAkun').reset(); }
+        function saveEditAkun(e) { 
+            e.preventDefault(); 
+            let oldUser = document.getElementById('editOldUsername').value; 
+            let index = db.users.findIndex(x => x.username === oldUser); 
+            if(index !== -1) { 
+                db.users[index].nama = document.getElementById('editNama').value; 
+                db.users[index].role = document.getElementById('editRole').value; 
+                let newPass = document.getElementById('editPassword').value; 
+                if(newPass.trim() !== "") db.users[index].password = newPass; 
+                if(oldUser === currentUser.username) { 
+                    currentUser.nama = db.users[index].nama; 
+                    currentUser.role = db.users[index].role; 
+                    sessionStorage.setItem('rs_current_user', JSON.stringify(currentUser)); 
+                    applyRoleUI(); 
+                } 
+                saveData(); 
+                closeModalEditAkun(); 
+                alert('Akun di-update!'); 
+            } 
+        }
         function hapusAkun(username) { if(username === currentUser.username) return alert('Tidak bisa menghapus akun sendiri!'); if(confirm(`Yakin hapus akun "${username}"?`)) { db.users = db.users.filter(x => x.username !== username); saveData(); } }
         function aktifkanAkun(username) { let u = db.users.find(x => x.username === username); if(u && confirm(`Aktifkan akun "${username}"?`)) { u.status = 'active'; u.attempts = 0; saveData(); alert(`Akun diaktifkan!`); } }
 
-        function savePerawat(e) { e.preventDefault(); let id = document.getElementById('prwId').value; let data = { nama: document.getElementById('prwNama').value, nik: document.getElementById('prwNik').value, jabatan: document.getElementById('prwJabatan').value, pendidikan: document.getElementById('prwPendidikan').value }; if(id) { let index = db.nurses.findIndex(x => x.id === id); if(index !== -1) db.nurses[index] = { ...db.nurses[index], ...data }; } else { data.id = Date.now().toString(); db.nurses.push(data); } resetFormPerawat(); saveData(); alert('Disimpan!'); }
-        function editPerawat(id) { let p = db.nurses.find(x => x.id === id); if(p) { document.getElementById('prwId').value = p.id; document.getElementById('prwNama').value = p.nama; document.getElementById('prwNik').value = p.nik; document.getElementById('prwJabatan').value = p.jabatan; document.getElementById('prwPendidikan').value = p.pendidikan; window.scrollTo(0, 0); } }
-        function hapusPerawat(id) { if(confirm('Yakin hapus?')) { db.nurses = db.nurses.filter(x => x.id !== id); saveData(); } }
-        function resetFormPerawat() { document.getElementById('formPerawat').reset(); document.getElementById('prwId').value = ''; }
+        // --- MANAJEMEN PEGAWAI (MODAL) ---
+        function savePerawat(e) { e.preventDefault(); let data = { nama: document.getElementById('prwNama').value, nik: document.getElementById('prwNik').value, jabatan: document.getElementById('prwJabatan').value, pendidikan: document.getElementById('prwPendidikan').value }; data.id = Date.now().toString(); db.nurses.push(data); resetFormPerawat(); saveData(); alert('Pegawai baru ditambahkan!'); }
         
+        function editPerawat(id) { 
+            let p = db.nurses.find(x => x.id === id); 
+            if(p) { 
+                document.getElementById('editPrwId').value = p.id; 
+                document.getElementById('editPrwNama').value = p.nama; 
+                document.getElementById('editPrwNik').value = p.nik; 
+                document.getElementById('editPrwJabatan').value = p.jabatan; 
+                document.getElementById('editPrwPendidikan').value = p.pendidikan; 
+                document.getElementById('modalEditPerawat').classList.remove('hidden');
+            } 
+        }
+        function closeModalEditPerawat() { document.getElementById('modalEditPerawat').classList.add('hidden'); }
+        function saveEditPerawat(e) { 
+            e.preventDefault(); 
+            let id = document.getElementById('editPrwId').value; 
+            let data = { 
+                nama: document.getElementById('editPrwNama').value, 
+                nik: document.getElementById('editPrwNik').value, 
+                jabatan: document.getElementById('editPrwJabatan').value, 
+                pendidikan: document.getElementById('editPrwPendidikan').value 
+            }; 
+            let index = db.nurses.findIndex(x => x.id === id); 
+            if(index !== -1) { 
+                db.nurses[index] = { ...db.nurses[index], ...data }; 
+                saveData(); 
+                closeModalEditPerawat();
+                alert('Data Pegawai Berhasil Diperbarui!'); 
+            } 
+        }
+        function hapusPerawat(id) { if(confirm('Yakin hapus?')) { db.nurses = db.nurses.filter(x => x.id !== id); saveData(); } }
+        function resetFormPerawat() { document.getElementById('formPerawat').reset(); }
+        
+        // --- MANAJEMEN PASIEN (MODAL) ---
         function savePasien(e) { 
             e.preventDefault(); 
-            let id = document.getElementById('psnId').value; 
             let data = { 
                 reg: document.getElementById('psnReg').value, 
                 rm: document.getElementById('psnRm').value, 
@@ -1424,44 +1604,143 @@
                 tglReg: document.getElementById('psnTglReg').value, 
                 status: document.querySelector('input[name="psnStatus"]:checked') ? document.querySelector('input[name="psnStatus"]:checked').value : 'Aktif' 
             }; 
-            if(id) { 
-                let index = db.patients.findIndex(x => x.id === id); 
-                if(index !== -1) db.patients[index] = { ...db.patients[index], ...data }; 
-            } else { 
-                data.id = Date.now().toString(); db.patients.push(data); 
-            } 
+            data.id = Date.now().toString(); 
+            db.patients.push(data); 
             resetFormPasien(); 
             saveData(); 
-            alert('Disimpan!'); 
+            alert('Pasien baru ditambahkan!'); 
         }
+        
         function editPasien(id) { 
             let p = db.patients.find(x => x.id === id); 
             if(p) { 
-                document.getElementById('psnId').value = p.id; 
-                document.getElementById('psnReg').value = p.reg; 
-                document.getElementById('psnRm').value = p.rm; 
-                document.getElementById('psnNama').value = p.nama; 
-                document.getElementById('psnLahir').value = p.lahir; 
-                document.getElementById('psnUmur').value = p.umur || ''; 
-                document.getElementById('psnTinggi').value = p.tinggi || ''; 
-                document.getElementById('psnJk').value = p.jk; 
-                document.getElementById('psnDiag').value = p.diag; 
-                document.getElementById('psnAlamat').value = p.alamat; 
-                document.getElementById('psnBb').value = p.bb; 
-                document.getElementById('psnJadwal').value = p.jadwal; 
-                document.getElementById('psnTglReg').value = p.tglReg; 
-                let statusRadio = document.querySelector('input[name="psnStatus"][value="' + p.status + '"]'); 
+                document.getElementById('editPsnId').value = p.id; 
+                document.getElementById('editPsnReg').value = p.reg; 
+                document.getElementById('editPsnRm').value = p.rm; 
+                document.getElementById('editPsnNama').value = p.nama; 
+                document.getElementById('editPsnLahir').value = p.lahir; 
+                document.getElementById('editPsnUmur').value = p.umur || ''; 
+                document.getElementById('editPsnTinggi').value = p.tinggi || ''; 
+                document.getElementById('editPsnJk').value = p.jk; 
+                document.getElementById('editPsnDiag').value = p.diag; 
+                document.getElementById('editPsnAlamat').value = p.alamat; 
+                document.getElementById('editPsnBb').value = p.bb; 
+                document.getElementById('editPsnJadwal').value = p.jadwal; 
+                document.getElementById('editPsnTglReg').value = p.tglReg; 
+                let statusRadio = document.querySelector('input[name="editPsnStatus"][value="' + p.status + '"]'); 
                 if(statusRadio) statusRadio.checked = true; 
-                window.scrollTo(0, 0); 
+                document.getElementById('modalEditPasien').classList.remove('hidden');
             } 
+        }
+        function closeModalEditPasien() { document.getElementById('modalEditPasien').classList.add('hidden'); }
+        function saveEditPasien(e) {
+            e.preventDefault(); 
+            let id = document.getElementById('editPsnId').value; 
+            let data = { 
+                reg: document.getElementById('editPsnReg').value, 
+                rm: document.getElementById('editPsnRm').value, 
+                nama: document.getElementById('editPsnNama').value, 
+                lahir: document.getElementById('editPsnLahir').value, 
+                umur: document.getElementById('editPsnUmur').value, 
+                tinggi: document.getElementById('editPsnTinggi').value, 
+                jk: document.getElementById('editPsnJk').value, 
+                diag: document.getElementById('editPsnDiag').value, 
+                alamat: document.getElementById('editPsnAlamat').value, 
+                bb: document.getElementById('editPsnBb').value, 
+                jadwal: document.getElementById('editPsnJadwal').value, 
+                tglReg: document.getElementById('editPsnTglReg').value, 
+                status: document.querySelector('input[name="editPsnStatus"]:checked') ? document.querySelector('input[name="editPsnStatus"]:checked').value : 'Aktif' 
+            }; 
+            let index = db.patients.findIndex(x => x.id === id); 
+            if(index !== -1) {
+                db.patients[index] = { ...db.patients[index], ...data }; 
+                saveData(); 
+                closeModalEditPasien();
+                alert('Data Pasien Diperbarui!'); 
+            }
         }
         function hapusPasien(id) { if(confirm('Yakin hapus?')) { db.patients = db.patients.filter(x => x.id !== id); saveData(); } }
         function resetFormPasien() { document.getElementById('formPasien').reset(); document.getElementById('psnId').value = ''; }
 
+        // --- MANAJEMEN JADWAL (MODAL) ---
         function toggleManualInput() { let mesin = document.getElementById('jdwMesin').value; if(mesin === 'Rawat Inap') { document.getElementById('wrapMasterPasien').classList.add('hidden'); document.getElementById('wrapManualPasien').classList.remove('hidden'); document.getElementById('jdwPasien').removeAttribute('required'); document.getElementById('jdwNamaManual').setAttribute('required', 'true'); document.getElementById('jdwRmManual').setAttribute('required', 'true'); } else { document.getElementById('wrapMasterPasien').classList.remove('hidden'); document.getElementById('wrapManualPasien').classList.add('hidden'); document.getElementById('jdwPasien').setAttribute('required', 'true'); document.getElementById('jdwNamaManual').removeAttribute('required'); document.getElementById('jdwRmManual').removeAttribute('required'); } }
-        function saveJadwal(e) { e.preventDefault(); let id = document.getElementById('jdwId').value; let jadwal = { date: today, mesin: document.getElementById('jdwMesin').value, shift: document.getElementById('jdwShift').value, perawatId: document.getElementById('jdwPerawat').value, status: document.getElementById('jdwStatus').value }; if(jadwal.mesin === 'Rawat Inap') { jadwal.isManual = true; jadwal.nama = document.getElementById('jdwNamaManual').value; jadwal.rm = document.getElementById('jdwRmManual').value; jadwal.asal = document.getElementById('jdwAsalRanap').value; jadwal.akses = document.getElementById('jdwAksesManual').value; jadwal.keterangan = document.getElementById('jdwKetManual').value; } else { jadwal.isManual = false; jadwal.patientId = document.getElementById('jdwPasien').value; } if(id) { let index = db.schedules.findIndex(x => x.id === id); if(index !== -1) db.schedules[index] = { ...db.schedules[index], ...jadwal }; } else { jadwal.id = Date.now().toString() + Math.floor(Math.random()*1000); db.schedules.push(jadwal); } resetFormJadwal(); saveData(); }
+        
+        function saveJadwal(e) { 
+            e.preventDefault(); 
+            let jadwal = { date: today, mesin: document.getElementById('jdwMesin').value, shift: document.getElementById('jdwShift').value, perawatId: document.getElementById('jdwPerawat').value, status: document.getElementById('jdwStatus').value }; 
+            if(jadwal.mesin === 'Rawat Inap') { 
+                jadwal.isManual = true; jadwal.nama = document.getElementById('jdwNamaManual').value; jadwal.rm = document.getElementById('jdwRmManual').value; jadwal.asal = document.getElementById('jdwAsalRanap').value; jadwal.akses = document.getElementById('jdwAksesManual').value; jadwal.keterangan = document.getElementById('jdwKetManual').value; 
+            } else { 
+                jadwal.isManual = false; jadwal.patientId = document.getElementById('jdwPasien').value; 
+            } 
+            jadwal.id = Date.now().toString() + Math.floor(Math.random()*1000); 
+            db.schedules.push(jadwal); 
+            resetFormJadwal(); saveData(); 
+            alert('Plot Jadwal ditambahkan!');
+        }
         function resetFormJadwal() { document.getElementById('formJadwal').reset(); document.getElementById('jdwId').value = ''; $('#jdwPasien').val('').trigger('change.select2'); toggleManualInput(); }
-        function editJadwal(id) { let j = db.schedules.find(x => x.id === id); if(j) { document.getElementById('jdwId').value = j.id; document.getElementById('jdwMesin').value = j.mesin; toggleManualInput(); document.getElementById('jdwShift').value = j.shift || 'Pagi'; document.getElementById('jdwPerawat').value = j.perawatId || ''; document.getElementById('jdwStatus').value = j.status || 'Menunggu'; if(j.isManual) { document.getElementById('jdwNamaManual').value = j.nama; document.getElementById('jdwRmManual').value = j.rm; document.getElementById('jdwAsalRanap').value = j.asal; document.getElementById('jdwAksesManual').value = j.akses || 'Cimino'; document.getElementById('jdwKetManual').value = j.keterangan || ''; } else { $('#jdwPasien').val(j.patientId).trigger('change'); } window.scrollTo(0, 0); } }
+        
+        function toggleManualInputEdit() { 
+            let mesin = document.getElementById('editJdwMesin').value; 
+            if(mesin === 'Rawat Inap') { 
+                document.getElementById('editWrapMasterPasien').classList.add('hidden'); 
+                document.getElementById('editWrapManualPasien').classList.remove('hidden'); 
+                document.getElementById('editJdwPasien').removeAttribute('required'); 
+                document.getElementById('editJdwNamaManual').setAttribute('required', 'true'); 
+                document.getElementById('editJdwRmManual').setAttribute('required', 'true'); 
+            } else { 
+                document.getElementById('editWrapMasterPasien').classList.remove('hidden'); 
+                document.getElementById('editWrapManualPasien').classList.add('hidden'); 
+                document.getElementById('editJdwPasien').setAttribute('required', 'true'); 
+                document.getElementById('editJdwNamaManual').removeAttribute('required'); 
+                document.getElementById('editJdwRmManual').removeAttribute('required'); 
+            } 
+        }
+        function editJadwal(id) { 
+            let j = db.schedules.find(x => x.id === id); 
+            if(j) { 
+                document.getElementById('editJdwId').value = j.id; 
+                document.getElementById('editJdwMesin').value = j.mesin; 
+                toggleManualInputEdit(); 
+                document.getElementById('editJdwShift').value = j.shift || 'Pagi'; 
+                $('#editJdwPerawat').val(j.perawatId || '').trigger('change'); 
+                document.getElementById('editJdwStatus').value = j.status || 'Menunggu'; 
+                if(j.isManual) { 
+                    document.getElementById('editJdwNamaManual').value = j.nama; 
+                    document.getElementById('editJdwRmManual').value = j.rm; 
+                    document.getElementById('editJdwAsalRanap').value = j.asal; 
+                    document.getElementById('editJdwAksesManual').value = j.akses || 'Cimino'; 
+                    document.getElementById('editJdwKetManual').value = j.keterangan || ''; 
+                } else { 
+                    $('#editJdwPasien').val(j.patientId).trigger('change'); 
+                } 
+                document.getElementById('modalEditJadwal').classList.remove('hidden'); 
+            } 
+        }
+        function closeModalEditJadwal() { document.getElementById('modalEditJadwal').classList.add('hidden'); }
+        function saveEditJadwalModal(e) { 
+            e.preventDefault(); 
+            let id = document.getElementById('editJdwId').value; 
+            let jadwal = { date: today, mesin: document.getElementById('editJdwMesin').value, shift: document.getElementById('editJdwShift').value, perawatId: document.getElementById('editJdwPerawat').value, status: document.getElementById('editJdwStatus').value }; 
+            if(jadwal.mesin === 'Rawat Inap') { 
+                jadwal.isManual = true; 
+                jadwal.nama = document.getElementById('editJdwNamaManual').value; 
+                jadwal.rm = document.getElementById('editJdwRmManual').value; 
+                jadwal.asal = document.getElementById('editJdwAsalRanap').value; 
+                jadwal.akses = document.getElementById('editJdwAksesManual').value; 
+                jadwal.keterangan = document.getElementById('editJdwKetManual').value; 
+            } else { 
+                jadwal.isManual = false; 
+                jadwal.patientId = document.getElementById('editJdwPasien').value; 
+            } 
+            let index = db.schedules.findIndex(x => x.id === id); 
+            if(index !== -1) {
+                db.schedules[index] = { ...db.schedules[index], ...jadwal }; 
+                saveData(); 
+                closeModalEditJadwal();
+                alert("Data Jadwal Diperbarui!");
+            }
+        }
         function updateStatusJadwal(id, selectElement) { let jdw = db.schedules.find(x => x.id === id); if(jdw) { jdw.status = selectElement.value; saveData(); } }
         function hapusJadwal(id) { if(confirm('Yakin hapus?')) { db.schedules = db.schedules.filter(x => x.id !== id); saveData(); } }
 
@@ -1495,16 +1774,23 @@
             let pjOptions = '<option value="">-- Pilih Pegawai PJ --</option>' + db.nurses.filter(n => n.jabatan !== 'Pramusiwi').map(n => `<option value="${n.id}">${n.nama}</option>`).join('');
             
             document.getElementById('jdwPerawat').innerHTML = pjOptions; 
+            document.getElementById('editJdwPerawat').innerHTML = pjOptions; 
             document.getElementById('lmbPerawat').innerHTML = allPegawaiOptions; 
             document.getElementById('editLmbPerawat').innerHTML = allPegawaiOptions; 
             
             // Inisialisasi Select2 untuk pencarian pegawai
             $('#lmbPerawat').select2({ placeholder: '-- Cari Pegawai --', allowClear: true, width: '100%' });
             $('#editLmbPerawat').select2({ placeholder: '-- Cari Pegawai --', allowClear: true, width: '100%', dropdownParent: $('#modalEditLembur') });
+            $('#editJdwPerawat').select2({ placeholder: '-- Pilih Pegawai PJ --', allowClear: true, width: '100%', dropdownParent: $('#modalEditJadwal') });
 
             // Pasien Select2
             let optPsn = '<option value="">-- Pilih --</option>' + db.patients.map(p => `<option value="${p.id}">${p.nama} (${p.rm})</option>`).join('');
-            document.getElementById('jdwPasien').innerHTML = optPsn; $('#jdwPasien').select2({ placeholder: '-- Pilih Pasien --', allowClear: true, width: '100%' });
+            document.getElementById('jdwPasien').innerHTML = optPsn; 
+            document.getElementById('editJdwPasien').innerHTML = optPsn; 
+            
+            $('#jdwPasien').select2({ placeholder: '-- Pilih Pasien --', allowClear: true, width: '100%' });
+            $('#editJdwPasien').select2({ placeholder: '-- Pilih Pasien --', allowClear: true, width: '100%', dropdownParent: $('#modalEditJadwal') });
+            
             let optSesi = optPsn; let todayRanap = db.schedules.filter(s => s.date === today && s.isManual);
             if(todayRanap.length > 0) { optSesi += '<optgroup label="Pasien Rawat Inap (Terjadwal)">'; todayRanap.forEach(s => { optSesi += `<option value="manual_${s.id}">${s.nama} (${s.rm}) - ${s.asal}</option>`; }); optSesi += '</optgroup>'; }
             document.getElementById('sesiPasien').innerHTML = optSesi; $('#sesiPasien').select2({ placeholder: '-- Pilih Pasien --', allowClear: true, width: '100%' });
