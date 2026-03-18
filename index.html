@@ -154,6 +154,8 @@
 </head>
 <body class="bg-gray-50 flex h-screen overflow-hidden text-sm font-sans text-gray-700 relative">
 
+    <img id="logoPdfLembur" src="11.png" style="display:none;" crossorigin="anonymous">
+
     <div id="denahMesinModal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center backdrop-blur-sm transition-opacity" onclick="closeDenahModal()">
         <div class="bg-gray-50 rounded-2xl shadow-2xl w-[95%] max-w-5xl max-h-[90vh] overflow-hidden flex flex-col relative" onclick="event.stopPropagation()">
             <div class="bg-gradient-to-r from-brand-dark to-brand-blue p-4 sm:p-5 flex justify-between items-center text-white shrink-0">
@@ -703,11 +705,6 @@
                         <div class="flex flex-wrap items-center gap-3">
                             <div class="relative"><i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i><input type="text" id="searchLemburPerawat" oninput="refreshUI()" placeholder="Cari pegawai..." class="!pl-10 py-2 border-gray-200 w-48 sm:w-64 rounded-xl shadow-sm"></div>
                             <div class="flex items-center gap-2 bg-gray-50 p-1.5 rounded-xl border border-gray-200"><input type="date" id="filterTglMulai" class="border-none bg-transparent w-auto text-sm" onchange="refreshUI()"><span class="text-sm text-gray-400 font-medium">s/d</span><input type="date" id="filterTglAkhir" class="border-none bg-transparent w-auto text-sm" onchange="refreshUI()"></div>
-                            
-                            <div class="relative">
-                                <input type="text" id="inputBulanCetak" placeholder="Bulan Cetak (Cth: JAN 2026)" class="py-2 px-3 border-gray-200 w-40 sm:w-56 rounded-xl shadow-sm text-sm uppercase">
-                            </div>
-                            
                             <button onclick="downloadPDFLembur()" class="admin-only bg-rose-500 hover:bg-rose-600 text-white px-4 py-2.5 rounded-xl font-medium shadow-sm transition flex items-center gap-2"><i class="fas fa-file-pdf"></i> Export PDF</button>
                         </div>
                     </div>
@@ -1073,6 +1070,22 @@
         }
 
         // --- FUNGSI UPDATE PDF LEMBUR ---
+        function getBase64Logo() {
+            try {
+                let img = document.getElementById('logoPdfLembur');
+                if (!img || !img.complete || img.naturalWidth === 0) return null;
+                let canvas = document.createElement("canvas");
+                canvas.width = img.naturalWidth;
+                canvas.height = img.naturalHeight;
+                let ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0);
+                return canvas.toDataURL("image/png");
+            } catch(e) {
+                console.warn("Logo gagal dimuat ke PDF karena kendala Cross-Origin", e);
+                return null;
+            }
+        }
+
         function downloadPDFLembur() {
             let tglMulai = document.getElementById('filterTglMulai').value;
             let tglAkhir = document.getElementById('filterTglAkhir').value;
@@ -1082,10 +1095,12 @@
             let filteredLembur = db.lemburs.filter(l => l.tgl >= tglMulai && l.tgl <= tglAkhir);
             if(filteredLembur.length === 0) return alert('Tidak ada data lembur di rentang tanggal tersebut!');
 
-            // 1. Logika Bulan Editable (Membaca input teks baru)
-            let inputBulan = document.getElementById('inputBulanCetak') ? document.getElementById('inputBulanCetak').value.trim() : '';
+            // Fitur input bulan manual dengan default otomatis
             let monthNames = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
-            let namaBulan = inputBulan ? inputBulan.toUpperCase() : (monthNames[new Date(tglMulai).getMonth()] + ' ' + new Date(tglMulai).getFullYear());
+            let defaultMonth = monthNames[new Date(tglMulai).getMonth()];
+            let namaBulan = prompt("Masukkan nama BULAN untuk judul laporan PDF:", defaultMonth);
+            if (namaBulan === null) return; // Batal jika user klik cancel
+            namaBulan = namaBulan.toUpperCase();
 
             let groupedLembur = {};
             filteredLembur.forEach(l => {
@@ -1100,41 +1115,37 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('p', 'mm', 'a4');
 
-            // Tanggal Hari Ini untuk keperluan surat
+            // Tanggal Surat
             let now = new Date();
             let monthNamesIndo = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
             let strDate = `WAY HUWI, ${now.getDate().toString().padStart(2, '0')} ${monthNamesIndo[now.getMonth()]} ${now.getFullYear()}`;
 
             // --- KOP SURAT ---
-            
-            // 2. Tambahkan Logo Baru ke Header Kiri PDF
-            try {
-                let logoElem = new Image();
-                logoElem.src = 'Rumah_Sakit_Airan_Raya.webp'; // Menggunakan file WEBP yang diunggah
-                doc.addImage(logoElem, 'WEBP', 14, 10, 18, 18);
-            } catch(e) {
-                console.warn("Logo gagal dimuat ke dalam PDF.", e);
+            let logoData = getBase64Logo();
+            if (logoData) {
+                // Posisi Logo: X:14, Y:12, Lebar:20, Tinggi:20
+                doc.addImage(logoData, 'PNG', 14, 12, 18, 18); 
             }
 
             doc.setFontSize(11);
             doc.setFont("helvetica", "bold");
             doc.setTextColor(0,0,0);
-            doc.text("RUMAH SAKIT AIRAN RAYA", 35, 15);
+            doc.text("RUMAH SAKIT AIRAN RAYA", 35, 17);
             doc.setFontSize(9);
             doc.setFont("helvetica", "normal");
-            doc.text("JL AIRAN RAYA NO 99 WAY HUI", 35, 20);
-            doc.text("LAMPUNG SELATAN", 35, 25);
-            doc.text("TELP (0721) 561 7799, 561 7999", 35, 30);
+            doc.text("JL AIRAN RAYA NO 99 WAY HUI", 35, 22);
+            doc.text("LAMPUNG SELATAN", 35, 27);
+            doc.text("TELP (0721) 561 7799, 561 7999", 35, 32);
 
             // Garis Pembatas Kop
             doc.setLineWidth(0.5);
-            doc.line(14, 33, 196, 33);
+            doc.line(14, 35, 196, 35);
             doc.setLineWidth(1.0);
-            doc.line(14, 34, 196, 34);
+            doc.line(14, 36, 196, 36);
 
             // --- HEADER SURAT ---
             doc.setFontSize(14);
-            doc.setFont("helvetica", "normal");
+            doc.setFont("helvetica", "bold");
             doc.text("SURAT PERINTAH LEMBUR", 105, 45, {align: 'center'});
 
             doc.setFontSize(11);
@@ -1151,81 +1162,76 @@
 
             let startY = 80;
 
-            // 3. Render Tabel Terpisah Per Perawat
+            // --- RENDER TABEL PER PERAWAT ---
             for (let pId in groupedLembur) {
                 let pNama = db.nurses.find(x => x.id === pId)?.nama || 'Unknown';
                 let dataLembur = groupedLembur[pId];
 
-                // Cetak Nama Pegawai di atas tabelnya masing-masing
+                // Cek sisa halaman, buat halaman baru jika tidak cukup
+                if (startY > 240) {
+                    doc.addPage();
+                    startY = 20;
+                }
+
                 doc.setFontSize(10);
                 doc.setFont("helvetica", "bold");
-                doc.text(`Nama Pegawai: ${pNama}`, 14, startY);
-                startY += 4; // Jarak teks dengan tabel
+                doc.text(`Nama Pegawai : ${pNama}`, 14, startY);
+                startY += 4;
 
-                const tableColumn = ["NO", "TANGGAL", "JAM DIMULAI", "JAM SELESAI", "JUMLAH JAM", "KEPERLUAN"];
+                const tableColumn = ["NO", "TANGGAL", "JAM MULAI", "JAM SELESAI", "TOTAL (JAM)", "KEPERLUAN"];
                 let tableRows = [];
-                let totalJam = 0;
+                let totalDurasi = 0;
 
                 dataLembur.sort((a,b) => new Date(a.tgl) - new Date(b.tgl)).forEach((l, idx) => {
                     let d = parseFloat(l.durasi) || 0;
-                    totalJam += d;
+                    totalDurasi += d;
+                    let displayTotal = Number(d.toFixed(2));
+                    
                     tableRows.push([
                         idx + 1,
                         formatDateIndo(l.tgl),
                         l.mulai,
                         l.selesai,
-                        Number(d.toFixed(2)),
+                        displayTotal,
                         l.ket
                     ]);
                 });
 
-                // Baris Tambahan untuk Total Jam per Perawat
+                // Baris Footer Total Jam
                 tableRows.push([
-                    { content: 'TOTAL JAM LEMBUR', colSpan: 4, styles: { halign: 'right', fontStyle: 'bold' } },
-                    { content: Number(totalJam.toFixed(2)), styles: { halign: 'center', fontStyle: 'bold' } },
-                    { content: '', styles: { fillColor: [255, 255, 255] } } // Sel kosong untuk keperluan
+                    { content: 'TOTAL JAM LEMBUR', colSpan: 4, styles: { halign: 'right', fontStyle: 'bold', fillColor: [230, 230, 230] } },
+                    { content: Number(totalDurasi.toFixed(2)), styles: { halign: 'center', fontStyle: 'bold', fillColor: [230, 230, 230] } },
+                    { content: '', styles: { fillColor: [230, 230, 230] } }
                 ]);
 
-                // Render Tabel
                 doc.autoTable({
                     head: [tableColumn],
                     body: tableRows,
                     startY: startY,
                     theme: 'grid',
-                    styles: { fontSize: 9, textColor: [0, 0, 0], lineColor: [0, 0, 0], lineWidth: 0.2, overflow: 'linebreak' },
+                    styles: { fontSize: 9, textColor: [0, 0, 0], lineColor: [0, 0, 0], lineWidth: 0.2 },
                     headStyles: { fillColor: [211, 211, 211], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center', lineColor: [0, 0, 0], lineWidth: 0.2 },
                     columnStyles: {
                         0: {cellWidth: 10, halign: 'center'},
-                        1: {cellWidth: 30, halign: 'center'}, 
-                        2: {halign: 'center', cellWidth: 25},
-                        3: {halign: 'center', cellWidth: 25},
-                        4: {halign: 'center', cellWidth: 25},
-                        5: {cellWidth: 'auto'} // Keterangan ambil sisa ruang
+                        1: {cellWidth: 25, halign: 'center'},
+                        2: {cellWidth: 25, halign: 'center'},
+                        3: {cellWidth: 25, halign: 'center'},
+                        4: {cellWidth: 25, halign: 'center'}
                     }
                 });
 
-                // Set Y point untuk perawat berikutnya (beri jarak 12 point)
-                startY = doc.lastAutoTable.finalY + 12;
-
-                // Jika mendekati batas bawah margin kertas, buat halaman baru
-                if (startY > 250) {
-                    doc.addPage();
-                    startY = 20;
-                }
+                // Tambahkan jarak antar tabel perawat
+                startY = doc.lastAutoTable.finalY + 12; 
             }
 
             // --- FOOTER & TANDA TANGAN ---
-            // Cek apakah sisa ruang cukup untuk baris tanda tangan, jika tidak buat halaman baru
-            if (startY > 200) { 
-                doc.addPage();
-                startY = 20;
-            }
+            if (startY > 200) { doc.addPage(); startY = 20; }
 
             doc.setFontSize(10);
             doc.setTextColor(0,0,0);
             doc.setFont("helvetica", "normal");
 
-            let splitClose = doc.splitTextToSize("Demikian surat tugas lembur ini disampaikan. Atas perhatian dan kerjasamanya diucapkan terimakasih", 182);
+            let splitClose = doc.splitTextToSize("Demikian surat tugas lembur ini disampaikan. Atas perhatian dan kerjasamanya diucapkan terimakasih.", 182);
             doc.text(splitClose, 14, startY);
 
             // Tanggal Surat
@@ -1257,7 +1263,7 @@
             doc.setFont("helvetica", "bold");
             doc.text("dr. Chinta Ariestassia, MMRS", 155, row2Y + 30, {align: 'center'});
 
-            doc.save(`Surat_Perintah_Lembur_${tglMulai}_sd_${tglAkhir}.pdf`);
+            doc.save(`Surat_Perintah_Lembur_${namaBulan}.pdf`);
         }
 
         const newsContent = ["<strong>Adekuesi Dialisis:</strong> Target Kt/V ideal ≥ 1.2 untuk jadwal HD 3x seminggu (4-5 jam).", "<strong>Adekuesi Dialisis 2x Seminggu:</strong> Target Kt/V ≥ 1.8 untuk jadwal HD 2x seminggu.", "<strong>Laju Aliran Darah (Qb):</strong> Standar Qb umumnya 150-300 ml/menit menyesuaikan akses vaskular."];
