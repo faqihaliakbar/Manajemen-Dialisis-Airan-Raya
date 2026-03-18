@@ -1107,14 +1107,13 @@
 
             // --- KOP SURAT ---
             
-            // 2. Tambahkan Logo ke Header Kiri PDF
+            // 2. Tambahkan Logo Baru ke Header Kiri PDF
             try {
-                // Mengambil logo RS dari HTML secara otomatis
-                let logoElem = document.querySelector('img[alt="Logo RS Airan Raya"]') || new Image();
-                if(!logoElem.src) logoElem.src = 'airanraya.png'; // Pastikan path file benar di folder kamu
-                doc.addImage(logoElem, 'PNG', 14, 10, 18, 18);
+                let logoElem = new Image();
+                logoElem.src = 'Rumah_Sakit_Airan_Raya.webp'; // Menggunakan file WEBP yang diunggah
+                doc.addImage(logoElem, 'WEBP', 14, 10, 18, 18);
             } catch(e) {
-                console.warn("Logo gagal dimuat ke dalam PDF. Pastikan gambar ada dan formatnya didukung.", e);
+                console.warn("Logo gagal dimuat ke dalam PDF.", e);
             }
 
             doc.setFontSize(11);
@@ -1151,55 +1150,77 @@
             doc.text(splitIntro, 14, 70);
 
             let startY = 80;
-            const tableColumn = ["NO", "NAMA PEGAWAI", "TANGGAL", "JAM DIMULAI", "JAM SELESAI", "JUMLAH JAM", "KEPERLUAN"];
-            let tableRows = [];
-            let globalIndex = 1;
 
+            // 3. Render Tabel Terpisah Per Perawat
             for (let pId in groupedLembur) {
                 let pNama = db.nurses.find(x => x.id === pId)?.nama || 'Unknown';
                 let dataLembur = groupedLembur[pId];
 
+                // Cetak Nama Pegawai di atas tabelnya masing-masing
+                doc.setFontSize(10);
+                doc.setFont("helvetica", "bold");
+                doc.text(`Nama Pegawai: ${pNama}`, 14, startY);
+                startY += 4; // Jarak teks dengan tabel
+
+                const tableColumn = ["NO", "TANGGAL", "JAM DIMULAI", "JAM SELESAI", "JUMLAH JAM", "KEPERLUAN"];
+                let tableRows = [];
+                let totalJam = 0;
+
                 dataLembur.sort((a,b) => new Date(a.tgl) - new Date(b.tgl)).forEach((l, idx) => {
                     let d = parseFloat(l.durasi) || 0;
-                    let displayTotal = Number(d.toFixed(2));
-                    let rowData = [ globalIndex ];
-
-                    if (idx === 0) {
-                        rowData.push({ rowSpan: dataLembur.length, content: pNama, styles: { valign: 'middle', fontStyle: 'bold' } });
-                    }
-
-                    rowData.push(formatDateIndo(l.tgl), l.mulai, l.selesai, displayTotal, l.ket);
-                    tableRows.push(rowData);
-                    globalIndex++;
+                    totalJam += d;
+                    tableRows.push([
+                        idx + 1,
+                        formatDateIndo(l.tgl),
+                        l.mulai,
+                        l.selesai,
+                        Number(d.toFixed(2)),
+                        l.ket
+                    ]);
                 });
+
+                // Baris Tambahan untuk Total Jam per Perawat
+                tableRows.push([
+                    { content: 'TOTAL JAM LEMBUR', colSpan: 4, styles: { halign: 'right', fontStyle: 'bold' } },
+                    { content: Number(totalJam.toFixed(2)), styles: { halign: 'center', fontStyle: 'bold' } },
+                    { content: '', styles: { fillColor: [255, 255, 255] } } // Sel kosong untuk keperluan
+                ]);
+
+                // Render Tabel
+                doc.autoTable({
+                    head: [tableColumn],
+                    body: tableRows,
+                    startY: startY,
+                    theme: 'grid',
+                    styles: { fontSize: 9, textColor: [0, 0, 0], lineColor: [0, 0, 0], lineWidth: 0.2, overflow: 'linebreak' },
+                    headStyles: { fillColor: [211, 211, 211], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center', lineColor: [0, 0, 0], lineWidth: 0.2 },
+                    columnStyles: {
+                        0: {cellWidth: 10, halign: 'center'},
+                        1: {cellWidth: 30, halign: 'center'}, 
+                        2: {halign: 'center', cellWidth: 25},
+                        3: {halign: 'center', cellWidth: 25},
+                        4: {halign: 'center', cellWidth: 25},
+                        5: {cellWidth: 'auto'} // Keterangan ambil sisa ruang
+                    }
+                });
+
+                // Set Y point untuk perawat berikutnya (beri jarak 12 point)
+                startY = doc.lastAutoTable.finalY + 12;
+
+                // Jika mendekati batas bawah margin kertas, buat halaman baru
+                if (startY > 250) {
+                    doc.addPage();
+                    startY = 20;
+                }
             }
 
-            // 3. Render Tabel (Perbaikan cellWidth pada index 1 agar nama tidak terpotong)
-            doc.autoTable({
-                head: [tableColumn],
-                body: tableRows,
-                startY: startY,
-                theme: 'grid',
-                styles: { fontSize: 9, textColor: [0, 0, 0], lineColor: [0, 0, 0], lineWidth: 0.2, overflow: 'linebreak' },
-                headStyles: { fillColor: [211, 211, 211], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center', lineColor: [0, 0, 0], lineWidth: 0.2 },
-                columnStyles: {
-                    0: {cellWidth: 10, halign: 'center'},
-                    1: {cellWidth: 40}, // Fix lebar khusus kolom Nama Pegawai (jika panjang, akan auto enter ke bawah)
-                    3: {halign: 'center', cellWidth: 20},
-                    4: {halign: 'center', cellWidth: 20},
-                    5: {halign: 'center', cellWidth: 20},
-                    6: {cellWidth: 'auto'} // Lebar keterangan fleksibel sisa ruang
-                }
-            });
-
-            startY = doc.lastAutoTable.finalY + 10;
-
-            if (startY > 180) {
+            // --- FOOTER & TANDA TANGAN ---
+            // Cek apakah sisa ruang cukup untuk baris tanda tangan, jika tidak buat halaman baru
+            if (startY > 200) { 
                 doc.addPage();
                 startY = 20;
             }
 
-            // --- FOOTER & TANDA TANGAN ---
             doc.setFontSize(10);
             doc.setTextColor(0,0,0);
             doc.setFont("helvetica", "normal");
