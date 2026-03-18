@@ -167,7 +167,13 @@
                 <div><label>Username / NIK</label><input type="text" id="editUsername" required readonly></div>
                 <div><label>Nama Lengkap</label><input type="text" id="editNama" required></div>
                 <div><label>Password Baru <span class="normal-case font-normal text-gray-400">(Kosongkan jika tidak diganti)</span></label><input type="password" id="editPassword"></div>
-                <div><label>Hak Akses (Role)</label><select id="editRole" required><option value="Perawat">Perawat</option><option value="Admin">Admin</option></select></div>
+                <div><label>Hak Akses (Role)</label>
+                    <select id="editRole" required>
+                        <option value="Perawat">Perawat</option>
+                        <option value="Ka Tim">Ka Tim</option>
+                        <option value="Admin">Admin</option>
+                    </select>
+                </div>
                 <div class="md:col-span-2 flex justify-end gap-3 mt-4 border-t pt-5">
                     <button type="button" onclick="closeModalEditAkun()" class="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 font-medium transition">Batal</button>
                     <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl shadow-md font-medium transition flex items-center gap-2"><i class="fas fa-save"></i> Update Akun</button>
@@ -613,11 +619,11 @@
             <ul class="space-y-1">
                 <li><a href="#" onclick="switchPage('dashboard', this)" id="nav-dashboard" class="nav-link nav-active block px-6 py-3"><i class="fas fa-border-all w-7 opacity-80"></i> Dashboard</a></li>
                 <li class="admin-only"><a href="#" onclick="switchPage('akun', this)" id="nav-akun" class="nav-link block px-6 py-3"><i class="fas fa-user-shield w-7 opacity-80"></i> Manajemen Akun</a></li>
-                <p class="px-6 text-xs font-semibold text-gray-400 uppercase tracking-wider mt-6 mb-2 admin-only">Master Data</p>
-                <li class="admin-only"><a href="#" onclick="switchPage('pasien', this)" id="nav-pasien" class="nav-link block px-6 py-3"><i class="fas fa-users w-7 opacity-80"></i> Master Pasien</a></li>
+                <p class="px-6 text-xs font-semibold text-gray-400 uppercase tracking-wider mt-6 mb-2 katim-admin">Master Data</p>
+                <li class="katim-admin"><a href="#" onclick="switchPage('pasien', this)" id="nav-pasien" class="nav-link block px-6 py-3"><i class="fas fa-users w-7 opacity-80"></i> Master Pasien</a></li>
                 <li class="admin-only"><a href="#" onclick="switchPage('perawat', this)" id="nav-perawat" class="nav-link block px-6 py-3"><i class="fas fa-id-badge w-7 opacity-80"></i> Data Pegawai</a></li>
                 <p class="px-6 text-xs font-semibold text-gray-400 uppercase tracking-wider mt-6 mb-2">Operasional</p>
-                <li class="admin-only"><a href="#" onclick="switchPage('statusMesin', this)" id="nav-statusMesin" class="nav-link block px-6 py-3"><i class="fas fa-bed w-7 opacity-80 text-brand-neon"></i> Status Denah</a></li>
+                <li class="katim-admin"><a href="#" onclick="switchPage('statusMesin', this)" id="nav-statusMesin" class="nav-link block px-6 py-3"><i class="fas fa-bed w-7 opacity-80 text-brand-neon"></i> Status Denah</a></li>
                 <li><a href="#" onclick="switchPage('jadwal', this)" id="nav-jadwal" class="nav-link block px-6 py-3"><i class="fas fa-calendar-check w-7 opacity-80"></i> Jadwal Harian</a></li>
                 <li><a href="#" onclick="switchPage('registrasi', this)" id="nav-registrasi" class="nav-link block px-6 py-3"><i class="fas fa-procedures w-7 opacity-80"></i> Registrasi Sesi HD</a></li>
                 <li><a href="#" onclick="switchPage('lembur', this)" id="nav-lembur" class="nav-link block px-6 py-3"><i class="fas fa-clock w-7 opacity-80"></i> Buku Lembur</a></li>
@@ -680,12 +686,11 @@
             </section>
 
             <section id="statusMesin" class="page-section">
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8 admin-only">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8 katim-admin">
                     <h3 class="font-bold text-xl mb-2 text-brand-dark flex items-center gap-2"><i class="fas fa-cogs text-brand-neon"></i> Pengaturan Status Denah Mesin</h3>
                     <p class="text-sm text-gray-500 mb-6 border-b border-gray-100 pb-4">Ketuk salah satu pilihan pada mesin di bawah untuk merubah status "Denah Mesin" di halaman depan.</p>
                     
-                    <div id="admin-status-mesin-container" class="space-y-8">
-                        </div>
+                    <div id="admin-status-mesin-container" class="space-y-8"></div>
                 </div>
             </section>
 
@@ -696,7 +701,13 @@
                         <div><label>Username / NIK</label><input type="text" id="tambahUsername" required></div>
                         <div><label>Nama Lengkap</label><input type="text" id="tambahNama" required></div>
                         <div><label>Password Baru</label><input type="password" id="tambahPassword" required></div>
-                        <div><label>Hak Akses (Role)</label><select id="tambahRole" required><option value="Perawat">Perawat</option><option value="Admin">Admin</option></select></div>
+                        <div><label>Hak Akses (Role)</label>
+                            <select id="tambahRole" required>
+                                <option value="Perawat">Perawat</option>
+                                <option value="Ka Tim">Ka Tim</option>
+                                <option value="Admin">Admin</option>
+                            </select>
+                        </div>
                         <div class="md:col-span-2 flex justify-end gap-3 mt-4"><button type="button" onclick="toggleFormTambahAkun()" class="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 font-medium transition">Batal</button><button type="submit" class="bg-brand-neon hover:bg-brand-neonHover text-white px-6 py-2.5 rounded-xl shadow-md font-medium transition flex items-center gap-2"><i class="fas fa-save"></i> Simpan Akun</button></div>
                     </form>
                 </div>
@@ -779,13 +790,13 @@
                     </form>
                 </div>
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-                    <div class="flex justify-between items-center mb-6 gap-4"><h3 class="font-bold text-xl text-brand-dark">Daftar Pasien</h3><button onclick="downloadPDFPasien()" class="admin-only bg-rose-500 hover:bg-rose-600 text-white px-4 py-2.5 rounded-xl font-medium shadow-sm transition flex items-center gap-2"><i class="fas fa-file-pdf"></i> Export PDF</button></div>
+                    <div class="flex justify-between items-center mb-6 gap-4"><h3 class="font-bold text-xl text-brand-dark">Daftar Pasien</h3><button onclick="downloadPDFPasien()" class="katim-admin bg-rose-500 hover:bg-rose-600 text-white px-4 py-2.5 rounded-xl font-medium shadow-sm transition flex items-center gap-2"><i class="fas fa-file-pdf"></i> Export PDF</button></div>
                     <div class="overflow-x-auto rounded-xl border border-gray-100"><table class="w-full text-left"><thead><tr><th>No RM</th><th>Nama & Fisik</th><th>Diagnosis</th><th>BB Kering</th><th>Jadwal</th><th>Status</th><th class="text-center">Aksi</th></tr></thead><tbody id="listPasien"></tbody></table></div>
                 </div>
             </section>
             
             <section id="jadwal" class="page-section">
-                <div class="admin-only bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8" id="formJadwalContainer">
+                <div class="katim-admin bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8" id="formJadwalContainer">
                     <h3 class="font-bold text-xl mb-6 text-brand-dark border-b border-gray-100 pb-3">Plotting Jadwal Mesin Hari Ini</h3>
                     <form id="formJadwal" onsubmit="saveJadwal(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div><label>Mesin / Kategori</label><select id="jdwMesin" required onchange="toggleManualInput()"><option value="Nipro">Nipro</option><option value="Fresenius">Fresenius</option><option value="Rawat Inap">Rawat Inap</option></select></div>
@@ -811,9 +822,9 @@
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 border-b border-gray-100 pb-4"><div class="flex flex-col sm:flex-row items-start sm:items-center gap-4"><h3 class="font-bold text-xl text-brand-dark">Riwayat Harian</h3><input type="date" id="filterTglSesi" class="w-auto border-gray-300 shadow-sm" onchange="refreshUI()"></div></div>
                     <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-                        <div class="rounded-xl border border-gray-200 overflow-hidden"><div class="bg-gray-50 p-4 border-b border-gray-200 flex justify-between items-center"><h4 class="font-bold text-blue-700"><i class="fas fa-hdd"></i> Sesi Nipro</h4><button onclick="downloadPDFSesi('Nipro')" class="admin-only text-rose-600 hover:text-rose-800 text-xs font-semibold flex items-center gap-1.5 bg-rose-50 px-3 py-1.5 rounded-lg border border-rose-200"><i class="fas fa-file-pdf"></i> PDF</button></div><div class="overflow-x-auto"><table class="w-full text-left text-xs"><thead><tr class="bg-white border-b"><th class="p-3 font-semibold text-gray-600">Pasien & Akses</th><th class="p-3 font-semibold text-gray-600">BB & Detail HD</th><th class="p-3 font-semibold text-center text-gray-600">Aksi</th></tr></thead><tbody id="listSesiNipro" class="divide-y divide-gray-100"></tbody></table></div></div>
-                        <div class="rounded-xl border border-gray-200 overflow-hidden"><div class="bg-gray-50 p-4 border-b border-gray-200 flex justify-between items-center"><h4 class="font-bold text-emerald-700"><i class="fas fa-hdd"></i> Sesi Fresenius</h4><button onclick="downloadPDFSesi('Fresenius')" class="admin-only text-rose-600 hover:text-rose-800 text-xs font-semibold flex items-center gap-1.5 bg-rose-50 px-3 py-1.5 rounded-lg border border-rose-200"><i class="fas fa-file-pdf"></i> PDF</button></div><div class="overflow-x-auto"><table class="w-full text-left text-xs"><thead><tr class="bg-white border-b"><th class="p-3 font-semibold text-gray-600">Pasien & Akses</th><th class="p-3 font-semibold text-gray-600">BB & Detail HD</th><th class="p-3 font-semibold text-center text-gray-600">Aksi</th></tr></thead><tbody id="listSesiFresenius" class="divide-y divide-gray-100"></tbody></table></div></div>
-                        <div class="rounded-xl border border-gray-200 overflow-hidden"><div class="bg-rose-50/50 p-4 border-b border-gray-200 flex justify-between items-center"><h4 class="font-bold text-rose-700"><i class="fas fa-bed"></i> Sesi Rawat Inap</h4><button onclick="downloadPDFSesi('Rawat Inap')" class="admin-only text-rose-600 hover:text-rose-800 text-xs font-semibold flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-lg border border-rose-200"><i class="fas fa-file-pdf"></i> PDF</button></div><div class="overflow-x-auto"><table class="w-full text-left text-xs"><thead><tr class="bg-white border-b"><th class="p-3 font-semibold text-gray-600">Pasien & Akses</th><th class="p-3 font-semibold text-gray-600">BB & Detail HD</th><th class="p-3 font-semibold text-center text-gray-600">Aksi</th></tr></thead><tbody id="listSesiRanap" class="divide-y divide-gray-100"></tbody></table></div></div>
+                        <div class="rounded-xl border border-gray-200 overflow-hidden"><div class="bg-gray-50 p-4 border-b border-gray-200 flex justify-between items-center"><h4 class="font-bold text-blue-700"><i class="fas fa-hdd"></i> Sesi Nipro</h4><button onclick="downloadPDFSesi('Nipro')" class="katim-admin text-rose-600 hover:text-rose-800 text-xs font-semibold flex items-center gap-1.5 bg-rose-50 px-3 py-1.5 rounded-lg border border-rose-200"><i class="fas fa-file-pdf"></i> PDF</button></div><div class="overflow-x-auto"><table class="w-full text-left text-xs"><thead><tr class="bg-white border-b"><th class="p-3 font-semibold text-gray-600">Pasien & Akses</th><th class="p-3 font-semibold text-gray-600">BB & Detail HD</th><th class="p-3 font-semibold text-center text-gray-600">Aksi</th></tr></thead><tbody id="listSesiNipro" class="divide-y divide-gray-100"></tbody></table></div></div>
+                        <div class="rounded-xl border border-gray-200 overflow-hidden"><div class="bg-gray-50 p-4 border-b border-gray-200 flex justify-between items-center"><h4 class="font-bold text-emerald-700"><i class="fas fa-hdd"></i> Sesi Fresenius</h4><button onclick="downloadPDFSesi('Fresenius')" class="katim-admin text-rose-600 hover:text-rose-800 text-xs font-semibold flex items-center gap-1.5 bg-rose-50 px-3 py-1.5 rounded-lg border border-rose-200"><i class="fas fa-file-pdf"></i> PDF</button></div><div class="overflow-x-auto"><table class="w-full text-left text-xs"><thead><tr class="bg-white border-b"><th class="p-3 font-semibold text-gray-600">Pasien & Akses</th><th class="p-3 font-semibold text-gray-600">BB & Detail HD</th><th class="p-3 font-semibold text-center text-gray-600">Aksi</th></tr></thead><tbody id="listSesiFresenius" class="divide-y divide-gray-100"></tbody></table></div></div>
+                        <div class="rounded-xl border border-gray-200 overflow-hidden"><div class="bg-rose-50/50 p-4 border-b border-gray-200 flex justify-between items-center"><h4 class="font-bold text-rose-700"><i class="fas fa-bed"></i> Sesi Rawat Inap</h4><button onclick="downloadPDFSesi('Rawat Inap')" class="katim-admin text-rose-600 hover:text-rose-800 text-xs font-semibold flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-lg border border-rose-200"><i class="fas fa-file-pdf"></i> PDF</button></div><div class="overflow-x-auto"><table class="w-full text-left text-xs"><thead><tr class="bg-white border-b"><th class="p-3 font-semibold text-gray-600">Pasien & Akses</th><th class="p-3 font-semibold text-gray-600">BB & Detail HD</th><th class="p-3 font-semibold text-center text-gray-600">Aksi</th></tr></thead><tbody id="listSesiRanap" class="divide-y divide-gray-100"></tbody></table></div></div>
                     </div>
                 </div>
             </section>
@@ -833,7 +844,7 @@
                         <div class="flex flex-wrap items-center gap-3">
                             <div class="relative"><i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i><input type="text" id="searchLemburPerawat" oninput="refreshUI()" placeholder="Cari pegawai..." class="!pl-10 py-2 border-gray-200 w-48 sm:w-64 rounded-xl shadow-sm"></div>
                             <div class="flex items-center gap-2 bg-gray-50 p-1.5 rounded-xl border border-gray-200"><input type="date" id="filterTglMulai" class="border-none bg-transparent w-auto text-sm" onchange="refreshUI()"><span class="text-sm text-gray-400 font-medium">s/d</span><input type="date" id="filterTglAkhir" class="border-none bg-transparent w-auto text-sm" onchange="refreshUI()"></div>
-                            <button onclick="downloadPDFLembur()" class="admin-only bg-rose-500 hover:bg-rose-600 text-white px-4 py-2.5 rounded-xl font-medium shadow-sm transition flex items-center gap-2"><i class="fas fa-file-pdf"></i> Export PDF</button>
+                            <button onclick="downloadPDFLembur()" class="katim-admin bg-rose-500 hover:bg-rose-600 text-white px-4 py-2.5 rounded-xl font-medium shadow-sm transition flex items-center gap-2"><i class="fas fa-file-pdf"></i> Export PDF</button>
                         </div>
                     </div>
                     <div id="listLemburContainer" class="space-y-6"></div>
@@ -1035,7 +1046,10 @@
             renderDenahMesin(); // Update Modal Denah saat data berubah
         });
 
+        // BUG FIX: Memastikan refreshUI dijalankan segera sebelum Firebase merespon untuk instant feedback
         function saveData() {
+            refreshUI(); // <--- Paksa UI langsung terupdate secara lokal
+            
             document.getElementById('server-status').innerHTML = '<i class="fas fa-sync fa-spin"></i> Menyimpan...';
             document.getElementById('server-status').className = 'text-yellow-400 flex items-center gap-1.5 font-medium';
             database.ref('rs_airan_raya').set(db).then(() => {
@@ -1102,7 +1116,8 @@
         }
 
         function renderAdminStatusMesin() {
-            if (!currentUser || currentUser.role !== 'Admin') return;
+            // Ditampilkan untuk Admin DAN Ka Tim
+            if (!currentUser || (currentUser.role !== 'Admin' && currentUser.role !== 'Ka Tim')) return;
             
             let html = '';
             
@@ -1303,7 +1318,7 @@
                     let rowData = [ idx + 1 ];
                     
                     if (idx === 0) {
-                        // Nama perawat menggunakan rowspan seperti tampilan awal
+                        // Nama perawat menggunakan rowspan
                         rowData.push({ rowSpan: dataLembur.length, content: pNama, styles: { valign: 'middle', fontStyle: 'bold' } });
                     }
 
@@ -1333,7 +1348,6 @@
                     headStyles: { fillColor: [211, 211, 211], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center', lineColor: [0, 0, 0], lineWidth: 0.2 },
                     columnStyles: {
                         0: {cellWidth: 10, halign: 'center'},
-                        // 1: Nama Pegawai menyesuaikan lebar teks otomatis
                         2: {cellWidth: 25, halign: 'center'},
                         3: {cellWidth: 25, halign: 'center'},
                         4: {cellWidth: 25, halign: 'center'},
@@ -1440,12 +1454,28 @@
         function applyRoleUI() {
             if(!currentUser) return; 
             document.getElementById('userInfoDisplay').innerHTML = `<span class="font-bold text-white tracking-wide">${currentUser.nama}</span><br><span class="text-brand-neon font-medium text-[10px] uppercase">${currentUser.role}</span>`;
-            let adminOnlyElements = document.querySelectorAll('.admin-only'); 
-            if (currentUser.role === 'Perawat') { 
-                adminOnlyElements.forEach(el => el.classList.add('hidden')); 
-                if (['akun', 'pasien', 'perawat', 'statusMesin'].includes(document.querySelector('.page-section.active').id)) switchPage('dashboard', document.getElementById('nav-dashboard')); 
+            
+            let adminElements = document.querySelectorAll('.admin-only'); 
+            let katimAdminElements = document.querySelectorAll('.katim-admin');
+
+            if (currentUser.role === 'Admin') {
+                adminElements.forEach(el => el.classList.remove('hidden'));
+                katimAdminElements.forEach(el => el.classList.remove('hidden'));
+            } else if (currentUser.role === 'Ka Tim') {
+                adminElements.forEach(el => el.classList.add('hidden'));
+                katimAdminElements.forEach(el => el.classList.remove('hidden'));
+                
+                // Cegah Ka Tim masuk ke halaman yang dilarang jika terakses dari URL
+                let activeSection = document.querySelector('.page-section.active').id;
+                if (['akun', 'perawat'].includes(activeSection)) switchPage('dashboard', document.getElementById('nav-dashboard')); 
             } else { 
-                adminOnlyElements.forEach(el => el.classList.remove('hidden')); 
+                // Level Perawat Reguler
+                adminElements.forEach(el => el.classList.add('hidden')); 
+                katimAdminElements.forEach(el => el.classList.add('hidden')); 
+                
+                // Cegah Perawat Reguler masuk ke halaman yang dilarang
+                let activeSection = document.querySelector('.page-section.active').id;
+                if (['akun', 'pasien', 'perawat', 'statusMesin'].includes(activeSection)) switchPage('dashboard', document.getElementById('nav-dashboard')); 
             }
         }
         
@@ -1660,7 +1690,7 @@
             }
         }
         function hapusPasien(id) { if(confirm('Yakin hapus?')) { db.patients = db.patients.filter(x => x.id !== id); saveData(); } }
-        function resetFormPasien() { document.getElementById('formPasien').reset(); document.getElementById('psnId').value = ''; }
+        function resetFormPasien() { document.getElementById('formPasien').reset(); }
 
         // --- MANAJEMEN JADWAL (MODAL) ---
         function toggleManualInput() { let mesin = document.getElementById('jdwMesin').value; if(mesin === 'Rawat Inap') { document.getElementById('wrapMasterPasien').classList.add('hidden'); document.getElementById('wrapManualPasien').classList.remove('hidden'); document.getElementById('jdwPasien').removeAttribute('required'); document.getElementById('jdwNamaManual').setAttribute('required', 'true'); document.getElementById('jdwRmManual').setAttribute('required', 'true'); } else { document.getElementById('wrapMasterPasien').classList.remove('hidden'); document.getElementById('wrapManualPasien').classList.add('hidden'); document.getElementById('jdwPasien').setAttribute('required', 'true'); document.getElementById('jdwNamaManual').removeAttribute('required'); document.getElementById('jdwRmManual').removeAttribute('required'); } }
@@ -1678,7 +1708,7 @@
             resetFormJadwal(); saveData(); 
             alert('Plot Jadwal ditambahkan!');
         }
-        function resetFormJadwal() { document.getElementById('formJadwal').reset(); document.getElementById('jdwId').value = ''; $('#jdwPasien').val('').trigger('change.select2'); toggleManualInput(); }
+        function resetFormJadwal() { document.getElementById('formJadwal').reset(); $('#jdwPasien').val('').trigger('change.select2'); toggleManualInput(); }
         
         function toggleManualInputEdit() { 
             let mesin = document.getElementById('editJdwMesin').value; 
@@ -1754,7 +1784,7 @@
         function refreshUI() {
             if (!currentUser || !db.users) return;
             
-            // 1. Render Status Mesin (Admin)
+            // 1. Render Status Mesin
             renderAdminStatusMesin();
             // 2. Render Denah Mesin
             renderDenahMesin();
@@ -1799,7 +1829,12 @@
             // Render Tabel Pegawai
             document.getElementById('listPerawat').innerHTML = db.nurses.map(n => `<tr><td class="p-4 font-medium">${n.nama}</td><td class="p-4 text-gray-500">${n.nik}</td><td class="p-4"><span class="bg-indigo-50 text-indigo-700 px-2 py-1 rounded text-xs">${n.jabatan}</span></td><td class="p-4 text-gray-600">${n.pendidikan}</td><td class="p-4 text-center"><button onclick="editPerawat('${n.id}')" class="text-brand-blue bg-blue-50 hover:bg-blue-100 p-2 rounded-lg mr-2 transition"><i class="fas fa-edit"></i></button><button onclick="hapusPerawat('${n.id}')" class="text-rose-500 bg-rose-50 hover:bg-rose-100 p-2 rounded-lg transition"><i class="fas fa-trash"></i></button></td></tr>`).join('') || '<tr><td colspan="5" class="p-8 text-center text-gray-400">Belum ada data</td></tr>';
             
-            document.getElementById('listPasien').innerHTML = db.patients.map(p => `<tr><td class="p-4 font-semibold text-brand-dark">${p.rm}</td><td class="p-4">${p.nama} <div class="text-[11px] text-gray-400 font-medium mt-0.5"><i class="fas fa-ruler-vertical"></i> ${p.tinggi||'-'} cm &nbsp;&nbsp;|&nbsp;&nbsp; <i class="fas fa-birthday-cake"></i> ${p.umur||'-'} Thn</div></td><td class="p-4 text-gray-600">${p.diag}</td><td class="p-4 font-medium text-blue-600">${p.bb} Kg</td><td class="p-4"><span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs">${p.jadwal}</span></td><td class="p-4">${p.status === 'Aktif' ? '<span class="text-emerald-600 font-semibold text-xs"><i class="fas fa-circle text-[8px]"></i> Aktif</span>' : '<span class="text-gray-400 font-semibold text-xs"><i class="fas fa-circle text-[8px]"></i> '+p.status+'</span>'}</td><td class="p-4 text-center"><button onclick="editPasien('${p.id}')" class="text-brand-blue bg-blue-50 hover:bg-blue-100 p-2 rounded-lg mr-2 transition"><i class="fas fa-edit"></i></button><button onclick="hapusPasien('${p.id}')" class="text-rose-500 bg-rose-50 hover:bg-rose-100 p-2 rounded-lg transition"><i class="fas fa-trash"></i></button></td></tr>`).join('') || '<tr><td colspan="7" class="p-8 text-center text-gray-400">Belum ada data</td></tr>';
+            // Render Tabel Pasien (Aksi bisa diedit/hapus oleh Admin & Ka Tim)
+            let isAdminOrKaTim = (currentUser.role === 'Admin' || currentUser.role === 'Ka Tim');
+            document.getElementById('listPasien').innerHTML = db.patients.map(p => {
+                let btnAction = isAdminOrKaTim ? `<button onclick="editPasien('${p.id}')" class="text-brand-blue bg-blue-50 hover:bg-blue-100 p-2 rounded-lg mr-2 transition"><i class="fas fa-edit"></i></button><button onclick="hapusPasien('${p.id}')" class="text-rose-500 bg-rose-50 hover:bg-rose-100 p-2 rounded-lg transition"><i class="fas fa-trash"></i></button>` : `<span class="text-gray-300">-</span>`;
+                return `<tr><td class="p-4 font-semibold text-brand-dark">${p.rm}</td><td class="p-4">${p.nama} <div class="text-[11px] text-gray-400 font-medium mt-0.5"><i class="fas fa-ruler-vertical"></i> ${p.tinggi||'-'} cm &nbsp;&nbsp;|&nbsp;&nbsp; <i class="fas fa-birthday-cake"></i> ${p.umur||'-'} Thn</div></td><td class="p-4 text-gray-600">${p.diag}</td><td class="p-4 font-medium text-blue-600">${p.bb} Kg</td><td class="p-4"><span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs">${p.jadwal}</span></td><td class="p-4">${p.status === 'Aktif' ? '<span class="text-emerald-600 font-semibold text-xs"><i class="fas fa-circle text-[8px]"></i> Aktif</span>' : '<span class="text-gray-400 font-semibold text-xs"><i class="fas fa-circle text-[8px]"></i> '+p.status+'</span>'}</td><td class="p-4 text-center">${btnAction}</td></tr>`;
+            }).join('') || '<tr><td colspan="7" class="p-8 text-center text-gray-400">Belum ada data</td></tr>';
 
             // Sesi Harian
             let filterTgl = document.getElementById('filterTglSesi').value; let filteredSesi = db.sessions.filter(s => s.tgl === filterTgl);
@@ -1817,7 +1852,7 @@
             document.getElementById('listJadwalHarian').innerHTML = db.schedules.filter(s => s.date === today).map(s => { 
                 let nama = s.isManual ? s.nama : (db.patients.find(x => x.id === s.patientId)?.nama || '-'); let rm = s.isManual ? s.rm : (db.patients.find(x => x.id === s.patientId)?.rm || '-'); let st = s.status || 'Menunggu'; let shift = s.shift || '-'; let pj = db.nurses.find(x => x.id === s.perawatId)?.nama || '-'; let ketRawatInap = s.isManual ? `<div class="text-xs text-rose-500 mt-1 bg-rose-50 inline-block px-1.5 py-0.5 rounded font-medium"><i class="fas fa-info-circle"></i> Akses: ${s.akses || '-'} | Ket: ${s.keterangan || '-'}</div>` : ''; 
                 let colorClass = 'bg-yellow-50 text-yellow-700 border-yellow-200'; if(st === 'Running') colorClass = 'bg-emerald-50 text-emerald-700 border-emerald-200'; else if(st === 'Selesai') colorClass = 'bg-blue-50 text-blue-700 border-blue-200'; else if(st === 'Batal') colorClass = 'bg-rose-50 text-rose-700 border-rose-200';
-                let aksiBtns = currentUser.role === 'Admin' ? `<button onclick="editJadwal('${s.id}')" class="text-brand-blue bg-blue-50 hover:bg-blue-100 p-2 rounded-lg mr-2 transition"><i class="fas fa-edit"></i></button><button onclick="hapusJadwal('${s.id}')" class="text-rose-500 bg-rose-50 hover:bg-rose-100 p-2 rounded-lg transition"><i class="fas fa-trash"></i></button>` : `<span class="text-gray-300">-</span>`;
+                let aksiBtns = isAdminOrKaTim ? `<button onclick="editJadwal('${s.id}')" class="text-brand-blue bg-blue-50 hover:bg-blue-100 p-2 rounded-lg mr-2 transition"><i class="fas fa-edit"></i></button><button onclick="hapusJadwal('${s.id}')" class="text-rose-500 bg-rose-50 hover:bg-rose-100 p-2 rounded-lg transition"><i class="fas fa-trash"></i></button>` : `<span class="text-gray-300">-</span>`;
                 return `<tr><td class="p-4 font-medium text-gray-600">${s.mesin} ${s.isManual ? ' <span class="text-[10px] uppercase tracking-wider text-rose-500 font-bold block mt-1"><i class="fas fa-bed"></i> '+s.asal+'</span>' : ''}</td><td class="p-4 font-bold text-gray-800">${nama} ${ketRawatInap}</td><td class="p-4 text-gray-500 font-medium">${rm}</td><td class="p-4"><span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs font-semibold mr-2">${shift}</span> <span class="text-sm text-gray-600">${pj}</span></td><td class="p-4"><select onchange="updateStatusJadwal('${s.id}', this)" class="border rounded-lg font-semibold text-xs px-2 py-1.5 w-full cursor-pointer transition ${colorClass}"><option value="Menunggu" ${st === 'Menunggu' ? 'selected' : ''}>Menunggu</option><option value="Running" ${st === 'Running' ? 'selected' : ''}>Running</option><option value="Selesai" ${st === 'Selesai' ? 'selected' : ''}>Selesai</option><option value="Batal" ${st === 'Batal' ? 'selected' : ''}>Batal</option></select></td><td class="p-4 text-center">${aksiBtns}</td></tr>`; 
             }).join('') || '<tr><td colspan="6" class="p-8 text-center text-gray-400">Belum ada jadwal ter-plot hari ini</td></tr>';
 
