@@ -1339,6 +1339,7 @@
                     { content: '', styles: { fillColor: [230, 230, 230] } }
                 ]);
 
+                // FIX: Penyesuaian ukuran kolom agar teks nama tidak terpotong
                 doc.autoTable({
                     head: [tableColumn],
                     body: tableRows,
@@ -1348,10 +1349,12 @@
                     headStyles: { fillColor: [211, 211, 211], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center', lineColor: [0, 0, 0], lineWidth: 0.2 },
                     columnStyles: {
                         0: {cellWidth: 10, halign: 'center'},
-                        2: {cellWidth: 25, halign: 'center'},
-                        3: {cellWidth: 25, halign: 'center'},
-                        4: {cellWidth: 25, halign: 'center'},
-                        5: {cellWidth: 25, halign: 'center'}
+                        1: {cellWidth: 35, halign: 'left', valign: 'middle'}, // <-- Ini melebarkan kolom Nama
+                        2: {cellWidth: 22, halign: 'center'},
+                        3: {cellWidth: 22, halign: 'center'},
+                        4: {cellWidth: 22, halign: 'center'},
+                        5: {cellWidth: 22, halign: 'center'},
+                        6: {cellWidth: 49, halign: 'left'} 
                     }
                 });
 
@@ -1690,7 +1693,7 @@
             }
         }
         function hapusPasien(id) { if(confirm('Yakin hapus?')) { db.patients = db.patients.filter(x => x.id !== id); saveData(); } }
-        function resetFormPasien() { document.getElementById('formPasien').reset(); }
+        function resetFormPasien() { document.getElementById('formPasien').reset(); document.getElementById('psnId').value = ''; }
 
         // --- MANAJEMEN JADWAL (MODAL) ---
         function toggleManualInput() { let mesin = document.getElementById('jdwMesin').value; if(mesin === 'Rawat Inap') { document.getElementById('wrapMasterPasien').classList.add('hidden'); document.getElementById('wrapManualPasien').classList.remove('hidden'); document.getElementById('jdwPasien').removeAttribute('required'); document.getElementById('jdwNamaManual').setAttribute('required', 'true'); document.getElementById('jdwRmManual').setAttribute('required', 'true'); } else { document.getElementById('wrapMasterPasien').classList.remove('hidden'); document.getElementById('wrapManualPasien').classList.add('hidden'); document.getElementById('jdwPasien').setAttribute('required', 'true'); document.getElementById('jdwNamaManual').removeAttribute('required'); document.getElementById('jdwRmManual').removeAttribute('required'); } }
