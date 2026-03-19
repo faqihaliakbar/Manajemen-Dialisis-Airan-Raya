@@ -26,11 +26,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 
-    <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
-    <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
-    <script src="https://jsuites.net/v4/jsuites.js"></script>
-    <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
-
     <script>
         tailwind.config = {
             theme: {
@@ -155,9 +150,6 @@
         /* Denah Specific Styles */
         .bed-box { transition: all 0.2s ease; cursor: pointer; }
         .bed-box:hover { transform: translateY(-3px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
-
-        /* Styling tambahan Jspreadsheet */
-        .jexcel > tbody > tr > td { font-size: 13px; font-family: 'Poppins', sans-serif; }
     </style>
 </head>
 <body class="bg-gray-50 flex h-screen overflow-hidden text-sm font-sans text-gray-700 relative">
@@ -636,7 +628,7 @@
                 <li><a href="#" onclick="switchPage('registrasi', this)" id="nav-registrasi" class="nav-link block px-6 py-3"><i class="fas fa-procedures w-7 opacity-80"></i> Registrasi Sesi HD</a></li>
                 <li><a href="#" onclick="switchPage('lembur', this)" id="nav-lembur" class="nav-link block px-6 py-3"><i class="fas fa-clock w-7 opacity-80"></i> Buku Lembur</a></li>
                 <p class="px-6 text-xs font-semibold text-gray-400 uppercase tracking-wider mt-6 mb-2">Eksternal</p>
-                <li><a href="#" onclick="switchPage('bukuRegister', this)" id="nav-bukuRegister" class="nav-link block px-6 py-3"><i class="fas fa-file-excel w-7 opacity-80"></i> Buku Register</a></li>
+                <li><a href="https://docs.google.com/spreadsheets/d/1yXZgauGMP9w3to1ot3R2Obo9gdnBmGQfoTHGtQRpshw/edit?hl=id&pli=1&gid=1812546983#gid=1812546983" target="_blank" class="nav-link block px-6 py-3"><i class="fas fa-file-excel w-7 opacity-80"></i> Buku Register</a></li>
             </ul>
         </nav>
         <div class="px-6 py-4 bg-black/20 text-xs flex items-center justify-between">
@@ -858,62 +850,6 @@
                     <div id="listLemburContainer" class="space-y-6"></div>
                 </div>
             </section>
-
-            <section id="bukuRegister" class="page-section">
-                <div id="register-selection" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
-                    <h3 class="font-bold text-xl mb-6 text-brand-dark border-b border-gray-100 pb-3 flex items-center gap-2"><i class="fas fa-book-medical text-brand-neon"></i> Pilih Kategori Buku Register</h3>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <button onclick="openRegister('Nipro RJ')" class="bg-white hover:bg-blue-50 border-2 border-blue-100 p-6 rounded-2xl shadow-sm hover:shadow-md transition text-center group">
-                            <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-4 group-hover:scale-110 transition"><i class="fas fa-walking"></i></div>
-                            <h4 class="font-bold text-gray-800">Nipro</h4>
-                            <p class="text-sm text-gray-500">Rawat Jalan (RJ)</p>
-                        </button>
-                        
-                        <button onclick="openRegister('Nipro RI')" class="bg-white hover:bg-rose-50 border-2 border-rose-100 p-6 rounded-2xl shadow-sm hover:shadow-md transition text-center group">
-                            <div class="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-4 group-hover:scale-110 transition"><i class="fas fa-bed"></i></div>
-                            <h4 class="font-bold text-gray-800">Nipro</h4>
-                            <p class="text-sm text-gray-500">Rawat Inap (RI)</p>
-                        </button>
-                        
-                        <button onclick="openRegister('Fresenius RJ')" class="bg-white hover:bg-emerald-50 border-2 border-emerald-100 p-6 rounded-2xl shadow-sm hover:shadow-md transition text-center group">
-                            <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-4 group-hover:scale-110 transition"><i class="fas fa-walking"></i></div>
-                            <h4 class="font-bold text-gray-800">Fresenius</h4>
-                            <p class="text-sm text-gray-500">Rawat Jalan (RJ)</p>
-                        </button>
-                        
-                        <button onclick="openRegister('Fresenius RI')" class="bg-white hover:bg-rose-50 border-2 border-rose-100 p-6 rounded-2xl shadow-sm hover:shadow-md transition text-center group">
-                            <div class="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-4 group-hover:scale-110 transition"><i class="fas fa-bed"></i></div>
-                            <h4 class="font-bold text-gray-800">Fresenius</h4>
-                            <p class="text-sm text-gray-500">Rawat Inap (RI)</p>
-                        </button>
-                    </div>
-                </div>
-
-                <div id="register-spreadsheet-view" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hidden flex-col">
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4 border-b border-gray-100 pb-4">
-                        <div class="flex items-center gap-4">
-                            <button onclick="closeRegister()" class="bg-gray-100 hover:bg-gray-200 text-gray-600 px-4 py-2 rounded-xl transition flex items-center gap-2 font-medium"><i class="fas fa-arrow-left"></i> Kembali</button>
-                            <h3 class="font-bold text-xl text-brand-dark" id="register-title">Buku Register</h3>
-                        </div>
-                        
-                        <div class="flex flex-wrap items-center gap-3">
-                            <div class="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-xl border border-gray-200">
-                                <i class="fas fa-calendar-alt text-gray-400"></i>
-                                <input type="month" id="filterRegisterBulan" class="border-none bg-transparent text-sm w-auto outline-none" onchange="filterRegisterData()">
-                            </div>
-                            <div class="relative">
-                                <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                                <input type="text" id="searchRegister" placeholder="Cari nama / RM..." class="!pl-10 py-2 border-gray-200 w-48 sm:w-64 rounded-xl shadow-sm text-sm" onkeyup="searchRegisterData()">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="spreadsheet-container" class="w-full overflow-hidden border border-gray-200 rounded-lg"></div>
-                    <p class="text-[10px] text-gray-400 mt-2"><i class="fas fa-info-circle"></i> Data otomatis tersimpan (Auto-Save) setiap kali Anda mengubah isi tabel.</p>
-                </div>
-            </section>
-
         </div>
     </main>
 
@@ -1050,7 +986,7 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        let db = { users: [], nurses: [], patients: [], schedules: [], sessions: [], lemburs: [], bedStatus: {}, registers: {} };
+        let db = { users: [], nurses: [], patients: [], schedules: [], sessions: [], lemburs: [], bedStatus: {} };
         let currentUser = JSON.parse(sessionStorage.getItem('rs_current_user')) || null;
         
         const today = new Date().toISOString().split('T')[0];
@@ -1078,7 +1014,6 @@
                 db.users = data.users || []; db.nurses = data.nurses || []; db.patients = data.patients || [];
                 db.schedules = data.schedules || []; db.sessions = data.sessions || []; db.lemburs = data.lemburs || []; 
                 db.bedStatus = data.bedStatus || getDefaultBedStatus();
-                db.registers = data.registers || {}; // Sync Buku Register
             } else {
                 db.users.push({username: 'admin', password: '1234', nama: 'Administrator', role: 'Admin', status: 'active', attempts: 0});
                 db.bedStatus = getDefaultBedStatus();
@@ -1551,7 +1486,7 @@
         function switchPage(pageId, element) {
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active')); document.getElementById(pageId).classList.add('active');
             document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('nav-active')); if(element) element.classList.add('nav-active');
-            const titles = { 'dashboard': 'Dashboard Utama', 'akun': 'Manajemen Akun Sistem', 'pasien': 'Master Data Pasien', 'perawat': 'Data Pegawai', 'jadwal': 'Jadwal Harian', 'registrasi': 'Registrasi Sesi Harian', 'lembur': 'Buku Lembur Pegawai', 'statusMesin': 'Status Denah Mesin', 'bukuRegister': 'Buku Register Dialisis' };
+            const titles = { 'dashboard': 'Dashboard Utama', 'akun': 'Manajemen Akun Sistem', 'pasien': 'Master Data Pasien', 'perawat': 'Data Pegawai', 'jadwal': 'Jadwal Harian', 'registrasi': 'Registrasi Sesi Harian', 'lembur': 'Buku Lembur Pegawai', 'statusMesin': 'Status Denah Mesin' };
             document.getElementById('pageTitle').innerText = titles[pageId]; refreshUI();
         }
 
@@ -1970,118 +1905,6 @@
             
             // Notifikasi
             let notifs = ''; if(!db.patients.length) notifs += '<li class="text-rose-500 bg-rose-50 p-3 rounded-lg border border-rose-100 flex items-start gap-3"><i class="fas fa-exclamation-circle mt-0.5"></i> <span>Master Data Pasien kosong. Silakan isi terlebih dahulu.</span></li>'; db.sessions.filter(s => s.tgl === today).slice(-3).reverse().forEach(s => { let nama = "-"; if(s.isManualSesi){nama = s.namaManual;} else if(s.patientId.startsWith('manual_')) { let j = db.schedules.find(x => x.id === s.patientId.replace('manual_', '')); if(j) nama = j.nama; } else { let p = db.patients.find(x => x.id === s.patientId); if(p) nama = p.nama; } notifs += `<li class="text-brand-dark bg-emerald-50 p-3 rounded-lg border border-emerald-100 flex items-start gap-3"><i class="fas fa-check-circle text-emerald-500 mt-0.5"></i> <div>Sesi HD <span class="font-bold">${nama}</span> telah berhasil diinput ke sistem.</div></li>`; }); document.getElementById('notificationList').innerHTML = notifs || '<li class="text-gray-400 text-center italic py-4">Tidak ada notifikasi baru.</li>';
-        }
-
-        // --- MANAJEMEN BUKU REGISTER (EXCEL-LIKE) ---
-        let currentRegisterGrid = null;
-        let currentRegisterCategory = '';
-
-        function openRegister(category) {
-            currentRegisterCategory = category;
-            document.getElementById('register-selection').classList.add('hidden');
-            document.getElementById('register-spreadsheet-view').classList.remove('hidden');
-            document.getElementById('register-title').innerText = `Buku Register - ${category}`;
-            
-            // Reset filter
-            document.getElementById('searchRegister').value = '';
-            document.getElementById('filterRegisterBulan').value = '';
-
-            renderSpreadsheet(category);
-        }
-
-        function closeRegister() {
-            document.getElementById('register-selection').classList.remove('hidden');
-            document.getElementById('register-spreadsheet-view').classList.add('hidden');
-            if(currentRegisterGrid) {
-                currentRegisterGrid.destroy();
-                currentRegisterGrid = null;
-            }
-        }
-
-        function renderSpreadsheet(category, filteredData = null) {
-            let container = document.getElementById('spreadsheet-container');
-            container.innerHTML = ''; // Bersihkan container sebelumnya
-            
-            // Ambil data dari Firebase atau gunakan array kosong (10 baris default)
-            let data = filteredData || (db.registers[category] || [...Array(10)].map(() => []));
-
-            // Inisialisasi Jspreadsheet
-            currentRegisterGrid = jspreadsheet(container, {
-                data: data,
-                columns: [
-                    { type: 'numeric', title: 'NO', width: 40 },
-                    { type: 'calendar', title: 'TANGGAL', width: 100, options: { format: 'DD/MM/YYYY' } },
-                    { type: 'text', title: 'NAMA', width: 150 },
-                    { type: 'text', title: 'RM', width: 80 },
-                    { type: 'text', title: 'ALAMAT', width: 150 },
-                    { type: 'numeric', title: 'USIA', width: 50 },
-                    { type: 'dropdown', title: 'JK', width: 50, source: ['L', 'P'] },
-                    { type: 'text', title: 'J.KES', width: 80 },
-                    { type: 'text', title: 'RW.PNYKT', width: 100 },
-                    { type: 'numeric', title: 'BB KERING', width: 80 },
-                    { type: 'numeric', title: 'BB PRE HD', width: 80 },
-                    { type: 'numeric', title: 'BB POST HD', width: 80 },
-                    { type: 'numeric', title: 'UFG', width: 60 },
-                    { type: 'numeric', title: 'QB', width: 60 },
-                    { type: 'numeric', title: 'QD', width: 60 },
-                    { type: 'text', title: 'TIME', width: 60 },
-                    { type: 'text', title: 'DIALIZER', width: 100 },
-                    { type: 'text', title: 'HEPARIN', width: 80 },
-                    { type: 'dropdown', title: 'AKSES', width: 80, source: ['Cimino', 'CDL', 'Femoral'] },
-                    { type: 'numeric', title: 'KTV', width: 60 }
-                ],
-                search: true, // Native search aktif (hidden)
-                pagination: 30, // Paging
-                tableOverflow: true,
-                tableHeight: '60vh',
-                tableWidth: '100%',
-                onchange: function(instance, cell, col, row, value) {
-                    // Fitur Auto-Save ke database Firebase saat diedit
-                    if (!document.getElementById('filterRegisterBulan').value) {
-                        if(!db.registers) db.registers = {};
-                        db.registers[currentRegisterCategory] = currentRegisterGrid.getData();
-                        saveData(); // Sinkronisasi Firebase
-                    }
-                }
-            });
-        }
-
-        // Fitur Search Custom (Trigger fungsi search bawaan jspreadsheet)
-        function searchRegisterData() {
-            if (currentRegisterGrid) {
-                let query = document.getElementById('searchRegister').value;
-                currentRegisterGrid.search(query);
-            }
-        }
-
-        // Fitur Filter Bulan / Tahun
-        function filterRegisterData() {
-            let filterVal = document.getElementById('filterRegisterBulan').value; // format: "YYYY-MM"
-            let allData = db.registers[currentRegisterCategory] || [];
-            
-            if (!filterVal) {
-                // Jika filter dikosongkan, tampilkan semua data lagi
-                renderSpreadsheet(currentRegisterCategory, allData);
-                return;
-            }
-
-            // Filter berdasarkan kolom Tanggal (Indeks 1)
-            let [year, month] = filterVal.split('-');
-            
-            let filtered = allData.filter(row => {
-                let dateStr = row[1]; // TANGGAL ada di kolom ke-2
-                if (!dateStr) return false;
-                
-                // Jspreadsheet kalender format default saat disimpan biasanya "YYYY-MM-DD"
-                return dateStr.startsWith(`${year}-${month}`); 
-            });
-
-            if(filtered.length === 0) filtered = [[]]; // Mencegah grid error jika kosong
-            
-            if (currentRegisterGrid) {
-                currentRegisterGrid.destroy();
-            }
-            renderSpreadsheet(currentRegisterCategory, filtered);
         }
 
         checkAuth();
