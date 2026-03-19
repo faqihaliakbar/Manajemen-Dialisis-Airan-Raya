@@ -12,8 +12,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -27,11 +25,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-
-    <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
-    <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
-    <script src="https://jsuites.net/v4/jsuites.js"></script>
-    <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
 
     <script>
         tailwind.config = {
@@ -157,12 +150,6 @@
         /* Denah Specific Styles */
         .bed-box { transition: all 0.2s ease; cursor: pointer; }
         .bed-box:hover { transform: translateY(-3px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
-
-        /* Styling tambahan Jspreadsheet */
-        .jexcel > tbody > tr > td { font-size: 13px; font-family: 'Poppins', sans-serif; }
-        .jexcel_toolbar { padding: 8px !important; border-radius: 0.5rem 0.5rem 0 0; background-color: #f8fafc !important; border-bottom: 1px solid #e2e8f0 !important; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
-        .jexcel_toolbar i { font-size: 20px !important; color: #475569 !important; }
-        .jexcel_toolbar .jexcel_toolbar_item:hover { background-color: #e2e8f0 !important; border-radius: 4px; }
     </style>
 </head>
 <body class="bg-gray-50 flex h-screen overflow-hidden text-sm font-sans text-gray-700 relative">
@@ -641,7 +628,7 @@
                 <li><a href="#" onclick="switchPage('registrasi', this)" id="nav-registrasi" class="nav-link block px-6 py-3"><i class="fas fa-procedures w-7 opacity-80"></i> Registrasi Sesi HD</a></li>
                 <li><a href="#" onclick="switchPage('lembur', this)" id="nav-lembur" class="nav-link block px-6 py-3"><i class="fas fa-clock w-7 opacity-80"></i> Buku Lembur</a></li>
                 <p class="px-6 text-xs font-semibold text-gray-400 uppercase tracking-wider mt-6 mb-2">Eksternal</p>
-                <li><a href="#" onclick="switchPage('bukuRegister', this)" id="nav-bukuRegister" class="nav-link block px-6 py-3"><i class="fas fa-file-excel w-7 opacity-80"></i> Buku Register</a></li>
+                <li><a href="https://docs.google.com/spreadsheets/d/1yXZgauGMP9w3to1ot3R2Obo9gdnBmGQfoTHGtQRpshw/edit?hl=id&pli=1&gid=1812546983#gid=1812546983" target="_blank" class="nav-link block px-6 py-3"><i class="fas fa-file-excel w-7 opacity-80"></i> Buku Register</a></li>
             </ul>
         </nav>
         <div class="px-6 py-4 bg-black/20 text-xs flex items-center justify-between">
@@ -863,102 +850,6 @@
                     <div id="listLemburContainer" class="space-y-6"></div>
                 </div>
             </section>
-
-            <section id="bukuRegister" class="page-section">
-                <div id="register-selection" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
-                    <h3 class="font-bold text-xl mb-6 text-brand-dark border-b border-gray-100 pb-3 flex items-center gap-2"><i class="fas fa-book-medical text-brand-neon"></i> Pilih Kategori Buku Register</h3>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <button onclick="openRegister('Nipro RJ')" class="bg-white hover:bg-rose-50 border-2 border-rose-100 p-6 rounded-2xl shadow-sm hover:shadow-md transition text-center group">
-                            <div class="w-16 h-16 bg-rose-100 text-[#800000] rounded-full flex items-center justify-center text-2xl mx-auto mb-4 group-hover:scale-110 transition"><i class="fas fa-walking"></i></div>
-                            <h4 class="font-bold text-[#800000]">Nipro</h4>
-                            <p class="text-sm text-gray-500">Rawat Jalan (RJ)</p>
-                        </button>
-                        
-                        <button onclick="openRegister('Nipro RI')" class="bg-white hover:bg-rose-50 border-2 border-rose-100 p-6 rounded-2xl shadow-sm hover:shadow-md transition text-center group">
-                            <div class="w-16 h-16 bg-rose-100 text-[#800000] rounded-full flex items-center justify-center text-2xl mx-auto mb-4 group-hover:scale-110 transition"><i class="fas fa-bed"></i></div>
-                            <h4 class="font-bold text-[#800000]">Nipro</h4>
-                            <p class="text-sm text-gray-500">Rawat Inap (RI)</p>
-                        </button>
-                        
-                        <button onclick="openRegister('Fresenius RJ')" class="bg-white hover:bg-sky-50 border-2 border-sky-100 p-6 rounded-2xl shadow-sm hover:shadow-md transition text-center group">
-                            <div class="w-16 h-16 bg-sky-100 text-sky-500 rounded-full flex items-center justify-center text-2xl mx-auto mb-4 group-hover:scale-110 transition"><i class="fas fa-walking"></i></div>
-                            <h4 class="font-bold text-sky-600">Fresenius</h4>
-                            <p class="text-sm text-gray-500">Rawat Jalan (RJ)</p>
-                        </button>
-                        
-                        <button onclick="openRegister('Fresenius RI')" class="bg-white hover:bg-sky-50 border-2 border-sky-100 p-6 rounded-2xl shadow-sm hover:shadow-md transition text-center group">
-                            <div class="w-16 h-16 bg-sky-100 text-sky-500 rounded-full flex items-center justify-center text-2xl mx-auto mb-4 group-hover:scale-110 transition"><i class="fas fa-bed"></i></div>
-                            <h4 class="font-bold text-sky-600">Fresenius</h4>
-                            <p class="text-sm text-gray-500">Rawat Inap (RI)</p>
-                        </button>
-                    </div>
-                </div>
-
-                <div id="register-spreadsheet-view" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hidden flex-col">
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4 border-b border-gray-100 pb-4">
-                        <div class="flex items-center gap-4">
-                            <button onclick="closeRegister()" class="bg-gray-100 hover:bg-gray-200 text-gray-600 px-4 py-2 rounded-xl transition flex items-center gap-2 font-medium"><i class="fas fa-arrow-left"></i> Kembali</button>
-                            <h3 class="font-bold text-xl" id="register-title">Buku Register</h3>
-                        </div>
-                        
-                        <div class="flex flex-wrap items-center gap-3">
-                            <select id="filterRegisterYear" onchange="applyFilters()" class="border border-gray-200 rounded-lg px-2 py-1.5 text-sm font-semibold text-brand-dark bg-white shadow-sm outline-none">
-                                <option value="2024">2024</option>
-                                <option value="2025">2025</option>
-                                <option value="2026" selected>2026</option>
-                                <option value="2027">2027</option>
-                                <option value="2028">2028</option>
-                                <option value="2029">2029</option>
-                                <option value="2030">2030</option>
-                                <option value="2031">2031</option>
-                                <option value="2032">2032</option>
-                                <option value="2033">2033</option>
-                                <option value="2034">2034</option>
-                                <option value="2035">2035</option>
-                            </select>
-                            
-                            <div class="flex flex-wrap gap-1 bg-gray-100 p-1 rounded-lg border border-gray-200" id="monthFilterContainer">
-                                <button class="btn-month px-2.5 py-1 text-xs font-bold rounded-md bg-brand-neon text-white shadow-sm transition" data-month="" onclick="selectMonth(this)">ALL</button>
-                                <button class="btn-month px-2.5 py-1 text-xs font-bold rounded-md text-gray-500 hover:bg-gray-200 transition" data-month="01" onclick="selectMonth(this)">JAN</button>
-                                <button class="btn-month px-2.5 py-1 text-xs font-bold rounded-md text-gray-500 hover:bg-gray-200 transition" data-month="02" onclick="selectMonth(this)">FEB</button>
-                                <button class="btn-month px-2.5 py-1 text-xs font-bold rounded-md text-gray-500 hover:bg-gray-200 transition" data-month="03" onclick="selectMonth(this)">MAR</button>
-                                <button class="btn-month px-2.5 py-1 text-xs font-bold rounded-md text-gray-500 hover:bg-gray-200 transition" data-month="04" onclick="selectMonth(this)">APR</button>
-                                <button class="btn-month px-2.5 py-1 text-xs font-bold rounded-md text-gray-500 hover:bg-gray-200 transition" data-month="05" onclick="selectMonth(this)">MEI</button>
-                                <button class="btn-month px-2.5 py-1 text-xs font-bold rounded-md text-gray-500 hover:bg-gray-200 transition" data-month="06" onclick="selectMonth(this)">JUN</button>
-                                <button class="btn-month px-2.5 py-1 text-xs font-bold rounded-md text-gray-500 hover:bg-gray-200 transition" data-month="07" onclick="selectMonth(this)">JUL</button>
-                                <button class="btn-month px-2.5 py-1 text-xs font-bold rounded-md text-gray-500 hover:bg-gray-200 transition" data-month="08" onclick="selectMonth(this)">AGS</button>
-                                <button class="btn-month px-2.5 py-1 text-xs font-bold rounded-md text-gray-500 hover:bg-gray-200 transition" data-month="09" onclick="selectMonth(this)">SEP</button>
-                                <button class="btn-month px-2.5 py-1 text-xs font-bold rounded-md text-gray-500 hover:bg-gray-200 transition" data-month="10" onclick="selectMonth(this)">OKT</button>
-                                <button class="btn-month px-2.5 py-1 text-xs font-bold rounded-md text-gray-500 hover:bg-gray-200 transition" data-month="11" onclick="selectMonth(this)">NOV</button>
-                                <button class="btn-month px-2.5 py-1 text-xs font-bold rounded-md text-gray-500 hover:bg-gray-200 transition" data-month="12" onclick="selectMonth(this)">DES</button>
-                            </div>
-
-                            <div class="relative ml-2">
-                                <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                                <input type="text" id="searchRegister" placeholder="Cari nama / RM..." class="!pl-10 py-1.5 border border-gray-200 w-48 sm:w-56 rounded-lg shadow-sm text-sm" onkeyup="applyFilters()">
-                            </div>
-                            
-                            <div class="flex gap-2 ml-auto">
-                                <button onclick="tambahBarisRegister()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-300 px-4 py-1.5 rounded-lg shadow-sm font-bold transition flex items-center gap-2">
-                                    <i class="fas fa-plus"></i> Baris
-                                </button>
-                                
-                                <button onclick="saveRegisterManual()" class="bg-brand-neon hover:bg-brand-neonHover text-white px-5 py-1.5 rounded-lg shadow-md font-bold transition flex items-center gap-2">
-                                    <i class="fas fa-save"></i> Simpan
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="spreadsheet-container" class="w-full overflow-hidden border border-gray-200 rounded-lg"></div>
-                    <div class="flex justify-between items-center mt-2">
-                        <p class="text-[10px] text-gray-400"><i class="fas fa-info-circle"></i> Jangan lupa klik tombol <b>Simpan</b> setiap kali Anda selesai mengubah format atau menambah baris baru.</p>
-                        <p class="text-[10px] text-blue-500 font-medium">Tips: Klik Kanan pada sel tabel untuk opsi Merge, Copy, dan Paste.</p>
-                    </div>
-                </div>
-            </section>
-
         </div>
     </main>
 
@@ -1095,7 +986,7 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        let db = { users: [], nurses: [], patients: [], schedules: [], sessions: [], lemburs: [], bedStatus: {}, registers: {} };
+        let db = { users: [], nurses: [], patients: [], schedules: [], sessions: [], lemburs: [], bedStatus: {} };
         let currentUser = JSON.parse(sessionStorage.getItem('rs_current_user')) || null;
         
         const today = new Date().toISOString().split('T')[0];
@@ -1123,7 +1014,6 @@
                 db.users = data.users || []; db.nurses = data.nurses || []; db.patients = data.patients || [];
                 db.schedules = data.schedules || []; db.sessions = data.sessions || []; db.lemburs = data.lemburs || []; 
                 db.bedStatus = data.bedStatus || getDefaultBedStatus();
-                db.registers = data.registers || {}; // Sync Buku Register
             } else {
                 db.users.push({username: 'admin', password: '1234', nama: 'Administrator', role: 'Admin', status: 'active', attempts: 0});
                 db.bedStatus = getDefaultBedStatus();
@@ -1596,7 +1486,7 @@
         function switchPage(pageId, element) {
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active')); document.getElementById(pageId).classList.add('active');
             document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('nav-active')); if(element) element.classList.add('nav-active');
-            const titles = { 'dashboard': 'Dashboard Utama', 'akun': 'Manajemen Akun Sistem', 'pasien': 'Master Data Pasien', 'perawat': 'Data Pegawai', 'jadwal': 'Jadwal Harian', 'registrasi': 'Registrasi Sesi Harian', 'lembur': 'Buku Lembur Pegawai', 'statusMesin': 'Status Denah Mesin', 'bukuRegister': 'Buku Register Dialisis' };
+            const titles = { 'dashboard': 'Dashboard Utama', 'akun': 'Manajemen Akun Sistem', 'pasien': 'Master Data Pasien', 'perawat': 'Data Pegawai', 'jadwal': 'Jadwal Harian', 'registrasi': 'Registrasi Sesi Harian', 'lembur': 'Buku Lembur Pegawai', 'statusMesin': 'Status Denah Mesin' };
             document.getElementById('pageTitle').innerText = titles[pageId]; refreshUI();
         }
 
@@ -2015,238 +1905,6 @@
             
             // Notifikasi
             let notifs = ''; if(!db.patients.length) notifs += '<li class="text-rose-500 bg-rose-50 p-3 rounded-lg border border-rose-100 flex items-start gap-3"><i class="fas fa-exclamation-circle mt-0.5"></i> <span>Master Data Pasien kosong. Silakan isi terlebih dahulu.</span></li>'; db.sessions.filter(s => s.tgl === today).slice(-3).reverse().forEach(s => { let nama = "-"; if(s.isManualSesi){nama = s.namaManual;} else if(s.patientId.startsWith('manual_')) { let j = db.schedules.find(x => x.id === s.patientId.replace('manual_', '')); if(j) nama = j.nama; } else { let p = db.patients.find(x => x.id === s.patientId); if(p) nama = p.nama; } notifs += `<li class="text-brand-dark bg-emerald-50 p-3 rounded-lg border border-emerald-100 flex items-start gap-3"><i class="fas fa-check-circle text-emerald-500 mt-0.5"></i> <div>Sesi HD <span class="font-bold">${nama}</span> telah berhasil diinput ke sistem.</div></li>`; }); document.getElementById('notificationList').innerHTML = notifs || '<li class="text-gray-400 text-center italic py-4">Tidak ada notifikasi baru.</li>';
-        }
-
-        // --- MANAJEMEN BUKU REGISTER (EXCEL-LIKE) ---
-        let currentRegisterGrid = null;
-        let currentRegisterCategory = '';
-        let activeMonth = ''; // Kosong berarti ALL Month
-
-        function openRegister(category) {
-            currentRegisterCategory = category;
-            document.getElementById('register-selection').classList.add('hidden');
-            document.getElementById('register-spreadsheet-view').classList.remove('hidden');
-            
-            let titleEl = document.getElementById('register-title');
-            titleEl.innerText = `Buku Register - ${category}`;
-            
-            // Warnakan teks keterangan berdasarkan kategori
-            if (category.includes('Nipro')) {
-                titleEl.className = 'font-bold text-xl text-[#800000]'; // Merah Maroon
-            } else if (category.includes('Fresenius')) {
-                titleEl.className = 'font-bold text-xl text-[#0ea5e9]'; // Biru Muda (sky-500)
-            } else {
-                titleEl.className = 'font-bold text-xl text-brand-dark';
-            }
-            
-            // Reset filter search
-            document.getElementById('searchRegister').value = '';
-            
-            // Reset state bulan ke ALL
-            activeMonth = '';
-            document.querySelectorAll('.btn-month').forEach(b => {
-                if(b.dataset.month === '') {
-                    b.classList.remove('text-gray-500', 'hover:bg-gray-200');
-                    b.classList.add('bg-brand-neon', 'text-white', 'shadow-sm');
-                } else {
-                    b.classList.remove('bg-brand-neon', 'text-white', 'shadow-sm');
-                    b.classList.add('text-gray-500', 'hover:bg-gray-200');
-                }
-            });
-
-            renderSpreadsheet(category);
-        }
-
-        function closeRegister() {
-            document.getElementById('register-selection').classList.remove('hidden');
-            document.getElementById('register-spreadsheet-view').classList.add('hidden');
-            if(currentRegisterGrid) {
-                currentRegisterGrid.destroy();
-                currentRegisterGrid = null;
-            }
-        }
-
-        function tambahBarisRegister() {
-            if (currentRegisterGrid) {
-                // Menambahkan 1 baris baru di paling bawah
-                currentRegisterGrid.insertRow();
-            }
-        }
-
-        function renderSpreadsheet(category) {
-            let container = document.getElementById('spreadsheet-container');
-            container.innerHTML = ''; // Bersihkan container sebelumnya
-            
-            // Ambil data dari Firebase (Mendukung format lama & format baru dengan styling)
-            let savedData = db.registers[category];
-            let data = [];
-            let style = {};
-            let merge = {};
-
-            if (savedData) {
-                if (Array.isArray(savedData)) {
-                    data = savedData; // Migrasi dari format lama (jika ada)
-                } else {
-                    data = savedData.data || [];
-                    style = savedData.style || {};
-                    merge = savedData.merge || {};
-                }
-            }
-            
-            // Jika data kosong, buat 10 baris default
-            if (data.length === 0) {
-                data = [...Array(10)].map(() => []);
-            }
-
-            // Inisialisasi Jspreadsheet
-            currentRegisterGrid = jspreadsheet(container, {
-                data: data,
-                style: style,
-                mergeCells: merge,
-                minSpareRows: 1, // Akan selalu ada 1 baris kosong di bawah yang otomatis bertambah saat diisi
-                toolbar: [
-                    { type: 'i', content: 'undo', onclick: function() { currentRegisterGrid.undo(); } },
-                    { type: 'i', content: 'redo', onclick: function() { currentRegisterGrid.redo(); } },
-                    { type: 'select', k: 'font-family', v: ['Arial', 'Verdana', 'Tahoma', 'Courier New', 'Times New Roman', 'Poppins'] },
-                    { type: 'select', k: 'font-size', v: ['9px','10px','11px','12px','13px','14px','16px'] },
-                    { type: 'i', content: 'format_bold', k: 'font-weight', v: 'bold' },
-                    { type: 'i', content: 'format_italic', k: 'font-style', v: 'italic' },
-                    { type: 'i', content: 'format_underline', k: 'text-decoration', v: 'underline' },
-                    { type: 'i', content: 'format_align_left', k: 'text-align', v: 'left' },
-                    { type: 'i', content: 'format_align_center', k: 'text-align', v: 'center' },
-                    { type: 'i', content: 'format_align_right', k: 'text-align', v: 'right' },
-                    { type: 'color', content: 'format_color_text', k: 'color' },
-                    { type: 'color', content: 'format_color_fill', k: 'background-color' }
-                ],
-                columns: [
-                    { type: 'numeric', title: 'NO', width: 40 },
-                    { type: 'calendar', title: 'TANGGAL', width: 100, options: { format: 'DD/MM/YYYY' } },
-                    { type: 'text', title: 'NAMA', width: 150 },
-                    { type: 'text', title: 'RM', width: 80 },
-                    { type: 'text', title: 'ALAMAT', width: 150 },
-                    { type: 'numeric', title: 'USIA', width: 50 },
-                    { type: 'dropdown', title: 'JK', width: 50, source: ['L', 'P'] },
-                    { type: 'text', title: 'J.KES', width: 80 },
-                    { type: 'text', title: 'RW.PNYKT', width: 100 },
-                    { type: 'numeric', title: 'BB KERING', width: 80 },
-                    { type: 'numeric', title: 'BB PRE HD', width: 80 },
-                    { type: 'numeric', title: 'BB POST HD', width: 80 },
-                    { type: 'numeric', title: 'UFG', width: 60 },
-                    { type: 'numeric', title: 'QB', width: 60 },
-                    { type: 'numeric', title: 'QD', width: 60 },
-                    { type: 'text', title: 'TIME', width: 60 },
-                    { type: 'text', title: 'DIALIZER', width: 100 },
-                    { type: 'text', title: 'HEPARIN', width: 80 },
-                    { type: 'dropdown', title: 'AKSES', width: 80, source: ['Cimino', 'CDL', 'Femoral'] },
-                    { type: 'numeric', title: 'KTV', width: 60 }
-                ],
-                search: false, // Dimatikan agar tidak bentrok dengan fungsi hideRow kita
-                tableOverflow: true,
-                tableHeight: '60vh',
-                tableWidth: '100%',
-                onchange: function() {
-                    // Update state lokal untuk fungsi Auto-Save ke Variabel Global (TIDAK nge-hit server)
-                    if(!db.registers) db.registers = {};
-                    db.registers[currentRegisterCategory] = {
-                        data: currentRegisterGrid.getData(), 
-                        style: currentRegisterGrid.getStyle(), 
-                        merge: currentRegisterGrid.getMerge()
-                    };
-                }
-            });
-            
-            // Terapkan filter jika ada state
-            applyFilters();
-        }
-
-        // Fungsi Simpan Manual Buku Register ke Firebase
-        function saveRegisterManual() {
-            if (currentRegisterGrid) {
-                if(!db.registers) db.registers = {};
-                
-                // Ambil seluruh konfigurasi dari grid untuk disimpan permanen
-                db.registers[currentRegisterCategory] = {
-                    data: currentRegisterGrid.getData(), // Mendapatkan semua data
-                    style: currentRegisterGrid.getStyle(), // Mendapatkan format/warna
-                    merge: currentRegisterGrid.getMerge() // Mendapatkan sel merge
-                };
-                
-                // Panggil fungsi sinkronisasi ke Firebase bawaan Anda
-                saveData(); 
-                
-                alert('Data Buku Register berhasil disimpan!');
-            }
-        }
-
-        // --- SISTEM FILTERING BULAN & TAHUN ---
-        function selectMonth(btn) {
-            // Ubah gaya tombol UI
-            document.querySelectorAll('.btn-month').forEach(b => {
-                b.classList.remove('bg-brand-neon', 'text-white', 'shadow-sm');
-                b.classList.add('text-gray-500', 'hover:bg-gray-200');
-            });
-            btn.classList.remove('text-gray-500', 'hover:bg-gray-200');
-            btn.classList.add('bg-brand-neon', 'text-white', 'shadow-sm');
-
-            activeMonth = btn.dataset.month; // set nilai bulan (01, 02, dst)
-            applyFilters();
-        }
-
-        // Filter dinamis dengan menyembunyikan baris (hideRow)
-        function applyFilters() {
-            if (!currentRegisterGrid) return;
-
-            let year = document.getElementById('filterRegisterYear').value;
-            let query = document.getElementById('searchRegister').value.toLowerCase();
-            let numRows = currentRegisterGrid.options.data.length;
-
-            for (let i = 0; i < numRows; i++) {
-                let rowData = currentRegisterGrid.getRowData(i);
-                
-                let dateVal = rowData[1] || ''; // TANGGAL (Kolom 2 / Indeks 1)
-                let nameVal = (rowData[2] || '').toString().toLowerCase(); // NAMA
-                let rmVal = (rowData[3] || '').toString().toLowerCase(); // RM
-                
-                let show = true;
-                
-                // Cek apakah baris ini sepenuhnya kosong
-                let isEmpty = true;
-                for(let j=0; j<rowData.length; j++){
-                    if(rowData[j] !== '' && rowData[j] !== null) { isEmpty = false; break; }
-                }
-
-                // Baris kosong SELALU ditampilkan agar user tetap bisa input ke bawah
-                if (isEmpty) {
-                    currentRegisterGrid.showRow(i);
-                    continue; 
-                }
-
-                // 1. Cek Pencarian Teks
-                if (query && !nameVal.includes(query) && !rmVal.includes(query)) {
-                    show = false;
-                }
-
-                // 2. Cek Filter Bulan & Tahun
-                if (show && dateVal) {
-                    if (activeMonth) {
-                        // Jika bulan tertentu dipilih
-                        if (!dateVal.startsWith(`${year}-${activeMonth}`)) show = false;
-                    } else {
-                        // Jika tombol ALL dipilih
-                        if (!dateVal.startsWith(`${year}-`)) show = false;
-                    }
-                } else if (show && !dateVal && (activeMonth || query)) {
-                    // Jika ada text dicari atau bulan dipilih, baris isi yg ga punya tanggal, sembunyikan
-                    show = false;
-                }
-
-                // Terapkan Sembunyi / Tampil
-                if (show) {
-                    currentRegisterGrid.showRow(i);
-                } else {
-                    currentRegisterGrid.hideRow(i);
-                }
-            }
         }
 
         checkAuth();
