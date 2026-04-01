@@ -1021,6 +1021,15 @@
                 db.users = data.users || []; db.nurses = data.nurses || []; db.patients = data.patients || [];
                 db.schedules = data.schedules || []; db.sessions = data.sessions || []; db.lemburs = data.lemburs || []; 
                 db.bedStatus = data.bedStatus || getDefaultBedStatus();
+
+                // --- PERBAIKAN: AUTO-UNLOCK AKUN ADMIN ---
+                let adminAcc = db.users.find(u => u.username === 'admin');
+                if (adminAcc && adminAcc.status === 'suspended') {
+                    adminAcc.status = 'active';
+                    adminAcc.attempts = 0;
+                    database.ref('rs_airan_raya/users').set(db.users); // Memaksa update ke Firebase
+                }
+
             } else {
                 db.users.push({username: 'admin', password: '1234', nama: 'Administrator', role: 'Admin', status: 'active', attempts: 0});
                 db.bedStatus = getDefaultBedStatus();
