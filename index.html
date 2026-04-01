@@ -975,15 +975,22 @@
 
         // --- 1. INISIALISASI FIREBASE CLOUD DATABASE ---
         const firebaseConfig = {
-          apiKey: "AIzaSyBYhdoSx2SNGkmTQZsB8pJBySJRxKU6fS0",
-          authDomain: "sistem-dialisis-rs-airan.firebaseapp.com",
-          projectId: "sistem-dialisis-rs-airan",
-          storageBucket: "sistem-dialisis-rs-airan.firebasestorage.app",
-          messagingSenderId: "11936270109",
-          appId: "1:11936270109:web:ccb6d46359eb3efd0b03f4",
-          measurementId: "G-LVYM2WCDVM"
+            apiKey: "AIzaSyD52_K5GYNkUvtppMuee0IGIey5LauZOQg",
+            authDomain: "manajemen-dialisis-rs-airan.firebaseapp.com",
+            databaseURL: "https://manajemen-dialisis-rs-airan-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "manajemen-dialisis-rs-airan",
+            storageBucket: "manajemen-dialisis-rs-airan.firebasestorage.app",
+            messagingSenderId: "670726847041",
+            appId: "1:670726847041:web:483e90cf1340fe7781a4c0"
         };
-        firebase.initializeApp(firebaseConfig);
+        
+        // Cek agar tidak terjadi inisialisasi ganda
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        } else {
+            firebase.app(); 
+        }
+        
         const database = firebase.database();
 
         let db = { users: [], nurses: [], patients: [], schedules: [], sessions: [], lemburs: [], bedStatus: {} };
