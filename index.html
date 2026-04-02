@@ -325,71 +325,52 @@
                 </div>
                 <button onclick="closeDenahModal()" class="text-white hover:text-red-400 transition text-2xl"><i class="fas fa-times"></i></button>
             </div>
-
             <div class="p-4 sm:p-6 overflow-y-auto flex-1 bg-gray-200">
-                
                 <div class="flex flex-wrap justify-center gap-4 mb-6 bg-white p-3 rounded-xl shadow-sm border border-gray-200 w-max mx-auto">
                     <div class="flex items-center gap-2"><div class="w-4 h-4 bg-emerald-100 border border-emerald-400 rounded"></div><span class="text-xs font-bold text-gray-700">Kosong (Tersedia)</span></div>
                     <div class="flex items-center gap-2"><div class="w-4 h-4 bg-rose-100 border border-rose-400 rounded"></div><span class="text-xs font-bold text-gray-700">Running (Terisi)</span></div>
                     <div class="flex items-center gap-2"><div class="w-4 h-4 bg-blue-100 border border-blue-400 rounded"></div><span class="text-xs font-bold text-gray-700">Perbaikan</span></div>
                 </div>
-
                 <div class="flex flex-col lg:flex-row gap-6 justify-center items-start">
-
                     <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-md border border-gray-300 flex-1 relative w-full flex flex-col items-center overflow-x-auto">
-                        <div class="bg-emerald-600 text-white px-6 py-1 rounded-full font-bold shadow-sm border-2 border-white text-xs tracking-widest mb-4 z-10 sticky left-0">
-                            RUANG FRESENIUS
-                        </div>
-
+                        <div class="bg-emerald-600 text-white px-6 py-1 rounded-full font-bold shadow-sm border-2 border-white text-xs tracking-widest mb-4 z-10 sticky left-0">RUANG FRESENIUS</div>
                         <div class="flex gap-2 sm:gap-6 w-full justify-center min-w-max">
                             <div class="flex flex-col gap-2 w-16 sm:w-20" id="render-fresenius-kiri"></div>
-
                             <div class="w-8 sm:w-12 bg-gray-100 rounded-full border border-gray-200 flex flex-col justify-center items-center py-2">
                                 <i class="fas fa-arrow-up text-gray-400 mb-2 text-xs"></i>
                                 <span style="writing-mode: vertical-rl; text-orientation: upright;" class="text-[10px] font-bold text-gray-400 tracking-widest my-4">LORONG</span>
                                 <i class="fas fa-arrow-down text-gray-400 mt-2 text-xs"></i>
                             </div>
-
                             <div class="flex flex-col gap-2 w-16 sm:w-20" id="render-fresenius-kanan"></div>
                         </div>
                     </div>
-
                     <div class="flex flex-col gap-6 flex-1 w-full">
                         <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-md border border-gray-300 relative flex flex-col items-center overflow-x-auto">
-                            <div class="bg-blue-600 text-white px-6 py-1 rounded-full font-bold shadow-sm border-2 border-white text-xs tracking-widest mb-4 z-10 sticky left-0">
-                                RUANG NIPRO
-                            </div>
-
+                            <div class="bg-blue-600 text-white px-6 py-1 rounded-full font-bold shadow-sm border-2 border-white text-xs tracking-widest mb-4 z-10 sticky left-0">RUANG NIPRO</div>
                             <div class="flex gap-2 sm:gap-6 w-full justify-center min-w-max">
                                 <div class="flex flex-col gap-2 w-16 sm:w-20" id="render-nipro-kiri"></div>
-
                                 <div class="w-8 sm:w-12 bg-gray-100 rounded-full border border-gray-200 flex flex-col justify-center items-center py-2">
                                     <i class="fas fa-arrow-up text-gray-400 mb-2 text-xs"></i>
                                     <span style="writing-mode: vertical-rl; text-orientation: upright;" class="text-[10px] font-bold text-gray-400 tracking-widest my-4">LORONG</span>
                                     <i class="fas fa-arrow-down text-gray-400 mt-2 text-xs"></i>
                                 </div>
-
                                 <div class="flex flex-col gap-2 w-16 sm:w-20" id="render-nipro-kanan"></div>
                             </div>
                         </div>
-
                         <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-md border border-gray-300 relative flex flex-col items-center">
-                            <div class="bg-rose-600 text-white px-6 py-1 rounded-full font-bold shadow-sm border-2 border-white text-xs tracking-widest mb-4 z-10">
-                                RUANG KHUSUS
-                            </div>
+                            <div class="bg-rose-600 text-white px-6 py-1 rounded-full font-bold shadow-sm border-2 border-white text-xs tracking-widest mb-4 z-10">RUANG KHUSUS</div>
                             <div id="render-isolasi"></div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 
     <div id="imageModal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center backdrop-blur-sm transition-opacity" onclick="closeImageModal()">
-        <div class="relative max-w-4xl max-h-[90vh] w-[90%] p-2 flex justify-center" onclick="event.stopPropagation()">
+        <div class="relative max-w-5xl max-h-[90vh] w-[90%] p-2 flex justify-center" onclick="event.stopPropagation()">
             <button onclick="closeImageModal()" class="absolute -top-12 right-0 text-white hover:text-red-500 text-4xl transition"><i class="fas fa-times"></i></button>
-            <img id="imageModalSrc" src="WhatsApp Image 2026-03-09 at 13.07.05.jpeg" alt="Preview Image" class="max-h-[85vh] w-auto object-contain rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.5)] border-4 border-white/20 bg-white">
+            <img src="WhatsApp Image 2026-03-09 at 13.07.05.jpeg" alt="Preview Image" class="max-h-[85vh] w-auto object-contain rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.5)] border-4 border-white/20 bg-black">
         </div>
     </div>
 
@@ -447,13 +428,11 @@
 
     <div id="layananModal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center backdrop-blur-sm transition-opacity" onclick="closeLayananModal()">
         <div class="w-[90%] max-w-5xl rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.5)] flex flex-col md:flex-row relative overflow-hidden bg-gradient-to-r from-[#d1eee0] to-[#b3e0c4] transform scale-95 transition-transform duration-300" onclick="event.stopPropagation()">
-
             <div class="w-full md:w-[45%] h-60 md:h-[450px] relative">
                 <img id="layananImage" src="" alt="Layanan RS Airan Raya" class="w-full h-full object-cover object-center">
                 <div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-black/10 via-transparent to-[#d1eee0] md:to-[#d1eee0]"></div>
                 <div class="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-r from-transparent to-[#d1eee0] hidden md:block"></div>
             </div>
-
             <div class="w-full md:w-[55%] p-8 md:p-12 flex flex-col justify-center relative z-10">
                 <h2 id="layananTitle" class="text-3xl md:text-4xl font-bold text-gray-800 mb-6 tracking-tight">Judul Layanan</h2>
                 <p id="layananDesc" class="text-gray-700 text-sm md:text-base leading-relaxed font-medium"></p>
@@ -466,7 +445,6 @@
     </div>
 
     <div id="auth-overlay" class="fixed inset-0 z-50 flex flex-col justify-between bg-cover bg-center overflow-y-auto" style="background-image: linear-gradient(rgba(6, 78, 59, 0.8), rgba(14, 165, 233, 0.7)), url('RUMAH-SAKIT-AIRAN-RAYA-MEDICASTORE (1).jpg');">
-        
         <div class="w-full max-w-7xl mx-auto pt-2 z-20 relative">
             <div class="flex justify-between items-center px-6 md:px-10 py-2 text-white/90 text-xs">
                 <div><i class="fas fa-map-marker-alt mr-1"></i> Jl. Airan Raya No.99, Way Hui, Kec. Jati Agung, Kabupaten Lampung Selatan, Lampung 35131</div>
@@ -579,7 +557,7 @@
                         <h4 class="font-bold text-brand-dark mb-2 leading-tight text-lg">Perawat Dialisis<br>Profesional</h4>
                         <p class="text-sm text-gray-500 mb-6 px-2">Tim berpengalaman dan bersertifikat</p>
                     </div>
-                    <button type="button" onclick="openImageModalDynamic('WhatsApp Image 2026-03-09 at 13.07.05.jpeg')" class="bg-[#a3e635] hover:bg-[#84cc16] text-brand-dark text-xs font-bold py-2.5 px-6 rounded-full transition w-max mx-auto">LEARN MORE</button>
+                    <button type="button" onclick="document.getElementById('imageModal').classList.remove('hidden')" class="bg-[#a3e635] hover:bg-[#84cc16] text-brand-dark text-xs font-bold py-2.5 px-6 rounded-full transition w-max mx-auto">LEARN MORE</button>
                 </div>
                 <div class="bg-white rounded-2xl p-6 text-center shadow-xl transform transition hover:-translate-y-1 flex flex-col justify-between h-full">
                     <div>
@@ -624,11 +602,11 @@
                 <li class="admin-only"><a href="#" onclick="switchPage('perawat', this)" id="nav-perawat" class="nav-link block px-6 py-3"><i class="fas fa-id-badge w-7 opacity-80"></i> Data Pegawai</a></li>
                 <p class="px-6 text-xs font-semibold text-gray-400 uppercase tracking-wider mt-6 mb-2">Operasional</p>
                 <li class="katim-admin"><a href="#" onclick="switchPage('statusMesin', this)" id="nav-statusMesin" class="nav-link block px-6 py-3"><i class="fas fa-bed w-7 opacity-80 text-brand-neon"></i> Status Denah</a></li>
-                <li class="katim-admin"><a href="#" onclick="switchPage('uploadJadwal', this)" id="nav-uploadJadwal" class="nav-link block px-6 py-3"><i class="fas fa-image w-7 opacity-80 text-blue-400"></i> Upload Jadwal</a></li>
-                
                 <li><a href="#" onclick="switchPage('jadwal', this)" id="nav-jadwal" class="nav-link block px-6 py-3"><i class="fas fa-calendar-check w-7 opacity-80"></i> Jadwal Harian</a></li>
                 <li><a href="#" onclick="switchPage('registrasi', this)" id="nav-registrasi" class="nav-link block px-6 py-3"><i class="fas fa-procedures w-7 opacity-80"></i> Registrasi Sesi HD</a></li>
                 <li><a href="#" onclick="switchPage('lembur', this)" id="nav-lembur" class="nav-link block px-6 py-3"><i class="fas fa-clock w-7 opacity-80"></i> Buku Lembur</a></li>
+                <li><a href="#" onclick="switchPage('galeri', this)" id="nav-galeri" class="nav-link block px-6 py-3"><i class="fas fa-camera-retro w-7 opacity-80"></i> Galeri Dokumentasi</a></li>
+                
                 <p class="px-6 text-xs font-semibold text-gray-400 uppercase tracking-wider mt-6 mb-2">Eksternal</p>
                 <li><a href="https://docs.google.com/spreadsheets/d/1yXZgauGMP9w3to1ot3R2Obo9gdnBmGQfoTHGtQRpshw/edit?hl=id&pli=1&gid=1812546983#gid=1812546983" target="_blank" class="nav-link block px-6 py-3"><i class="fas fa-file-excel w-7 opacity-80"></i> Buku Register</a></li>
             </ul>
@@ -667,26 +645,12 @@
                         </div>
                     </div>
                 </div>
-                
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4 hover:shadow-md transition"><div class="w-12 h-12 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center text-xl shrink-0"><i class="fas fa-calendar-day"></i></div><div><p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Jadwal Hari Ini</p><h3 class="text-3xl font-bold text-gray-800" id="dashPasienHariIni">0</h3></div></div>
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4 hover:shadow-md transition"><div class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xl shrink-0"><i class="fas fa-users"></i></div><div><p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Total Pasien</p><h3 class="text-3xl font-bold text-gray-800" id="dashPasienAktif">0</h3></div></div>
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4 hover:shadow-md transition"><div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl shrink-0"><i class="fas fa-id-badge"></i></div><div><p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Pegawai Aktif</p><h3 class="text-3xl font-bold text-gray-800" id="dashPerawatAktif">0</h3></div></div>
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4 hover:shadow-md transition"><div class="w-12 h-12 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-xl shrink-0"><i class="fas fa-chart-line"></i></div><div><p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Sesi Bulan Ini</p><h3 class="text-3xl font-bold text-gray-800" id="dashPasienBulan">0</h3></div></div>
                 </div>
-
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
-                    <h3 class="font-bold text-brand-dark mb-4 flex items-center gap-2"><i class="fas fa-calendar-alt text-brand-neon"></i> Jadwal Dinas / Ruangan</h3>
-                    <div class="flex justify-center bg-gray-50 rounded-xl border border-gray-200 p-2 min-h-[200px] relative overflow-hidden">
-                        <img id="dashJadwalImage" src="" class="max-h-[500px] w-auto object-contain cursor-pointer hover:opacity-90 transition hidden" onclick="openImageModalDynamic(this.src)" title="Klik untuk memperbesar">
-                        <div id="dashJadwalEmpty" class="flex flex-col items-center justify-center text-gray-400 py-12 w-full h-full">
-                            <i class="fas fa-image text-5xl mb-4 opacity-50"></i>
-                            <p class="text-sm font-medium">Belum ada foto jadwal yang diunggah.</p>
-                            <p class="text-[10px] mt-1">Admin / Ka Tim dapat mengunggah melalui menu Upload Jadwal.</p>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
                     <div class="xl:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 table-container"><h3 class="font-bold text-brand-dark mb-4 flex items-center gap-2"><span class="bg-blue-100 text-blue-600 p-1.5 rounded-lg"><i class="fas fa-sun text-sm"></i></span> Nipro Pagi</h3><table class="w-full text-left text-xs"><tbody id="tableDashNiproPagi"></tbody></table></div>
@@ -697,31 +661,6 @@
                     </div>
                     <div class="xl:col-span-1">
                         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-0"><h3 class="font-bold text-brand-dark border-b border-gray-100 pb-3 mb-4 flex items-center gap-2"><span class="text-yellow-500"><i class="fas fa-bell"></i></span> Notifikasi Terbaru</h3><ul id="notificationList" class="space-y-4 text-sm"></ul></div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="uploadJadwal" class="page-section">
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8 katim-admin">
-                    <h3 class="font-bold text-xl mb-2 text-brand-dark flex items-center gap-2"><i class="fas fa-cloud-upload-alt text-blue-500"></i> Upload Foto Jadwal</h3>
-                    <p class="text-sm text-gray-500 mb-6 border-b border-gray-100 pb-4">Unggah foto jadwal dinas bulanan atau jadwal ruangan (format JPG/PNG). Gambar akan otomatis dikompresi agar sistem tetap ringan.</p>
-                    
-                    <div id="dropzoneJadwal" class="border-2 border-dashed border-blue-300 bg-blue-50/50 rounded-2xl p-10 flex flex-col items-center justify-center cursor-pointer hover:bg-blue-100 transition relative overflow-hidden group">
-                        <input type="file" id="fileInputJadwal" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onchange="handleFileUploadJadwal(event)">
-                        <i class="fas fa-file-image text-5xl text-blue-400 mb-4 group-hover:scale-110 transition-transform"></i>
-                        <h4 class="font-bold text-gray-700 text-lg mb-1">Drag & Drop foto jadwal di sini</h4>
-                        <p class="text-gray-500 text-sm">atau klik untuk memilih file dari perangkat</p>
-                    </div>
-
-                    <div id="previewJadwalContainer" class="mt-8 hidden">
-                        <h4 class="font-bold text-gray-700 mb-3 flex items-center gap-2"><i class="fas fa-eye text-emerald-500"></i> Preview Gambar:</h4>
-                        <div class="relative inline-block border-4 border-gray-200 rounded-xl overflow-hidden shadow-md max-w-full bg-gray-50">
-                            <img id="previewImageJadwal" src="" class="max-h-[400px] w-auto object-contain">
-                            <button type="button" onclick="hapusPreviewJadwal()" class="absolute top-2 right-2 bg-rose-500 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-rose-600 shadow-lg z-20 transition transform hover:scale-110" title="Batal"><i class="fas fa-times"></i></button>
-                        </div>
-                        <div class="mt-6 flex gap-3">
-                            <button type="button" onclick="simpanJadwalImage()" class="bg-brand-blue hover:bg-blue-800 text-white px-6 py-2.5 rounded-xl shadow-md font-medium transition flex items-center gap-2"><i class="fas fa-save"></i> Simpan ke Dashboard</button>
-                        </div>
                     </div>
                 </div>
             </section>
@@ -891,6 +830,31 @@
                     <div id="listLemburContainer" class="space-y-6"></div>
                 </div>
             </section>
+
+            <section id="galeri" class="page-section">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                        <h3 class="font-bold text-xl text-brand-dark flex items-center gap-2"><i class="fas fa-images text-brand-neon"></i> Galeri Kegiatan Dialisis</h3>
+                        <span class="text-sm font-semibold bg-gray-100 text-gray-600 px-4 py-1.5 rounded-full border border-gray-200" id="photoCountInfo">0 / 6 Foto</span>
+                    </div>
+
+                    <div id="dropZone" class="katim-admin border-2 border-dashed border-gray-300 rounded-2xl p-10 text-center bg-gray-50 hover:bg-gray-100 hover:border-brand-neon transition cursor-pointer mb-8 relative group overflow-hidden">
+                        <input type="file" id="photoInput" multiple accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onchange="handleFiles(this.files)">
+                        <div class="relative z-0 group-hover:scale-105 transition-transform duration-300">
+                            <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm border border-gray-200 text-brand-blue group-hover:text-brand-neon">
+                                <i class="fas fa-cloud-upload-alt text-2xl"></i>
+                            </div>
+                            <p class="text-base font-bold text-gray-700">Tarik & Lepas foto ke sini</p>
+                            <p class="text-sm text-gray-500 mt-1">atau klik untuk menelusuri perangkat Anda</p>
+                            <p class="text-[10px] uppercase font-bold text-emerald-500 mt-4 bg-emerald-50 w-max mx-auto px-2 py-1 rounded border border-emerald-100">Otomatis Terkompresi & Resolusi Disesuaikan</p>
+                        </div>
+                    </div>
+
+                    <div id="photoGallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                        </div>
+                </div>
+            </section>
+
         </div>
     </main>
 
@@ -916,22 +880,6 @@
                 // Menggabungkan array motivasi dengan icon pembatas untuk marquee
                 loginMarquee.innerHTML = kataMotivasi.join(' &nbsp; &nbsp; <i class="fas fa-heartbeat text-[#a3e635] mx-4 text-xs"></i> &nbsp; &nbsp; ');
             }
-
-            // Drag and Drop Zone Listener (Menu Upload Jadwal)
-            const dropzoneJadwal = document.getElementById('dropzoneJadwal');
-            dropzoneJadwal.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                dropzoneJadwal.classList.add('border-blue-500', 'bg-blue-100');
-            });
-            dropzoneJadwal.addEventListener('dragleave', (e) => {
-                e.preventDefault();
-                dropzoneJadwal.classList.remove('border-blue-500', 'bg-blue-100');
-            });
-            dropzoneJadwal.addEventListener('drop', (e) => {
-                e.preventDefault();
-                dropzoneJadwal.classList.remove('border-blue-500', 'bg-blue-100');
-                handleFileUploadJadwal(e);
-            });
         });
 
         // --- FUNGSI MODAL MOTIVASI (POPUP LEMBUR) ---
@@ -1006,17 +954,9 @@
             document.getElementById('denahMesinModal').classList.add('hidden');
         }
 
-        // --- FUNGSI MODAL GAMBAR DINAMIS (Bisa dipakai untuk Logo & Jadwal) ---
-        function openImageModalDynamic(srcUrl) {
-            if(!srcUrl) return;
-            document.getElementById('imageModalSrc').src = srcUrl;
-            document.getElementById('imageModal').classList.remove('hidden');
-        }
-        function closeImageModal() { 
-            document.getElementById('imageModal').classList.add('hidden'); 
-            // Kosongkan src saat ditutup untuk menghemat memori
-            setTimeout(() => document.getElementById('imageModalSrc').src = "", 300);
-        }
+        // --- FUNGSI MODAL GAMBAR ---
+        function openImageModal() { document.getElementById('imageModal').classList.remove('hidden'); }
+        function closeImageModal() { document.getElementById('imageModal').classList.add('hidden'); }
 
         // --- FUNGSI MODAL ARMADA ---
         function openArmadaModal() { document.getElementById('armadaModal').classList.remove('hidden'); }
@@ -1058,8 +998,8 @@
         
         const database = firebase.database();
 
-        // Tambahkan fallback jadwalImage di root object
-        let db = { users: [], nurses: [], patients: [], schedules: [], sessions: [], lemburs: [], bedStatus: {}, jadwalImage: "" };
+        // TAMBAHAN PHOTOS ARRAY DI SINI
+        let db = { users: [], nurses: [], patients: [], schedules: [], sessions: [], lemburs: [], bedStatus: {}, photos: [] };
         let currentUser = JSON.parse(sessionStorage.getItem('rs_current_user')) || null;
         
         const today = new Date().toISOString().split('T')[0];
@@ -1087,14 +1027,15 @@
                 db.users = data.users || []; db.nurses = data.nurses || []; db.patients = data.patients || [];
                 db.schedules = data.schedules || []; db.sessions = data.sessions || []; db.lemburs = data.lemburs || []; 
                 db.bedStatus = data.bedStatus || getDefaultBedStatus();
-                db.jadwalImage = data.jadwalImage || ""; // Tarik Data Base64 Foto Jadwal
+                // AMBIL DATA FOTO DARI FIREBASE
+                db.photos = data.photos || [];
 
-                // Auto-Unlock Admin logic
+                // --- PERBAIKAN: AUTO-UNLOCK AKUN ADMIN ---
                 let adminAcc = db.users.find(u => u.username === 'admin');
                 if (adminAcc && adminAcc.status === 'suspended') {
                     adminAcc.status = 'active';
                     adminAcc.attempts = 0;
-                    database.ref('rs_airan_raya/users').set(db.users); 
+                    database.ref('rs_airan_raya/users').set(db.users); // Memaksa update ke Firebase
                 }
 
             } else {
@@ -1105,6 +1046,7 @@
             
             // Inisialisasi Select2 untuk form login
             if(!currentUser && db.users) {
+                // FIX: Menampilkan usernamenya saja di dropdown login
                 let optUsers = '<option value=""></option>' + db.users.map(u => `<option value="${u.username}">${u.username}</option>`).join('');
                 let $loginDropdown = $('#loginUsername');
                 if ($loginDropdown.hasClass("select2-hidden-accessible")) { $loginDropdown.select2('destroy'); }
@@ -1126,11 +1068,12 @@
             document.getElementById('loading-data').style.display = 'none';
 
             if(currentUser) { applyRoleUI(); refreshUI(); }
-            renderDenahMesin(); 
+            renderDenahMesin(); // Update Modal Denah saat data berubah
         });
 
+        // BUG FIX: Memastikan refreshUI dijalankan segera sebelum Firebase merespon untuk instant feedback
         function saveData() {
-            refreshUI(); 
+            refreshUI(); // <--- Paksa UI langsung terupdate secara lokal
             
             document.getElementById('server-status').innerHTML = '<i class="fas fa-sync fa-spin"></i> Menyimpan...';
             document.getElementById('server-status').className = 'text-yellow-400 flex items-center gap-1.5 font-medium';
@@ -1142,70 +1085,6 @@
                 document.getElementById('server-status').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error';
                 document.getElementById('server-status').className = 'text-red-500 flex items-center gap-1.5 font-medium';
             });
-        }
-
-        // --- SISTEM UPLOAD & KOMPRESI JADWAL ---
-        let tempJadwalBase64 = "";
-
-        function handleFileUploadJadwal(event) {
-            let file = event.target.files ? event.target.files[0] : event.dataTransfer.files[0];
-            if (!file) return;
-            if (!file.type.startsWith('image/')) return alert('Harap unggah file dengan format gambar (JPG/PNG)!');
-            
-            // Proses Pembacaan dan Kompresi menggunakan Canvas
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                let img = new Image();
-                img.onload = function() {
-                    let canvas = document.createElement('canvas');
-                    let ctx = canvas.getContext('2d');
-                    
-                    // Batas Resolusi Maksimal agar size kecil di database
-                    let MAX_WIDTH = 1200;
-                    let MAX_HEIGHT = 1200;
-                    let width = img.width;
-                    let height = img.height;
-
-                    if (width > height) {
-                        if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
-                    } else {
-                        if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
-                    }
-                    
-                    canvas.width = width;
-                    canvas.height = height;
-                    ctx.drawImage(img, 0, 0, width, height);
-                    
-                    // Kompresi kualitas JPEG 70%
-                    tempJadwalBase64 = canvas.toDataURL('image/jpeg', 0.7); 
-                    
-                    document.getElementById('previewImageJadwal').src = tempJadwalBase64;
-                    document.getElementById('previewJadwalContainer').classList.remove('hidden');
-                }
-                img.src = e.target.result;
-            }
-            reader.readAsDataURL(file);
-        }
-
-        function hapusPreviewJadwal() {
-            tempJadwalBase64 = "";
-            document.getElementById('previewImageJadwal').src = "";
-            document.getElementById('previewJadwalContainer').classList.add('hidden');
-            document.getElementById('fileInputJadwal').value = ""; // reset input
-        }
-
-        function simpanJadwalImage() {
-            if(!tempJadwalBase64) return alert('Silakan pilih gambar jadwal terlebih dahulu!');
-            
-            // Simpan Base64 ke object database Firebase
-            db.jadwalImage = tempJadwalBase64;
-            saveData();
-            
-            alert('Foto Jadwal berhasil disimpan dan akan tampil di Dashboard semua perawat!');
-            
-            // Bersihkan form & kembalikan ke dashboard
-            hapusPreviewJadwal();
-            switchPage('dashboard', document.getElementById('nav-dashboard'));
         }
 
         // --- SISTEM RENDER DENAH (DINAMIS BERDASARKAN STATUS) ---
@@ -1262,6 +1141,7 @@
         }
 
         function renderAdminStatusMesin() {
+            // Ditampilkan untuk Admin DAN Ka Tim
             if (!currentUser || (currentUser.role !== 'Admin' && currentUser.role !== 'Ka Tim')) return;
             
             let html = '';
@@ -1382,10 +1262,11 @@
             let filteredLembur = db.lemburs.filter(l => l.tgl >= tglMulai && l.tgl <= tglAkhir);
             if(filteredLembur.length === 0) return alert('Tidak ada data lembur di rentang tanggal tersebut!');
 
+            // Fitur input bulan manual dengan default otomatis
             let monthNames = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
             let defaultMonth = monthNames[new Date(tglMulai).getMonth()];
             let namaBulan = prompt("Masukkan nama BULAN untuk judul laporan PDF:", defaultMonth);
-            if (namaBulan === null) return; 
+            if (namaBulan === null) return; // Batal jika user klik cancel
             namaBulan = namaBulan.toUpperCase();
 
             let groupedLembur = {};
@@ -1405,6 +1286,7 @@
             let monthNamesIndo = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
             let strDate = `WAY HUWI, ${now.getDate().toString().padStart(2, '0')} ${monthNamesIndo[now.getMonth()]} ${now.getFullYear()}`;
 
+            // --- KOP SURAT ---
             let logoData = getBase64Logo();
             if (logoData) { doc.addImage(logoData, 'PNG', 14, 12, 18, 18); }
 
@@ -1418,11 +1300,13 @@
             doc.text("LAMPUNG SELATAN", 35, 27);
             doc.text("TELP (0721) 5617799", 35, 32);
 
+            // Garis Pembatas Kop
             doc.setLineWidth(0.5);
             doc.line(14, 35, 196, 35);
             doc.setLineWidth(1.0);
             doc.line(14, 36, 196, 36);
 
+            // --- HEADER SURAT ---
             doc.setFontSize(14);
             doc.setFont("helvetica", "bold");
             doc.text("SURAT PERINTAH LEMBUR", 105, 45, {align: 'center'});
@@ -1440,6 +1324,7 @@
 
             let startY = 80;
 
+            // --- RENDER TABEL PER PERAWAT ---
             for (let pId in groupedLembur) {
                 let pNama = db.nurses.find(x => x.id === pId)?.nama || 'Unknown';
                 let dataLembur = groupedLembur[pId];
@@ -1458,6 +1343,7 @@
                     let rowData = [ idx + 1 ];
                     
                     if (idx === 0) {
+                        // Nama perawat menggunakan rowspan
                         rowData.push({ rowSpan: dataLembur.length, content: pNama, styles: { valign: 'middle', fontStyle: 'bold' } });
                     }
 
@@ -1471,12 +1357,14 @@
                     tableRows.push(rowData);
                 });
 
+                // Baris Footer Total Jam
                 tableRows.push([
                     { content: 'TOTAL JAM LEMBUR', colSpan: 5, styles: { halign: 'right', fontStyle: 'bold', fillColor: [230, 230, 230] } },
                     { content: Number(totalDurasi.toFixed(2)), styles: { halign: 'center', fontStyle: 'bold', fillColor: [230, 230, 230] } },
                     { content: '', styles: { fillColor: [230, 230, 230] } }
                 ]);
 
+                // FIX: Penyesuaian ukuran kolom agar teks nama tidak terpotong
                 doc.autoTable({
                     head: [tableColumn],
                     body: tableRows,
@@ -1486,7 +1374,7 @@
                     headStyles: { fillColor: [211, 211, 211], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center', lineColor: [0, 0, 0], lineWidth: 0.2 },
                     columnStyles: {
                         0: {cellWidth: 10, halign: 'center'},
-                        1: {cellWidth: 35, halign: 'left', valign: 'middle'}, 
+                        1: {cellWidth: 35, halign: 'left', valign: 'middle'}, // <-- Ini melebarkan kolom Nama
                         2: {cellWidth: 22, halign: 'center'},
                         3: {cellWidth: 22, halign: 'center'},
                         4: {cellWidth: 22, halign: 'center'},
@@ -1498,6 +1386,7 @@
                 startY = doc.lastAutoTable.finalY + 12; 
             }
 
+            // --- FOOTER & TANDA TANGAN ---
             if (startY > 200) { doc.addPage(); startY = 20; }
 
             doc.setFontSize(10);
@@ -1507,8 +1396,10 @@
             let splitClose = doc.splitTextToSize("Demikian surat tugas lembur ini disampaikan. Atas perhatian dan kerjasamanya diucapkan terimakasih.", 182);
             doc.text(splitClose, 14, startY);
 
+            // Tanggal Surat
             doc.text(strDate, 155, startY + 12, {align: 'center'});
 
+            // Baris Tanda Tangan 1
             doc.text("Mengetahui,", 55, startY + 20, {align: 'center'});
             doc.text("Kasie / Kasubag", 55, startY + 25, {align: 'center'});
             doc.setFont("helvetica", "bold");
@@ -1520,6 +1411,7 @@
             doc.setFont("helvetica", "bold");
             doc.text("Ns.Indah Pralistiawati, S.Kep.", 155, startY + 50, {align: 'center'});
 
+            // Baris Tanda Tangan 2
             let row2Y = startY + 65;
             doc.setFont("helvetica", "normal");
             doc.text("Menyetujui,", 55, row2Y, {align: 'center'});
@@ -1540,6 +1432,7 @@
         let currentNewsIndex = 0;
         function updateDashboardNews() { const ul = document.getElementById('dashNewsList'); if(!ul) return; ul.classList.remove('news-fade'); void ul.offsetWidth; ul.classList.add('news-fade'); let html = ''; for(let i=0; i<2; i++) { let idx = (currentNewsIndex + i) % newsContent.length; html += `<li>${newsContent[idx]}</li>`; } ul.innerHTML = html; currentNewsIndex = (currentNewsIndex + 1) % newsContent.length; } setInterval(updateDashboardNews, 5000); updateDashboardNews();
 
+        // Autocomplete Umur Data Pasien Baru & Edit
         document.getElementById('psnLahir').addEventListener('change', function() { if(this.value) { let birthDate = new Date(this.value); let ageDifMs = Date.now() - birthDate.getTime(); let ageDate = new Date(ageDifMs); document.getElementById('psnUmur').value = Math.abs(ageDate.getUTCFullYear() - 1970); } });
         document.getElementById('editPsnLahir').addEventListener('change', function() { if(this.value) { let birthDate = new Date(this.value); let ageDifMs = Date.now() - birthDate.getTime(); let ageDate = new Date(ageDifMs); document.getElementById('editPsnUmur').value = Math.abs(ageDate.getUTCFullYear() - 1970); } });
 
@@ -1600,22 +1493,24 @@
                 adminElements.forEach(el => el.classList.add('hidden'));
                 katimAdminElements.forEach(el => el.classList.remove('hidden'));
                 
+                // Cegah Ka Tim masuk ke halaman yang dilarang jika terakses dari URL
                 let activeSection = document.querySelector('.page-section.active').id;
                 if (['akun', 'perawat'].includes(activeSection)) switchPage('dashboard', document.getElementById('nav-dashboard')); 
             } else { 
+                // Level Perawat Reguler
                 adminElements.forEach(el => el.classList.add('hidden')); 
                 katimAdminElements.forEach(el => el.classList.add('hidden')); 
                 
+                // Cegah Perawat Reguler masuk ke halaman yang dilarang
                 let activeSection = document.querySelector('.page-section.active').id;
-                if (['akun', 'pasien', 'perawat', 'statusMesin', 'uploadJadwal'].includes(activeSection)) switchPage('dashboard', document.getElementById('nav-dashboard')); 
+                if (['akun', 'pasien', 'perawat', 'statusMesin'].includes(activeSection)) switchPage('dashboard', document.getElementById('nav-dashboard')); 
             }
         }
         
         function switchPage(pageId, element) {
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active')); document.getElementById(pageId).classList.add('active');
             document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('nav-active')); if(element) element.classList.add('nav-active');
-            // Menambah nama title halaman baru
-            const titles = { 'dashboard': 'Dashboard Utama', 'akun': 'Manajemen Akun Sistem', 'pasien': 'Master Data Pasien', 'perawat': 'Data Pegawai', 'jadwal': 'Jadwal Harian', 'registrasi': 'Registrasi Sesi Harian', 'lembur': 'Buku Lembur Pegawai', 'statusMesin': 'Status Denah Mesin', 'uploadJadwal': 'Upload Foto Jadwal' };
+            const titles = { 'dashboard': 'Dashboard Utama', 'akun': 'Manajemen Akun Sistem', 'pasien': 'Master Data Pasien', 'perawat': 'Data Pegawai', 'jadwal': 'Jadwal Harian', 'registrasi': 'Registrasi Sesi Harian', 'lembur': 'Buku Lembur Pegawai', 'statusMesin': 'Status Denah Mesin', 'galeri': 'Galeri Dokumentasi Kegiatan' };
             document.getElementById('pageTitle').innerText = titles[pageId]; refreshUI();
         }
 
@@ -1636,6 +1531,8 @@
             } 
             resetFormLembur(); 
             saveData(); 
+            
+            // Tampilkan popup motivasi
             openModalMotivasi();
         }
         
@@ -1912,23 +1809,137 @@
         function hapusSesi(id) { if(confirm('Yakin hapus?')) { db.sessions = db.sessions.filter(x => x.id !== id); saveData(); } }
         function resetFormSesi() { document.getElementById('formSesi').reset(); document.getElementById('sesiId').value = ''; $('#sesiPasien').val('').trigger('change.select2'); setModeSesi('master'); }
 
+        // --- FITUR GALERI FOTO (KHUSUS ADMIN & KATIM UNTUK UPLOAD/HAPUS) ---
+        const MAX_PHOTOS = 6;
+        const dropZone = document.getElementById('dropZone');
+
+        if(dropZone) {
+            dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-brand-neon', 'bg-emerald-50/50'); });
+            dropZone.addEventListener('dragleave', (e) => { e.preventDefault(); dropZone.classList.remove('border-brand-neon', 'bg-emerald-50/50'); });
+            dropZone.addEventListener('drop', (e) => { e.preventDefault(); dropZone.classList.remove('border-brand-neon', 'bg-emerald-50/50'); handleFiles(e.dataTransfer.files); });
+        }
+
+        function handleFiles(files) {
+            if (!currentUser || (currentUser.role !== 'Admin' && currentUser.role !== 'Ka Tim')) return alert('Hanya Admin dan Ka Tim yang dizinkan mengunggah foto!');
+            
+            if(!files || files.length === 0) return;
+            if(!db.photos) db.photos = [];
+            
+            let availableSlots = MAX_PHOTOS - db.photos.length;
+            if(availableSlots <= 0) return alert('Maksimal 6 foto sudah tercapai! Silakan hapus foto lama terlebih dahulu.');
+
+            let filesToProcess = Array.from(files).slice(0, availableSlots);
+            let processedCount = 0;
+
+            document.getElementById('loading-data').style.display = 'flex';
+            document.querySelector('#loading-data p').innerText = 'Mengompresi Foto...';
+
+            filesToProcess.forEach(file => {
+                if(!file.type.startsWith('image/')) { processedCount++; return; }
+
+                let reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function(event) {
+                    let img = new Image();
+                    img.src = event.target.result;
+                    img.onload = function() {
+                        let canvas = document.createElement('canvas');
+                        let max_size = 800;
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > height) {
+                            if (width > max_size) { height *= max_size / width; width = max_size; }
+                        } else {
+                            if (height > max_size) { width *= max_size / height; height = max_size; }
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        let ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        
+                        let dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                        db.photos.push({ id: 'img_' + Date.now() + Math.floor(Math.random()*100), data: dataUrl, name: file.name });
+                        
+                        processedCount++;
+                        if(processedCount === filesToProcess.length) {
+                            document.getElementById('loading-data').style.display = 'none';
+                            document.querySelector('#loading-data p').innerText = 'Menyinkronkan Data...';
+                            document.getElementById('photoInput').value = ''; 
+                            saveData(); 
+                        }
+                    }
+                }
+            });
+        }
+
+        function deletePhoto(id) {
+            if (!currentUser || (currentUser.role !== 'Admin' && currentUser.role !== 'Ka Tim')) return;
+            if(confirm('Hapus foto ini dari galeri?')) {
+                db.photos = db.photos.filter(p => p.id !== id);
+                saveData();
+            }
+        }
+
+        function viewPhotoFullScreen(src) {
+            let modal = document.getElementById('imageModal');
+            let img = modal.querySelector('img');
+            img.src = src;
+            modal.classList.remove('hidden');
+        }
+
+        function renderPhotos() {
+            let gallery = document.getElementById('photoGallery');
+            let countInfo = document.getElementById('photoCountInfo');
+            if(!gallery) return;
+
+            let photos = db.photos || [];
+            countInfo.innerText = `${photos.length} / ${MAX_PHOTOS} Foto`;
+
+            let isAdminOrKaTim = currentUser && (currentUser.role === 'Admin' || currentUser.role === 'Ka Tim');
+
+            if(photos.length === 0) {
+                gallery.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 italic text-sm border-2 border-dashed border-gray-200 rounded-xl bg-gray-50">Belum ada foto dokumentasi.</div>';
+            } else {
+                gallery.innerHTML = photos.map(p => {
+                    let deleteBtnHtml = isAdminOrKaTim ? `
+                        <button onclick="event.stopPropagation(); deletePhoto('${p.id}')" class="bg-rose-500 hover:bg-rose-600 text-white p-2.5 rounded-xl transform translate-y-4 group-hover:translate-y-0 transition-all shadow-lg flex items-center justify-center gap-2 text-sm font-bold w-full mt-auto">
+                            <i class="fas fa-trash-alt"></i> Hapus
+                        </button>` : '';
+
+                    return `
+                    <div class="relative group rounded-2xl overflow-hidden shadow-md border border-gray-200 aspect-[4/3] bg-gray-100 flex flex-col cursor-pointer" onclick="viewPhotoFullScreen('${p.data}')">
+                        <img src="${p.data}" alt="${p.name}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 absolute inset-0">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 z-10">
+                            <p class="text-white text-xs font-medium truncate mb-3 drop-shadow-md"><i class="fas fa-image mr-1"></i> ${p.name}</p>
+                            ${deleteBtnHtml}
+                        </div>
+                    </div>`;
+                }).join('');
+            }
+            
+            const dz = document.getElementById('dropZone');
+            if(dz) {
+                if(!isAdminOrKaTim || photos.length >= MAX_PHOTOS) {
+                    dz.classList.add('hidden');
+                } else {
+                    dz.classList.remove('hidden');
+                }
+            }
+        }
+
+        // --- FUNGSI REFRESH UI ---
         function refreshUI() {
             if (!currentUser || !db.users) return;
+            
+            // Render Galeri Dokumentasi
+            renderPhotos();
             
             // 1. Render Status Mesin
             renderAdminStatusMesin();
             // 2. Render Denah Mesin
             renderDenahMesin();
-
-            // 3. Render Foto Jadwal (Dashboard)
-            if (db.jadwalImage) {
-                document.getElementById('dashJadwalImage').src = db.jadwalImage;
-                document.getElementById('dashJadwalImage').classList.remove('hidden');
-                document.getElementById('dashJadwalEmpty').classList.add('hidden');
-            } else {
-                document.getElementById('dashJadwalImage').classList.add('hidden');
-                document.getElementById('dashJadwalEmpty').classList.remove('hidden');
-            }
 
             // Render Akun
             document.getElementById('listAkun').innerHTML = db.users.map(u => {
