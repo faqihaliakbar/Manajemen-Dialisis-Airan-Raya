@@ -315,7 +315,6 @@
             </form>
         </div>
     </div>
-
     <div id="denahMesinModal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center backdrop-blur-sm transition-opacity" onclick="closeDenahModal()">
         <div class="bg-gray-50 rounded-2xl shadow-2xl w-[95%] max-w-5xl max-h-[90vh] overflow-hidden flex flex-col relative" onclick="event.stopPropagation()">
             <div class="bg-gradient-to-r from-brand-dark to-brand-blue p-4 sm:p-5 flex justify-between items-center text-white shrink-0">
@@ -367,10 +366,10 @@
         </div>
     </div>
 
-    <div id="imageModal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center backdrop-blur-sm transition-opacity" onclick="closeImageModal()">
-        <div class="relative max-w-5xl max-h-[90vh] w-[90%] p-2 flex justify-center" onclick="event.stopPropagation()">
-            <button onclick="closeImageModal()" class="absolute -top-12 right-0 text-white hover:text-red-500 text-4xl transition"><i class="fas fa-times"></i></button>
-            <img src="" alt="Preview Image" class="max-h-[85vh] w-auto object-contain rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.5)] border-4 border-white/20 bg-black">
+    <div id="imageModal" class="fixed inset-0 bg-black/90 z-[9999] hidden flex items-center justify-center backdrop-blur-sm transition-opacity overflow-hidden" onclick="closeImageModal()">
+        <button onclick="closeImageModal()" class="absolute top-6 right-6 text-white hover:text-red-500 text-4xl transition z-50"><i class="fas fa-times"></i></button>
+        <div id="zoomContainer" class="relative w-full h-full flex items-center justify-center cursor-grab" onclick="event.stopPropagation()">
+            <img id="zoomImage" src="" alt="Preview Image" class="max-h-[90vh] max-w-[90vw] object-contain rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.5)] border-2 border-white/20 transition-transform duration-100 origin-center" draggable="false">
         </div>
     </div>
 
@@ -557,7 +556,7 @@
                         <h4 class="font-bold text-brand-dark mb-2 leading-tight text-lg">Perawat Dialisis<br>Profesional</h4>
                         <p class="text-sm text-gray-500 mb-6 px-2">Tim berpengalaman dan bersertifikat</p>
                     </div>
-                    <button type="button" onclick="viewPhotoFullScreen('WhatsApp Image 2026-03-09 at 13.07.05.jpeg')" class="bg-[#a3e635] hover:bg-[#84cc16] text-brand-dark text-xs font-bold py-2.5 px-6 rounded-full transition w-max mx-auto">LEARN MORE</button>
+                    <button type="button" class="bg-[#a3e635] hover:bg-[#84cc16] text-brand-dark text-xs font-bold py-2.5 px-6 rounded-full transition w-max mx-auto">LEARN MORE</button>
                 </div>
                 <div class="bg-white rounded-2xl p-6 text-center shadow-xl transform transition hover:-translate-y-1 flex flex-col justify-between h-full">
                     <div>
@@ -606,6 +605,7 @@
                 <li><a href="#" onclick="switchPage('registrasi', this)" id="nav-registrasi" class="nav-link block px-6 py-3"><i class="fas fa-procedures w-7 opacity-80"></i> Registrasi Sesi HD</a></li>
                 <li><a href="#" onclick="switchPage('lembur', this)" id="nav-lembur" class="nav-link block px-6 py-3"><i class="fas fa-clock w-7 opacity-80"></i> Buku Lembur</a></li>
                 <li><a href="#" onclick="switchPage('galeri', this)" id="nav-galeri" class="nav-link block px-6 py-3"><i class="fas fa-camera-retro w-7 opacity-80"></i> Galeri Dokumentasi</a></li>
+                <li><a href="#" onclick="switchPage('berkas', this)" id="nav-berkas" class="nav-link block px-6 py-3"><i class="fas fa-folder-open w-7 opacity-80"></i> Arsip Dokumen</a></li>
                 
                 <p class="px-6 text-xs font-semibold text-gray-400 uppercase tracking-wider mt-6 mb-2">Eksternal</p>
                 <li><a href="https://docs.google.com/spreadsheets/d/1yXZgauGMP9w3to1ot3R2Obo9gdnBmGQfoTHGtQRpshw/edit?hl=id&pli=1&gid=1812546983#gid=1812546983" target="_blank" class="nav-link block px-6 py-3"><i class="fas fa-file-excel w-7 opacity-80"></i> Buku Register</a></li>
@@ -834,7 +834,7 @@
             <section id="galeri" class="page-section">
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                        <h3 class="font-bold text-xl text-brand-dark flex items-center gap-2"><i class="fas fa-images text-brand-neon"></i> Galeri Kegiatan Dialisis</h3>
+                        <h3 class="font-bold text-xl text-brand-dark flex items-center gap-2"><i class="fas fa-images text-brand-neon"></i> Galeri Dokumentasi Kegiatan</h3>
                         <span class="text-sm font-semibold bg-gray-100 text-gray-600 px-4 py-1.5 rounded-full border border-gray-200" id="photoCountInfo">0 / 20 Foto</span>
                     </div>
 
@@ -850,8 +850,36 @@
                         </div>
                     </div>
 
-                    <div id="photoGallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <div id="photoGallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+                </div>
+            </section>
+
+            <section id="berkas" class="page-section">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
+                    <h3 class="font-bold text-xl text-brand-dark mb-6 flex items-center gap-2"><i class="fas fa-folder-open text-brand-neon"></i> Arsip Dokumen & Rekam Medis</h3>
+                    
+                    <div id="dropZoneBerkas" class="katim-admin border-2 border-dashed border-gray-300 rounded-2xl p-10 text-center bg-blue-50/50 hover:bg-blue-100 transition cursor-pointer mb-8 relative">
+                        <input type="file" id="berkasInput" accept=".pdf,.doc,.docx,.xls,.xlsx" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onchange="handleBerkasFiles(this.files)">
+                        <div class="pointer-events-none relative z-0">
+                            <i class="fas fa-file-upload text-4xl text-brand-blue mb-3"></i>
+                            <p class="font-bold text-gray-700 text-lg">Pilih atau Tarik dokumen ke sini</p>
+                            <p class="text-sm text-gray-500 mt-1">Mendukung PDF, Word, Excel (Gunakan file di bawah 5MB agar server stabil)</p>
                         </div>
+                    </div>
+
+                    <div class="overflow-x-auto rounded-xl border border-gray-100">
+                        <table class="w-full text-left text-sm">
+                            <thead>
+                                <tr class="bg-gray-50 border-b">
+                                    <th class="p-4 font-semibold text-gray-600">Nama Dokumen</th>
+                                    <th class="p-4 font-semibold text-gray-600 text-center">Tipe</th>
+                                    <th class="p-4 font-semibold text-gray-600 text-center">Ukuran</th>
+                                    <th class="p-4 font-semibold text-gray-600 text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listBerkas" class="divide-y divide-gray-100"></tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
 
@@ -887,7 +915,6 @@
             document.getElementById('teksMotivasiPopup').innerText = getRandomMotivasi();
             let modal = document.getElementById('modalMotivasi');
             modal.classList.remove('hidden');
-            // Sedikit delay agar transisi CSS terbaca
             setTimeout(() => modal.firstElementChild.classList.replace('scale-95', 'scale-100'), 10);
         }
 
@@ -947,7 +974,7 @@
 
         // --- FUNGSI MODAL DENAH MESIN ---
         function openDenahModal() {
-            renderDenahMesin(); // Update warna setiap kali dibuka
+            renderDenahMesin();
             document.getElementById('denahMesinModal').classList.remove('hidden');
         }
         function closeDenahModal() {
@@ -955,7 +982,6 @@
         }
 
         // --- FUNGSI MODAL GAMBAR ---
-        function openImageModal() { document.getElementById('imageModal').classList.remove('hidden'); }
         function closeImageModal() { document.getElementById('imageModal').classList.add('hidden'); }
 
         // --- FUNGSI MODAL ARMADA ---
@@ -989,7 +1015,6 @@
             appId: "1:670726847041:web:483e90cf1340fe7781a4c0"
         };
         
-        // Cek agar tidak terjadi inisialisasi ganda
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         } else {
@@ -998,8 +1023,8 @@
         
         const database = firebase.database();
 
-        // TAMBAHAN PHOTOS ARRAY DI SINI
-        let db = { users: [], nurses: [], patients: [], schedules: [], sessions: [], lemburs: [], bedStatus: {}, photos: [] };
+        // TAMBAHAN BERKAS ARRAY
+        let db = { users: [], nurses: [], patients: [], schedules: [], sessions: [], lemburs: [], bedStatus: {}, photos: [], berkas: [] };
         let currentUser = JSON.parse(sessionStorage.getItem('rs_current_user')) || null;
         
         const today = new Date().toISOString().split('T')[0];
@@ -1011,7 +1036,6 @@
 
         document.getElementById('loading-data').style.display = 'flex';
 
-        // Fungsi Helper untuk Inisiasi Status Mesin Default
         function getDefaultBedStatus() {
             let status = {};
             for(let i=1; i<=15; i++) status[`F-${i}`] = 'Kosong';
@@ -1027,26 +1051,22 @@
                 db.users = data.users || []; db.nurses = data.nurses || []; db.patients = data.patients || [];
                 db.schedules = data.schedules || []; db.sessions = data.sessions || []; db.lemburs = data.lemburs || []; 
                 db.bedStatus = data.bedStatus || getDefaultBedStatus();
-                // AMBIL DATA FOTO DARI FIREBASE
                 db.photos = data.photos || [];
+                db.berkas = data.berkas || []; // Fetch berkas dokumen
 
-                // --- PERBAIKAN: AUTO-UNLOCK AKUN ADMIN ---
                 let adminAcc = db.users.find(u => u.username === 'admin');
                 if (adminAcc && adminAcc.status === 'suspended') {
                     adminAcc.status = 'active';
                     adminAcc.attempts = 0;
-                    database.ref('rs_airan_raya/users').set(db.users); // Memaksa update ke Firebase
+                    database.ref('rs_airan_raya/users').set(db.users);
                 }
-
             } else {
                 db.users.push({username: 'admin', password: '1234', nama: 'Administrator', role: 'Admin', status: 'active', attempts: 0});
                 db.bedStatus = getDefaultBedStatus();
                 saveData(); 
             }
             
-            // Inisialisasi Select2 untuk form login
             if(!currentUser && db.users) {
-                // FIX: Menampilkan usernamenya saja di dropdown login
                 let optUsers = '<option value=""></option>' + db.users.map(u => `<option value="${u.username}">${u.username}</option>`).join('');
                 let $loginDropdown = $('#loginUsername');
                 if ($loginDropdown.hasClass("select2-hidden-accessible")) { $loginDropdown.select2('destroy'); }
@@ -1068,12 +1088,11 @@
             document.getElementById('loading-data').style.display = 'none';
 
             if(currentUser) { applyRoleUI(); refreshUI(); }
-            renderDenahMesin(); // Update Modal Denah saat data berubah
+            renderDenahMesin(); 
         });
 
-        // BUG FIX: Memastikan refreshUI dijalankan segera sebelum Firebase merespon untuk instant feedback
         function saveData() {
-            refreshUI(); // <--- Paksa UI langsung terupdate secara lokal
+            refreshUI(); 
             
             document.getElementById('server-status').innerHTML = '<i class="fas fa-sync fa-spin"></i> Menyimpan...';
             document.getElementById('server-status').className = 'text-yellow-400 flex items-center gap-1.5 font-medium';
@@ -1109,21 +1128,16 @@
         function renderDenahMesin() {
             let fl = '', fr = '', nl = '', nr = '', iso = '';
             
-            // Fresenius Kiri (F-9 to F-15 + F-1 Kubikal di bawah)
             for(let i=9; i<=15; i++) fl += createBedHTML(`F-${i}`, `F-${i}`);
             fl += createBedHTML('F-1', `KUBIKAL<br>(F-1)`, 'fa-door-closed', 'border-2 shadow-md');
             
-            // Fresenius Kanan (F-8 down to F-2)
             for(let i=8; i>=2; i--) fr += createBedHTML(`F-${i}`, `F-${i}`);
 
-            // Nipro Kiri (N-10 to N-15)
             for(let i=10; i<=15; i++) nl += createBedHTML(`N-${i}`, `N-${i}`);
             
-            // Nipro Kanan (N-9 down to N-2 + Anak)
             for(let i=9; i>=2; i--) nr += createBedHTML(`N-${i}`, `N-${i}`);
             nr += createBedHTML('N-1', `ANAK<br>(N-1)`, 'fa-child', 'border-2 shadow-md');
 
-            // Isolasi
             iso = createBedHTML('ISOLASI', `ISOLASI`, 'fa-biohazard', 'border-2 shadow-[0_0_15px_rgba(244,63,94,0.15)] w-20 py-4');
 
             document.getElementById('render-fresenius-kiri').innerHTML = fl;
@@ -1141,7 +1155,6 @@
         }
 
         function renderAdminStatusMesin() {
-            // Ditampilkan untuk Admin DAN Ka Tim
             if (!currentUser || (currentUser.role !== 'Admin' && currentUser.role !== 'Ka Tim')) return;
             
             let html = '';
@@ -1262,11 +1275,10 @@
             let filteredLembur = db.lemburs.filter(l => l.tgl >= tglMulai && l.tgl <= tglAkhir);
             if(filteredLembur.length === 0) return alert('Tidak ada data lembur di rentang tanggal tersebut!');
 
-            // Fitur input bulan manual dengan default otomatis
             let monthNames = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
             let defaultMonth = monthNames[new Date(tglMulai).getMonth()];
             let namaBulan = prompt("Masukkan nama BULAN untuk judul laporan PDF:", defaultMonth);
-            if (namaBulan === null) return; // Batal jika user klik cancel
+            if (namaBulan === null) return; 
             namaBulan = namaBulan.toUpperCase();
 
             let groupedLembur = {};
@@ -1286,7 +1298,6 @@
             let monthNamesIndo = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
             let strDate = `WAY HUWI, ${now.getDate().toString().padStart(2, '0')} ${monthNamesIndo[now.getMonth()]} ${now.getFullYear()}`;
 
-            // --- KOP SURAT ---
             let logoData = getBase64Logo();
             if (logoData) { doc.addImage(logoData, 'PNG', 14, 12, 18, 18); }
 
@@ -1300,13 +1311,11 @@
             doc.text("LAMPUNG SELATAN", 35, 27);
             doc.text("TELP (0721) 5617799", 35, 32);
 
-            // Garis Pembatas Kop
             doc.setLineWidth(0.5);
             doc.line(14, 35, 196, 35);
             doc.setLineWidth(1.0);
             doc.line(14, 36, 196, 36);
 
-            // --- HEADER SURAT ---
             doc.setFontSize(14);
             doc.setFont("helvetica", "bold");
             doc.text("SURAT PERINTAH LEMBUR", 105, 45, {align: 'center'});
@@ -1324,7 +1333,6 @@
 
             let startY = 80;
 
-            // --- RENDER TABEL PER PERAWAT ---
             for (let pId in groupedLembur) {
                 let pNama = db.nurses.find(x => x.id === pId)?.nama || 'Unknown';
                 let dataLembur = groupedLembur[pId];
@@ -1343,7 +1351,6 @@
                     let rowData = [ idx + 1 ];
                     
                     if (idx === 0) {
-                        // Nama perawat menggunakan rowspan
                         rowData.push({ rowSpan: dataLembur.length, content: pNama, styles: { valign: 'middle', fontStyle: 'bold' } });
                     }
 
@@ -1357,14 +1364,12 @@
                     tableRows.push(rowData);
                 });
 
-                // Baris Footer Total Jam
                 tableRows.push([
                     { content: 'TOTAL JAM LEMBUR', colSpan: 5, styles: { halign: 'right', fontStyle: 'bold', fillColor: [230, 230, 230] } },
                     { content: Number(totalDurasi.toFixed(2)), styles: { halign: 'center', fontStyle: 'bold', fillColor: [230, 230, 230] } },
                     { content: '', styles: { fillColor: [230, 230, 230] } }
                 ]);
 
-                // FIX: Penyesuaian ukuran kolom agar teks nama tidak terpotong
                 doc.autoTable({
                     head: [tableColumn],
                     body: tableRows,
@@ -1374,7 +1379,7 @@
                     headStyles: { fillColor: [211, 211, 211], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center', lineColor: [0, 0, 0], lineWidth: 0.2 },
                     columnStyles: {
                         0: {cellWidth: 10, halign: 'center'},
-                        1: {cellWidth: 35, halign: 'left', valign: 'middle'}, // <-- Ini melebarkan kolom Nama
+                        1: {cellWidth: 35, halign: 'left', valign: 'middle'}, 
                         2: {cellWidth: 22, halign: 'center'},
                         3: {cellWidth: 22, halign: 'center'},
                         4: {cellWidth: 22, halign: 'center'},
@@ -1386,7 +1391,6 @@
                 startY = doc.lastAutoTable.finalY + 12; 
             }
 
-            // --- FOOTER & TANDA TANGAN ---
             if (startY > 200) { doc.addPage(); startY = 20; }
 
             doc.setFontSize(10);
@@ -1396,10 +1400,8 @@
             let splitClose = doc.splitTextToSize("Demikian surat tugas lembur ini disampaikan. Atas perhatian dan kerjasamanya diucapkan terimakasih.", 182);
             doc.text(splitClose, 14, startY);
 
-            // Tanggal Surat
             doc.text(strDate, 155, startY + 12, {align: 'center'});
 
-            // Baris Tanda Tangan 1
             doc.text("Mengetahui,", 55, startY + 20, {align: 'center'});
             doc.text("Kasie / Kasubag", 55, startY + 25, {align: 'center'});
             doc.setFont("helvetica", "bold");
@@ -1411,7 +1413,6 @@
             doc.setFont("helvetica", "bold");
             doc.text("Ns.Indah Pralistiawati, S.Kep.", 155, startY + 50, {align: 'center'});
 
-            // Baris Tanda Tangan 2
             let row2Y = startY + 65;
             doc.setFont("helvetica", "normal");
             doc.text("Menyetujui,", 55, row2Y, {align: 'center'});
@@ -1432,7 +1433,6 @@
         let currentNewsIndex = 0;
         function updateDashboardNews() { const ul = document.getElementById('dashNewsList'); if(!ul) return; ul.classList.remove('news-fade'); void ul.offsetWidth; ul.classList.add('news-fade'); let html = ''; for(let i=0; i<2; i++) { let idx = (currentNewsIndex + i) % newsContent.length; html += `<li>${newsContent[idx]}</li>`; } ul.innerHTML = html; currentNewsIndex = (currentNewsIndex + 1) % newsContent.length; } setInterval(updateDashboardNews, 5000); updateDashboardNews();
 
-        // Autocomplete Umur Data Pasien Baru & Edit
         document.getElementById('psnLahir').addEventListener('change', function() { if(this.value) { let birthDate = new Date(this.value); let ageDifMs = Date.now() - birthDate.getTime(); let ageDate = new Date(ageDifMs); document.getElementById('psnUmur').value = Math.abs(ageDate.getUTCFullYear() - 1970); } });
         document.getElementById('editPsnLahir').addEventListener('change', function() { if(this.value) { let birthDate = new Date(this.value); let ageDifMs = Date.now() - birthDate.getTime(); let ageDate = new Date(ageDifMs); document.getElementById('editPsnUmur').value = Math.abs(ageDate.getUTCFullYear() - 1970); } });
 
@@ -1493,24 +1493,21 @@
                 adminElements.forEach(el => el.classList.add('hidden'));
                 katimAdminElements.forEach(el => el.classList.remove('hidden'));
                 
-                // Cegah Ka Tim masuk ke halaman yang dilarang jika terakses dari URL
                 let activeSection = document.querySelector('.page-section.active').id;
                 if (['akun', 'perawat'].includes(activeSection)) switchPage('dashboard', document.getElementById('nav-dashboard')); 
             } else { 
-                // Level Perawat Reguler
                 adminElements.forEach(el => el.classList.add('hidden')); 
                 katimAdminElements.forEach(el => el.classList.add('hidden')); 
                 
-                // Cegah Perawat Reguler masuk ke halaman yang dilarang
                 let activeSection = document.querySelector('.page-section.active').id;
-                if (['akun', 'pasien', 'perawat', 'statusMesin'].includes(activeSection)) switchPage('dashboard', document.getElementById('nav-dashboard')); 
+                if (['akun', 'pasien', 'perawat', 'statusMesin', 'berkas'].includes(activeSection)) switchPage('dashboard', document.getElementById('nav-dashboard')); 
             }
         }
         
         function switchPage(pageId, element) {
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active')); document.getElementById(pageId).classList.add('active');
             document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('nav-active')); if(element) element.classList.add('nav-active');
-            const titles = { 'dashboard': 'Dashboard Utama', 'akun': 'Manajemen Akun Sistem', 'pasien': 'Master Data Pasien', 'perawat': 'Data Pegawai', 'jadwal': 'Jadwal Harian', 'registrasi': 'Registrasi Sesi Harian', 'lembur': 'Buku Lembur Pegawai', 'statusMesin': 'Status Denah Mesin', 'galeri': 'Galeri Dokumentasi Kegiatan' };
+            const titles = { 'dashboard': 'Dashboard Utama', 'akun': 'Manajemen Akun Sistem', 'pasien': 'Master Data Pasien', 'perawat': 'Data Pegawai', 'jadwal': 'Jadwal Harian', 'registrasi': 'Registrasi Sesi Harian', 'lembur': 'Buku Lembur Pegawai', 'statusMesin': 'Status Denah Mesin', 'galeri': 'Galeri Dokumentasi Kegiatan', 'berkas': 'Arsip Dokumen & Rekam Medis' };
             document.getElementById('pageTitle').innerText = titles[pageId]; refreshUI();
         }
 
@@ -1532,7 +1529,6 @@
             resetFormLembur(); 
             saveData(); 
             
-            // Tampilkan popup motivasi
             openModalMotivasi();
         }
         
@@ -1809,7 +1805,7 @@
         function hapusSesi(id) { if(confirm('Yakin hapus?')) { db.sessions = db.sessions.filter(x => x.id !== id); saveData(); } }
         function resetFormSesi() { document.getElementById('formSesi').reset(); document.getElementById('sesiId').value = ''; $('#sesiPasien').val('').trigger('change.select2'); setModeSesi('master'); }
 
-        // --- FITUR GALERI FOTO (KHUSUS ADMIN & KATIM UNTUK UPLOAD/EDIT/HAPUS) ---
+        // --- FITUR GALERI FOTO (KHUSUS ADMIN & KATIM) ---
         const MAX_PHOTOS = 20;
         const dropZone = document.getElementById('dropZone');
 
@@ -1844,7 +1840,7 @@
                     img.src = event.target.result;
                     img.onload = function() {
                         let canvas = document.createElement('canvas');
-                        let max_size = 800;
+                        let max_size = 1920; // RESOLUSI DITINGKATKAN KE HD
                         let width = img.width;
                         let height = img.height;
 
@@ -1859,7 +1855,7 @@
                         let ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
                         
-                        let dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                        let dataUrl = canvas.toDataURL('image/jpeg', 0.9); // KUALITAS GAMBAR 90%
                         db.photos.push({ id: 'img_' + Date.now() + Math.floor(Math.random()*1000), data: dataUrl, name: file.name });
                         
                         processedCount++;
@@ -1874,7 +1870,6 @@
             });
         }
 
-        // Fungsi Edit Judul Foto
         function editPhotoTitle(id) {
             if (!currentUser || (currentUser.role !== 'Admin' && currentUser.role !== 'Ka Tim')) return;
             let photo = db.photos.find(p => p.id === id);
@@ -1893,13 +1888,6 @@
                 db.photos = db.photos.filter(p => p.id !== id);
                 saveData();
             }
-        }
-
-        function viewPhotoFullScreen(src) {
-            let modal = document.getElementById('imageModal');
-            let img = modal.querySelector('img');
-            img.src = src;
-            modal.classList.remove('hidden');
         }
 
         function renderPhotos() {
@@ -1928,21 +1916,17 @@
 
                     return `
                     <div class="group rounded-2xl overflow-hidden shadow-md border border-gray-200 bg-white flex flex-col cursor-pointer transition-all hover:shadow-lg">
-                        
                         <div class="px-4 py-3 border-b border-gray-100 bg-gray-50 flex items-center z-10">
                             <p class="text-gray-800 text-sm font-bold truncate flex-1" title="${p.name}">
                                 <i class="fas fa-image text-brand-neon mr-2"></i> ${p.name}
                             </p>
                         </div>
-
                         <div class="relative aspect-[4/3] bg-gray-100 flex items-center justify-center overflow-hidden" onclick="viewPhotoFullScreen('${p.data}')">
                             <img src="${p.data}" alt="${p.name}" class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105">
-                            
                             <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 z-10">
                                 ${actionBtnsHtml}
                             </div>
                         </div>
-                        
                     </div>`;
                 }).join('');
             }
@@ -1957,16 +1941,94 @@
             }
         }
 
+        // --- FITUR ARSIP DOKUMEN ---
+        function handleBerkasFiles(files) {
+            if (!currentUser || (currentUser.role !== 'Admin' && currentUser.role !== 'Ka Tim')) return alert('Hanya Admin dan Ka Tim yang diizinkan mengunggah berkas!');
+            if (!files || files.length === 0) return;
+            if (!db.berkas) db.berkas = [];
+
+            document.getElementById('loading-data').style.display = 'flex';
+            document.querySelector('#loading-data p').innerText = 'Mengunggah Dokumen...';
+
+            let file = files[0]; // Ambil 1 file saja untuk keamanan memori
+            let reader = new FileReader();
+            
+            if(file.size > 5 * 1024 * 1024) {
+                alert("Peringatan: Ukuran file lebih dari 5MB dapat memperlambat database Firebase RTDB.");
+            }
+
+            reader.readAsDataURL(file);
+            reader.onload = function(event) {
+                let base64Data = event.target.result;
+                db.berkas.push({
+                    id: 'doc_' + Date.now(),
+                    name: file.name,
+                    type: file.type || 'unknown',
+                    size: (file.size / 1024).toFixed(2), // KB
+                    data: base64Data,
+                    date: new Date().toISOString()
+                });
+                
+                document.getElementById('loading-data').style.display = 'none';
+                document.getElementById('berkasInput').value = ''; 
+                saveData();
+            };
+            reader.onerror = function(error) {
+                alert("Gagal membaca file!");
+                document.getElementById('loading-data').style.display = 'none';
+            };
+        }
+
+        function renderBerkas() {
+            let tbody = document.getElementById('listBerkas');
+            if (!tbody) return;
+            let isAdminOrKaTim = currentUser && (currentUser.role === 'Admin' || currentUser.role === 'Ka Tim');
+            let berkasData = db.berkas || [];
+
+            if (berkasData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="p-8 text-center text-gray-400 italic">Belum ada dokumen tersimpan</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = berkasData.map(b => {
+                let icon = 'fa-file-alt text-gray-500';
+                if (b.type.includes('pdf')) icon = 'fa-file-pdf text-rose-500';
+                else if (b.type.includes('word') || b.name.endsWith('.doc') || b.name.endsWith('.docx')) icon = 'fa-file-word text-blue-500';
+                else if (b.type.includes('excel') || b.type.includes('spreadsheet') || b.name.endsWith('.xls') || b.name.endsWith('.xlsx')) icon = 'fa-file-excel text-emerald-500';
+
+                let actionBtns = `
+                    <a href="${b.data}" download="${b.name}" class="text-brand-blue bg-blue-50 hover:bg-blue-100 p-2 rounded-lg mr-2 transition inline-flex" title="Download"><i class="fas fa-download"></i></a>
+                `;
+                if (isAdminOrKaTim) {
+                    actionBtns += `<button onclick="hapusBerkas('${b.id}')" class="text-rose-500 bg-rose-50 hover:bg-rose-100 p-2 rounded-lg transition" title="Hapus"><i class="fas fa-trash"></i></button>`;
+                }
+
+                return `
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="p-4 font-medium text-gray-800 flex items-center gap-3">
+                        <i class="fas ${icon} text-2xl"></i> ${b.name}
+                    </td>
+                    <td class="p-4 text-center text-xs text-gray-500 uppercase">${b.name.split('.').pop()}</td>
+                    <td class="p-4 text-center text-sm text-gray-600">${b.size > 1024 ? (b.size/1024).toFixed(2) + ' MB' : b.size + ' KB'}</td>
+                    <td class="p-4 text-center">${actionBtns}</td>
+                </tr>`;
+            }).join('');
+        }
+
+        function hapusBerkas(id) {
+            if (confirm('Yakin ingin menghapus dokumen ini?')) {
+                db.berkas = db.berkas.filter(x => x.id !== id);
+                saveData();
+            }
+        }
+
         // --- FUNGSI REFRESH UI ---
         function refreshUI() {
             if (!currentUser || !db.users) return;
             
-            // Render Galeri Dokumentasi
             renderPhotos();
-            
-            // 1. Render Status Mesin
+            renderBerkas(); // Render Berkas
             renderAdminStatusMesin();
-            // 2. Render Denah Mesin
             renderDenahMesin();
 
             // Render Akun
@@ -1979,7 +2041,7 @@
                 return `<tr><td class="p-4 font-semibold text-gray-800">${u.username}</td><td class="p-4">${u.nama}</td><td class="p-4"><span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs font-medium">${u.role}</span></td><td class="p-4">${st} <div class="text-[10px] text-gray-400 mt-1.5"><i class="fas fa-shield-alt"></i> ${att}</div></td><td class="p-4 text-center">${actionBtns}</td></tr>`;
             }).join('');
 
-            // Pegawai PJ (Dengan fitur search select2)
+            // Pegawai PJ
             let allPegawaiOptions = '<option value=""></option>' + db.nurses.map(n => `<option value="${n.id}">${n.nama}</option>`).join('');
             let pjOptions = '<option value="">-- Pilih Pegawai PJ --</option>' + db.nurses.filter(n => n.jabatan !== 'Pramusiwi').map(n => `<option value="${n.id}">${n.nama}</option>`).join('');
             
@@ -1988,12 +2050,11 @@
             document.getElementById('lmbPerawat').innerHTML = allPegawaiOptions; 
             document.getElementById('editLmbPerawat').innerHTML = allPegawaiOptions; 
             
-            // Inisialisasi Select2 untuk pencarian pegawai
             $('#lmbPerawat').select2({ placeholder: '-- Cari Pegawai --', allowClear: true, width: '100%' });
             $('#editLmbPerawat').select2({ placeholder: '-- Cari Pegawai --', allowClear: true, width: '100%', dropdownParent: $('#modalEditLembur') });
             $('#editJdwPerawat').select2({ placeholder: '-- Pilih Pegawai PJ --', allowClear: true, width: '100%', dropdownParent: $('#modalEditJadwal') });
 
-            // Pasien Select2
+            // Pasien
             let optPsn = '<option value="">-- Pilih --</option>' + db.patients.map(p => `<option value="${p.id}">${p.nama} (${p.rm})</option>`).join('');
             document.getElementById('jdwPasien').innerHTML = optPsn; 
             document.getElementById('editJdwPasien').innerHTML = optPsn; 
@@ -2006,10 +2067,10 @@
             document.getElementById('sesiPasien').innerHTML = optSesi; $('#sesiPasien').select2({ placeholder: '-- Pilih Pasien --', allowClear: true, width: '100%' });
             $('#sesiPasien').off('change').on('change', function() { autoFillSesi(); });
 
-            // Render Tabel Pegawai
+            // Tabel Pegawai
             document.getElementById('listPerawat').innerHTML = db.nurses.map(n => `<tr><td class="p-4 font-medium">${n.nama}</td><td class="p-4 text-gray-500">${n.nik}</td><td class="p-4"><span class="bg-indigo-50 text-indigo-700 px-2 py-1 rounded text-xs">${n.jabatan}</span></td><td class="p-4 text-gray-600">${n.pendidikan}</td><td class="p-4 text-center"><button onclick="editPerawat('${n.id}')" class="text-brand-blue bg-blue-50 hover:bg-blue-100 p-2 rounded-lg mr-2 transition"><i class="fas fa-edit"></i></button><button onclick="hapusPerawat('${n.id}')" class="text-rose-500 bg-rose-50 hover:bg-rose-100 p-2 rounded-lg transition"><i class="fas fa-trash"></i></button></td></tr>`).join('') || '<tr><td colspan="5" class="p-8 text-center text-gray-400">Belum ada data</td></tr>';
             
-            // Render Tabel Pasien (Aksi bisa diedit/hapus oleh Admin & Ka Tim)
+            // Tabel Pasien
             let isAdminOrKaTim = (currentUser.role === 'Admin' || currentUser.role === 'Ka Tim');
             document.getElementById('listPasien').innerHTML = db.patients.map(p => {
                 let btnAction = isAdminOrKaTim ? `<button onclick="editPasien('${p.id}')" class="text-brand-blue bg-blue-50 hover:bg-blue-100 p-2 rounded-lg mr-2 transition"><i class="fas fa-edit"></i></button><button onclick="hapusPasien('${p.id}')" class="text-rose-500 bg-rose-50 hover:bg-rose-100 p-2 rounded-lg transition"><i class="fas fa-trash"></i></button>` : `<span class="text-gray-300">-</span>`;
@@ -2036,7 +2097,7 @@
                 return `<tr><td class="p-4 font-medium text-gray-600">${s.mesin} ${s.isManual ? ' <span class="text-[10px] uppercase tracking-wider text-rose-500 font-bold block mt-1"><i class="fas fa-bed"></i> '+s.asal+'</span>' : ''}</td><td class="p-4 font-bold text-gray-800">${nama} ${ketRawatInap}</td><td class="p-4 text-gray-500 font-medium">${rm}</td><td class="p-4"><span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs font-semibold mr-2">${shift}</span> <span class="text-sm text-gray-600">${pj}</span></td><td class="p-4"><select onchange="updateStatusJadwal('${s.id}', this)" class="border rounded-lg font-semibold text-xs px-2 py-1.5 w-full cursor-pointer transition ${colorClass}"><option value="Menunggu" ${st === 'Menunggu' ? 'selected' : ''}>Menunggu</option><option value="Running" ${st === 'Running' ? 'selected' : ''}>Running</option><option value="Selesai" ${st === 'Selesai' ? 'selected' : ''}>Selesai</option><option value="Batal" ${st === 'Batal' ? 'selected' : ''}>Batal</option></select></td><td class="p-4 text-center">${aksiBtns}</td></tr>`; 
             }).join('') || '<tr><td colspan="6" class="p-8 text-center text-gray-400">Belum ada jadwal ter-plot hari ini</td></tr>';
 
-            // LEMBUR UI RENDERER
+            // LEMBUR
             let tglMulai = document.getElementById('filterTglMulai').value; let tglAkhir = document.getElementById('filterTglAkhir').value; let searchKeyword = document.getElementById('searchLemburPerawat') ? document.getElementById('searchLemburPerawat').value.toLowerCase() : ''; let filteredLembur = db.lemburs.filter(l => l.tgl >= tglMulai && l.tgl <= tglAkhir); let groupedUI = {}; filteredLembur.forEach(l => { if(!groupedUI[l.perawatId]) groupedUI[l.perawatId] = []; groupedUI[l.perawatId].push(l); });
             let htmlLembur = ''; let foundData = false;
             
@@ -2082,6 +2143,62 @@
             // Notifikasi
             let notifs = ''; if(!db.patients.length) notifs += '<li class="text-rose-500 bg-rose-50 p-3 rounded-lg border border-rose-100 flex items-start gap-3"><i class="fas fa-exclamation-circle mt-0.5"></i> <span>Master Data Pasien kosong. Silakan isi terlebih dahulu.</span></li>'; db.sessions.filter(s => s.tgl === today).slice(-3).reverse().forEach(s => { let nama = "-"; if(s.isManualSesi){nama = s.namaManual;} else if(s.patientId.startsWith('manual_')) { let j = db.schedules.find(x => x.id === s.patientId.replace('manual_', '')); if(j) nama = j.nama; } else { let p = db.patients.find(x => x.id === s.patientId); if(p) nama = p.nama; } notifs += `<li class="text-brand-dark bg-emerald-50 p-3 rounded-lg border border-emerald-100 flex items-start gap-3"><i class="fas fa-check-circle text-emerald-500 mt-0.5"></i> <div>Sesi HD <span class="font-bold">${nama}</span> telah berhasil diinput ke sistem.</div></li>`; }); document.getElementById('notificationList').innerHTML = notifs || '<li class="text-gray-400 text-center italic py-4">Tidak ada notifikasi baru.</li>';
         }
+
+        // --- LOGIKA ZOOM & PAN GAMBAR ---
+        let scale = 1, panning = false, pointX = 0, pointY = 0, start = { x: 0, y: 0 };
+        const zoomImg = document.getElementById('zoomImage');
+        const zoomContainer = document.getElementById('zoomContainer');
+
+        function setTransform() {
+            zoomImg.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
+        }
+
+        function viewPhotoFullScreen(src) {
+            zoomImg.src = src;
+            document.getElementById('imageModal').classList.remove('hidden');
+            // Reset posisi dan zoom setiap kali dibuka
+            scale = 1; pointX = 0; pointY = 0; setTransform();
+        }
+
+        zoomContainer.onmousedown = function (e) {
+            e.preventDefault();
+            start = { x: e.clientX - pointX, y: e.clientY - pointY };
+            panning = true;
+            zoomContainer.classList.add('cursor-grabbing');
+        };
+
+        zoomContainer.onmouseup = function (e) {
+            panning = false;
+            zoomContainer.classList.remove('cursor-grabbing');
+        };
+
+        zoomContainer.onmouseleave = function (e) {
+            panning = false;
+            zoomContainer.classList.remove('cursor-grabbing');
+        };
+
+        zoomContainer.onmousemove = function (e) {
+            e.preventDefault();
+            if (!panning) return;
+            pointX = (e.clientX - start.x);
+            pointY = (e.clientY - start.y);
+            setTransform();
+        };
+
+        zoomContainer.onwheel = function (e) {
+            e.preventDefault();
+            let xs = (e.clientX - pointX) / scale;
+            let ys = (e.clientY - pointY) / scale;
+            let delta = (e.wheelDelta ? e.wheelDelta : -e.deltaY);
+            
+            (delta > 0) ? (scale *= 1.2) : (scale /= 1.2);
+            // Batasi zoom minimum dan maksimum
+            scale = Math.min(Math.max(0.5, scale), 5); 
+
+            pointX = e.clientX - xs * scale;
+            pointY = e.clientY - ys * scale;
+            setTransform();
+        };
 
         checkAuth();
     </script>
