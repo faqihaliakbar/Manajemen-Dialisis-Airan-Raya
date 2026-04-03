@@ -370,7 +370,7 @@
     <div id="imageModal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center backdrop-blur-sm transition-opacity" onclick="closeImageModal()">
         <div class="relative max-w-5xl max-h-[90vh] w-[90%] p-2 flex justify-center" onclick="event.stopPropagation()">
             <button onclick="closeImageModal()" class="absolute -top-12 right-0 text-white hover:text-red-500 text-4xl transition"><i class="fas fa-times"></i></button>
-            <img src="WhatsApp Image 2026-03-09 at 13.07.05.jpeg" alt="Preview Image" class="max-h-[85vh] w-auto object-contain rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.5)] border-4 border-white/20 bg-black">
+            <img src="" alt="Preview Image" class="max-h-[85vh] w-auto object-contain rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.5)] border-4 border-white/20 bg-black">
         </div>
     </div>
 
@@ -557,7 +557,7 @@
                         <h4 class="font-bold text-brand-dark mb-2 leading-tight text-lg">Perawat Dialisis<br>Profesional</h4>
                         <p class="text-sm text-gray-500 mb-6 px-2">Tim berpengalaman dan bersertifikat</p>
                     </div>
-                    <button type="button" onclick="document.getElementById('imageModal').classList.remove('hidden')" class="bg-[#a3e635] hover:bg-[#84cc16] text-brand-dark text-xs font-bold py-2.5 px-6 rounded-full transition w-max mx-auto">LEARN MORE</button>
+                    <button type="button" onclick="viewPhotoFullScreen('WhatsApp Image 2026-03-09 at 13.07.05.jpeg')" class="bg-[#a3e635] hover:bg-[#84cc16] text-brand-dark text-xs font-bold py-2.5 px-6 rounded-full transition w-max mx-auto">LEARN MORE</button>
                 </div>
                 <div class="bg-white rounded-2xl p-6 text-center shadow-xl transform transition hover:-translate-y-1 flex flex-col justify-between h-full">
                     <div>
@@ -835,7 +835,7 @@
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                         <h3 class="font-bold text-xl text-brand-dark flex items-center gap-2"><i class="fas fa-images text-brand-neon"></i> Galeri Kegiatan Dialisis</h3>
-                        <span class="text-sm font-semibold bg-gray-100 text-gray-600 px-4 py-1.5 rounded-full border border-gray-200" id="photoCountInfo">0 / 6 Foto</span>
+                        <span class="text-sm font-semibold bg-gray-100 text-gray-600 px-4 py-1.5 rounded-full border border-gray-200" id="photoCountInfo">0 / 20 Foto</span>
                     </div>
 
                     <div id="dropZone" class="katim-admin border-2 border-dashed border-gray-300 rounded-2xl p-10 text-center bg-gray-50 hover:bg-gray-100 hover:border-brand-neon transition cursor-pointer mb-8 relative group overflow-hidden">
@@ -850,7 +850,7 @@
                         </div>
                     </div>
 
-                    <div id="photoGallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    <div id="photoGallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                         </div>
                 </div>
             </section>
@@ -1809,8 +1809,8 @@
         function hapusSesi(id) { if(confirm('Yakin hapus?')) { db.sessions = db.sessions.filter(x => x.id !== id); saveData(); } }
         function resetFormSesi() { document.getElementById('formSesi').reset(); document.getElementById('sesiId').value = ''; $('#sesiPasien').val('').trigger('change.select2'); setModeSesi('master'); }
 
-        // --- FITUR GALERI FOTO (KHUSUS ADMIN & KATIM UNTUK UPLOAD/HAPUS) ---
-        const MAX_PHOTOS = 6;
+        // --- FITUR GALERI FOTO (KHUSUS ADMIN & KATIM UNTUK UPLOAD/EDIT/HAPUS) ---
+        const MAX_PHOTOS = 20;
         const dropZone = document.getElementById('dropZone');
 
         if(dropZone) {
@@ -1826,7 +1826,7 @@
             if(!db.photos) db.photos = [];
             
             let availableSlots = MAX_PHOTOS - db.photos.length;
-            if(availableSlots <= 0) return alert('Maksimal 6 foto sudah tercapai! Silakan hapus foto lama terlebih dahulu.');
+            if(availableSlots <= 0) return alert('Maksimal 20 foto sudah tercapai! Silakan hapus foto lama terlebih dahulu.');
 
             let filesToProcess = Array.from(files).slice(0, availableSlots);
             let processedCount = 0;
@@ -1860,7 +1860,7 @@
                         ctx.drawImage(img, 0, 0, width, height);
                         
                         let dataUrl = canvas.toDataURL('image/jpeg', 0.7);
-                        db.photos.push({ id: 'img_' + Date.now() + Math.floor(Math.random()*100), data: dataUrl, name: file.name });
+                        db.photos.push({ id: 'img_' + Date.now() + Math.floor(Math.random()*1000), data: dataUrl, name: file.name });
                         
                         processedCount++;
                         if(processedCount === filesToProcess.length) {
@@ -1872,6 +1872,19 @@
                     }
                 }
             });
+        }
+
+        // Fungsi Edit Judul Foto
+        function editPhotoTitle(id) {
+            if (!currentUser || (currentUser.role !== 'Admin' && currentUser.role !== 'Ka Tim')) return;
+            let photo = db.photos.find(p => p.id === id);
+            if(photo) {
+                let newTitle = prompt("Masukkan judul baru untuk foto ini:", photo.name);
+                if(newTitle !== null && newTitle.trim() !== "") {
+                    photo.name = newTitle.trim();
+                    saveData();
+                }
+            }
         }
 
         function deletePhoto(id) {
@@ -1903,18 +1916,33 @@
                 gallery.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 italic text-sm border-2 border-dashed border-gray-200 rounded-xl bg-gray-50">Belum ada foto dokumentasi.</div>';
             } else {
                 gallery.innerHTML = photos.map(p => {
-                    let deleteBtnHtml = isAdminOrKaTim ? `
-                        <button onclick="event.stopPropagation(); deletePhoto('${p.id}')" class="bg-rose-500 hover:bg-rose-600 text-white p-2.5 rounded-xl transform translate-y-4 group-hover:translate-y-0 transition-all shadow-lg flex items-center justify-center gap-2 text-sm font-bold w-full mt-auto">
-                            <i class="fas fa-trash-alt"></i> Hapus
-                        </button>` : '';
+                    let actionBtnsHtml = isAdminOrKaTim ? `
+                        <div class="flex gap-2 w-full mt-auto transform translate-y-8 group-hover:translate-y-0 transition-all duration-300">
+                            <button onclick="event.stopPropagation(); editPhotoTitle('${p.id}')" class="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-xl shadow-lg flex-1 flex items-center justify-center gap-1 text-xs font-bold">
+                                <i class="fas fa-edit"></i> Judul
+                            </button>
+                            <button onclick="event.stopPropagation(); deletePhoto('${p.id}')" class="bg-rose-500 hover:bg-rose-600 text-white p-2 rounded-xl shadow-lg flex-1 flex items-center justify-center gap-1 text-xs font-bold">
+                                <i class="fas fa-trash-alt"></i> Hapus
+                            </button>
+                        </div>` : '';
 
                     return `
-                    <div class="relative group rounded-2xl overflow-hidden shadow-md border border-gray-200 aspect-[4/3] bg-gray-100 flex flex-col cursor-pointer" onclick="viewPhotoFullScreen('${p.data}')">
-                        <img src="${p.data}" alt="${p.name}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 absolute inset-0">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 z-10">
-                            <p class="text-white text-xs font-medium truncate mb-3 drop-shadow-md"><i class="fas fa-image mr-1"></i> ${p.name}</p>
-                            ${deleteBtnHtml}
+                    <div class="group rounded-2xl overflow-hidden shadow-md border border-gray-200 bg-white flex flex-col cursor-pointer transition-all hover:shadow-lg">
+                        
+                        <div class="px-4 py-3 border-b border-gray-100 bg-gray-50 flex items-center z-10">
+                            <p class="text-gray-800 text-sm font-bold truncate flex-1" title="${p.name}">
+                                <i class="fas fa-image text-brand-neon mr-2"></i> ${p.name}
+                            </p>
                         </div>
+
+                        <div class="relative aspect-[4/3] bg-gray-100 flex items-center justify-center overflow-hidden" onclick="viewPhotoFullScreen('${p.data}')">
+                            <img src="${p.data}" alt="${p.name}" class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105">
+                            
+                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 z-10">
+                                ${actionBtnsHtml}
+                            </div>
+                        </div>
+                        
                     </div>`;
                 }).join('');
             }
