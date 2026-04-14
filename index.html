@@ -315,6 +315,30 @@
             </form>
         </div>
     </div>
+
+    <div id="modalPeringkatLembur" class="fixed inset-0 bg-black/60 z-[100] hidden flex items-center justify-center backdrop-blur-sm transition-opacity">
+        <div class="bg-white rounded-2xl shadow-2xl p-6 md:p-8 w-[800px] max-w-[95%] border border-yellow-100 max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center mb-6 border-b pb-3 shrink-0">
+                <h3 class="font-bold text-xl text-brand-dark flex items-center gap-2">
+                    <i class="fas fa-trophy text-yellow-500"></i> Peringkat Insentif Lembur
+                </h3>
+                <button onclick="closeModalPeringkat()" class="text-gray-400 hover:text-red-500 transition"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div class="overflow-y-auto flex-1 rounded-xl border border-gray-100">
+                <table class="w-full text-left">
+                    <thead class="sticky top-0 bg-gray-50 shadow-sm z-10">
+                        <tr class="border-b">
+                            <th class="p-4 font-semibold text-gray-600 text-center w-16">Rank</th>
+                            <th class="p-4 font-semibold text-gray-600">Nama Pegawai</th>
+                            <th class="p-4 font-semibold text-gray-600 text-center">Total Durasi</th>
+                            <th class="p-4 font-semibold text-gray-600 text-right">Total Insentif</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listPeringkatLembur" class="divide-y divide-gray-100"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
     
     <div id="denahMesinModal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center backdrop-blur-sm transition-opacity" onclick="closeDenahModal()">
         <div class="bg-gray-50 rounded-2xl shadow-2xl w-[95%] max-w-5xl max-h-[90vh] overflow-hidden flex flex-col relative" onclick="event.stopPropagation()">
@@ -840,14 +864,18 @@
                 </div>
                 
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4 border-b border-gray-100 pb-4">
-                        <h3 class="font-bold text-xl text-brand-dark">Daftar Rekap Lembur</h3>
-                        <div class="flex flex-wrap items-center gap-3">
-                            <div class="relative"><i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i><input type="text" id="searchLemburPerawat" oninput="refreshUI()" placeholder="Cari pegawai..." class="!pl-10 py-2 border-gray-200 w-48 sm:w-64 rounded-xl shadow-sm"></div>
-                            <div class="flex items-center gap-2 bg-gray-50 p-1.5 rounded-xl border border-gray-200"><input type="date" id="filterTglMulai" class="border-none bg-transparent w-auto text-sm" onchange="refreshUI()"><span class="text-sm text-gray-400 font-medium">s/d</span><input type="date" id="filterTglAkhir" class="border-none bg-transparent w-auto text-sm" onchange="refreshUI()"></div>
-                            <button onclick="downloadPDFLembur()" class="katim-admin bg-rose-500 hover:bg-rose-600 text-white px-4 py-2.5 rounded-xl font-medium shadow-sm transition flex items-center gap-2"><i class="fas fa-file-pdf"></i> Export PDF</button>
+                    <div class="flex flex-wrap items-center justify-between gap-4 mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                            <div class="relative flex-1 md:flex-none"><i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i><input type="text" id="searchLemburPerawat" oninput="refreshUI()" placeholder="Cari pegawai..." class="!pl-10 py-2 border-gray-200 w-full md:w-64 rounded-xl shadow-sm"></div>
+                            <div class="flex items-center gap-2 bg-white p-1.5 rounded-xl border border-gray-200 shadow-sm flex-1 md:flex-none justify-center"><input type="date" id="filterTglMulai" class="border-none bg-transparent w-auto text-sm" onchange="refreshUI()"><span class="text-sm text-gray-400 font-medium">s/d</span><input type="date" id="filterTglAkhir" class="border-none bg-transparent w-auto text-sm" onchange="refreshUI()"></div>
+                        </div>
+                        <div class="flex gap-2 w-full md:w-auto">
+                            <button onclick="openModalPeringkat()" class="flex-1 md:flex-none bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2.5 rounded-xl font-medium shadow-sm transition flex items-center justify-center gap-2"><i class="fas fa-trophy"></i> Peringkat</button>
+                            <button onclick="downloadPDFLembur()" class="katim-admin flex-1 md:flex-none bg-rose-500 hover:bg-rose-600 text-white px-4 py-2.5 rounded-xl font-medium shadow-sm transition flex items-center justify-center gap-2"><i class="fas fa-file-pdf"></i> Export PDF</button>
                         </div>
                     </div>
+
+                    <h3 class="font-bold text-xl text-brand-dark mb-4 border-b border-gray-100 pb-3">Daftar Rekap Lembur</h3>
                     <div id="listLemburContainer" class="space-y-6"></div>
                 </div>
             </section>
@@ -943,6 +971,14 @@
             let modal = document.getElementById('modalMotivasi');
             modal.firstElementChild.classList.replace('scale-100', 'scale-95');
             setTimeout(() => modal.classList.add('hidden'), 200);
+        }
+
+        // --- FUNGSI MODAL PERINGKAT LEMBUR ---
+        function openModalPeringkat() {
+            document.getElementById('modalPeringkatLembur').classList.remove('hidden');
+        }
+        function closeModalPeringkat() {
+            document.getElementById('modalPeringkatLembur').classList.add('hidden');
         }
 
         // --- DATA & FUNGSI MODAL LAYANAN ---
@@ -1117,7 +1153,6 @@
         database.ref('rs_airan_raya').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
-                // MODIFIKASI: Menggunakan Object.values agar array yang rusak bisa kembali menjadi format Array
                 db.users = data.users ? Object.values(data.users) : []; 
                 db.nurses = data.nurses ? Object.values(data.nurses) : []; 
                 db.patients = data.patients ? Object.values(data.patients) : [];
@@ -1165,7 +1200,6 @@
             renderDenahMesin(); 
         });
 
-        // MODIFIKASI: saveData sekarang bisa menargetkan hanya satu tabel spesifik
         function saveData(nodeToUpdate = null) {
             refreshUI(); 
             
@@ -1605,6 +1639,15 @@
         function editLembur(id) { 
             let l = db.lemburs.find(x => x.id === id); 
             if(l) { 
+                let perawat = db.nurses.find(n => n.id === l.perawatId);
+                let isOwner = perawat && currentUser && (perawat.nama === currentUser.nama);
+                let isAdmin = currentUser && currentUser.role === 'Admin';
+
+                if (!isOwner && !isAdmin) {
+                    alert('Akses Ditolak: Anda hanya dapat mengedit data lembur Anda sendiri!');
+                    return;
+                }
+
                 document.getElementById('editLmbId').value = l.id; 
                 document.getElementById('editLmbTgl').value = l.tgl; 
                 $('#editLmbPerawat').val(l.perawatId).trigger('change'); 
@@ -1615,6 +1658,7 @@
                 document.getElementById('modalEditLembur').classList.remove('hidden');
             } 
         }
+
         function closeModalEditLembur() { document.getElementById('modalEditLembur').classList.add('hidden'); }
         function saveEditLemburModal(e) {
             e.preventDefault();
@@ -1633,7 +1677,25 @@
             }
         }
         
-        function hapusLembur(id) { if(confirm('Yakin hapus data lembur ini?')) { db.lemburs = db.lemburs.filter(x => x.id !== id); saveData('lemburs'); } }
+        function hapusLembur(id) { 
+            let l = db.lemburs.find(x => x.id === id); 
+            if(!l) return;
+
+            let perawat = db.nurses.find(n => n.id === l.perawatId);
+            let isOwner = perawat && currentUser && (perawat.nama === currentUser.nama);
+            let isAdmin = currentUser && currentUser.role === 'Admin';
+
+            if (!isOwner && !isAdmin) {
+                alert('Akses Ditolak: Anda hanya dapat menghapus data lembur Anda sendiri!');
+                return;
+            }
+
+            if(confirm('Yakin hapus data lembur ini?')) { 
+                db.lemburs = db.lemburs.filter(x => x.id !== id); 
+                saveData('lemburs'); 
+            } 
+        }
+
         function resetFormLembur() { document.getElementById('formLembur').reset(); document.getElementById('lmbId').value = ''; document.getElementById('lmbTgl').value = today; $('#lmbPerawat').val(null).trigger('change'); }
 
         // --- MANAJEMEN AKUN (MODAL) ---
@@ -2190,8 +2252,18 @@
                     dataLembur.sort((a,b) => new Date(a.tgl) - new Date(b.tgl)).forEach((l, idx) => { 
                         let d = parseFloat(l.durasi) || 0; subTotal += d; let displayDurasi = Number(d.toFixed(2));
                         
+                        let isOwner = pNama === currentUser.nama;
+                        let isAdmin = currentUser.role === 'Admin';
+                        let actionBtns = '';
+
+                        if (isOwner || isAdmin) {
+                            actionBtns = `<button onclick="editLembur('${l.id}')" class="text-brand-blue bg-blue-50 hover:bg-blue-100 p-1.5 rounded mr-1 transition" title="Edit"><i class="fas fa-edit"></i></button><button onclick="hapusLembur('${l.id}')" class="text-rose-500 bg-rose-50 hover:bg-rose-100 p-1.5 rounded transition" title="Hapus"><i class="fas fa-trash"></i></button>`;
+                        } else {
+                            actionBtns = `<span class="text-gray-300">-</span>`;
+                        }
+
                         tableHtml += `<tr><td class="px-3 py-2 text-center text-gray-400">${idx + 1}</td>`;
-                        tableHtml += `<td class="px-3 py-2 text-gray-600 font-medium">${formatDateIndo(l.tgl)}</td><td class="px-3 py-2 text-center text-gray-600"><span class="bg-gray-100 px-2 py-0.5 rounded">${l.mulai}</span></td><td class="px-3 py-2 text-center text-gray-600"><span class="bg-gray-100 px-2 py-0.5 rounded">${l.selesai}</span></td><td class="px-3 py-2 text-center"><span class="bg-blue-50 text-blue-700 border border-blue-100 font-bold px-2 py-0.5 rounded">${displayDurasi}</span></td><td class="px-3 py-2 text-gray-500 italic max-w-[150px] truncate" title="${l.ket}">${l.ket}</td><td class="px-3 py-2 text-center"><button onclick="editLembur('${l.id}')" class="text-brand-blue bg-blue-50 hover:bg-blue-100 p-1.5 rounded mr-1 transition"><i class="fas fa-edit"></i></button><button onclick="hapusLembur('${l.id}')" class="text-rose-500 bg-rose-50 hover:bg-rose-100 p-1.5 rounded transition"><i class="fas fa-trash"></i></button></td></tr>`;
+                        tableHtml += `<td class="px-3 py-2 text-gray-600 font-medium">${formatDateIndo(l.tgl)}</td><td class="px-3 py-2 text-center text-gray-600"><span class="bg-gray-100 px-2 py-0.5 rounded">${l.mulai}</span></td><td class="px-3 py-2 text-center text-gray-600"><span class="bg-gray-100 px-2 py-0.5 rounded">${l.selesai}</span></td><td class="px-3 py-2 text-center"><span class="bg-blue-50 text-blue-700 border border-blue-100 font-bold px-2 py-0.5 rounded">${displayDurasi}</span></td><td class="px-3 py-2 text-gray-500 italic max-w-[150px] truncate" title="${l.ket}">${l.ket}</td><td class="px-3 py-2 text-center">${actionBtns}</td></tr>`;
                     });
                     
                     let estimasiUang = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(subTotal * 13344);
@@ -2200,6 +2272,45 @@
                 }
                 if(!foundData) { htmlLembur = '<div class="p-4 text-center text-rose-500 border border-rose-200 border-dashed rounded-lg bg-rose-50 text-sm">Tidak ada data pegawai yang sesuai dengan pencarian.</div>'; }
             } document.getElementById('listLemburContainer').innerHTML = htmlLembur;
+
+            // --- KALKULASI & RENDER TABEL PERINGKAT LEMBUR ---
+            let lemburTotals = [];
+            for (let pId in groupedUI) {
+                let pNama = db.nurses.find(x => x.id === pId)?.nama || '-';
+                let dataLembur = groupedUI[pId];
+                let subT = 0;
+                dataLembur.forEach(l => {
+                    subT += parseFloat(l.durasi) || 0;
+                });
+                lemburTotals.push({ nama: pNama, totalDurasi: subT, insentif: subT * 13344 });
+            }
+
+            // Urutkan dari insentif tertinggi ke terendah
+            lemburTotals.sort((a, b) => b.insentif - a.insentif);
+
+            let peringkatHtml = '';
+            if (lemburTotals.length === 0) {
+                peringkatHtml = '<tr><td colspan="4" class="p-8 text-center text-gray-400 italic">Belum ada data lembur</td></tr>';
+            } else {
+                peringkatHtml = lemburTotals.map((item, index) => {
+                    let rankIcon = '';
+                    if (index === 0) rankIcon = '<i class="fas fa-medal text-yellow-500 text-2xl drop-shadow-md"></i>';
+                    else if (index === 1) rankIcon = '<i class="fas fa-medal text-gray-400 text-xl drop-shadow"></i>';
+                    else if (index === 2) rankIcon = '<i class="fas fa-medal text-orange-500 text-xl drop-shadow"></i>';
+                    else rankIcon = `<span class="font-bold text-gray-500 text-lg">${index + 1}</span>`;
+
+                    let estimasiUang = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(item.insentif);
+
+                    return `<tr class="hover:bg-gray-50 transition">
+                        <td class="p-4 text-center align-middle">${rankIcon}</td>
+                        <td class="p-4 font-bold text-gray-800">${item.nama}</td>
+                        <td class="p-4 text-center font-medium text-brand-blue">${Number(item.totalDurasi.toFixed(2))} Jam</td>
+                        <td class="p-4 text-right font-bold text-emerald-600 bg-emerald-50/30">${estimasiUang}</td>
+                    </tr>`;
+                }).join('');
+            }
+            let listPeringkat = document.getElementById('listPeringkatLembur');
+            if(listPeringkat) listPeringkat.innerHTML = peringkatHtml;
 
             // Dashboard Stats
             document.getElementById('dashPasienHariIni').innerText = db.schedules.filter(s => s.date === today).length;
