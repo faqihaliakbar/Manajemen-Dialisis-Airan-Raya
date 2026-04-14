@@ -315,6 +315,7 @@
             </form>
         </div>
     </div>
+    
     <div id="denahMesinModal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center backdrop-blur-sm transition-opacity" onclick="closeDenahModal()">
         <div class="bg-gray-50 rounded-2xl shadow-2xl w-[95%] max-w-5xl max-h-[90vh] overflow-hidden flex flex-col relative" onclick="event.stopPropagation()">
             <div class="bg-gradient-to-r from-brand-dark to-brand-blue p-4 sm:p-5 flex justify-between items-center text-white shrink-0">
@@ -375,9 +376,29 @@
 
     <div id="armadaModal" class="fixed inset-0 bg-black/90 z-[9999] hidden flex items-center justify-center backdrop-blur-sm transition-opacity" onclick="closeArmadaModal()">
         <button onclick="closeArmadaModal()" class="fixed top-6 right-6 text-white bg-red-500/50 hover:bg-red-500 rounded-full w-12 h-12 flex items-center justify-center text-2xl transition z-[10000] shadow-lg"><i class="fas fa-times"></i></button>
-        <div class="relative max-w-6xl max-h-[90vh] w-[95%] p-2 flex flex-col md:flex-row justify-center items-center gap-6 overflow-y-auto" onclick="event.stopPropagation()">
-            <img src="FR.jpeg" alt="Mesin Fresenius" class="max-h-[80vh] w-auto object-contain rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.5)] border-4 border-white/20">
-            <img src="NPR.jpeg" alt="Mesin Nipro" class="max-h-[80vh] w-auto object-contain rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.5)] border-4 border-white/20">
+        <div class="relative w-full max-w-5xl h-full max-h-[90vh] p-4 flex flex-col md:flex-row justify-center items-center gap-6 overflow-y-auto" onclick="event.stopPropagation()">
+            <div class="flex-1 flex justify-center items-center w-full h-full min-h-[40vh] md:min-h-full">
+                <img src="FR.jpeg" alt="Mesin Fresenius" class="max-w-full max-h-full object-contain rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.5)] border-4 border-white/20">
+            </div>
+            <div class="flex-1 flex justify-center items-center w-full h-full min-h-[40vh] md:min-h-full">
+                <img src="NPR.jpeg" alt="Mesin Nipro" class="max-w-full max-h-full object-contain rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.5)] border-4 border-white/20">
+            </div>
+        </div>
+    </div>
+
+    <div id="previewBerkasModal" class="fixed inset-0 bg-black/80 z-[10000] hidden flex flex-col items-center justify-center backdrop-blur-sm transition-opacity" onclick="closePreviewBerkas()">
+        <div class="w-full max-w-5xl bg-white rounded-t-2xl flex justify-between items-center p-4 border-b" onclick="event.stopPropagation()">
+            <h3 id="previewBerkasTitle" class="font-bold text-lg text-brand-dark flex items-center gap-2"><i class="fas fa-file-alt text-brand-blue"></i> Preview Dokumen</h3>
+            <button onclick="closePreviewBerkas()" class="text-gray-500 hover:text-red-500 text-2xl transition"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="w-full max-w-5xl h-[80vh] bg-gray-100 rounded-b-2xl overflow-hidden relative flex items-center justify-center" onclick="event.stopPropagation()">
+            <iframe id="previewBerkasFrame" class="w-full h-full hidden border-none bg-white"></iframe>
+            <div id="previewBerkasError" class="hidden text-center p-8 flex flex-col items-center justify-center h-full w-full bg-gray-50">
+                <i class="fas fa-file-excel text-6xl text-gray-300 mb-4"></i>
+                <h4 class="text-lg font-bold text-gray-600 mb-2">Preview Tidak Tersedia</h4>
+                <p class="text-gray-500 text-sm mb-4">Format Word/Excel tidak dapat ditampilkan langsung di browser. Silakan unduh dokumen untuk melihat isinya.</p>
+                <a id="previewBerkasDownloadBtn" href="#" download class="bg-brand-blue hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl shadow-md transition font-medium flex items-center gap-2 w-max mx-auto"><i class="fas fa-download"></i> Unduh Dokumen Saja</a>
+            </div>
         </div>
     </div>
 
@@ -564,7 +585,7 @@
                         <h4 class="font-bold text-brand-dark mb-2 leading-tight text-lg">Kualitas<br>Terbaik</h4>
                         <p class="text-sm text-gray-500 mb-6 px-2">Layanan Dialisis Terstandar</p>
                     </div>
-                    <button type="button" class="bg-[#a3e635] hover:bg-[#84cc16] text-brand-dark text-xs font-bold py-2.5 px-6 rounded-full transition w-max mx-auto">LEARN MORE</button>
+                    <button type="button" onclick="openLayananModal('kualitas')" class="bg-[#a3e635] hover:bg-[#84cc16] text-brand-dark text-xs font-bold py-2.5 px-6 rounded-full transition w-max mx-auto">LEARN MORE</button>
                 </div>
                 <div class="bg-white rounded-2xl p-6 text-center shadow-xl transform transition hover:-translate-y-1 flex flex-col justify-between h-full">
                     <div>
@@ -694,7 +715,7 @@
 
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4"><h3 class="font-bold text-xl text-brand-dark">Daftar Akun Pengguna</h3><button onclick="toggleFormTambahAkun()" class="bg-brand-neon hover:bg-brand-neonHover text-white px-4 py-2 rounded-xl font-medium shadow-sm transition flex items-center gap-2"><i class="fas fa-plus"></i> Tambah Akun</button></div>
-                    <div class="overflow-x-auto rounded-xl border border-gray-100"><table class="w-full text-left"><thead><tr><th>Username/NIK</th><th>Nama Pengguna</th><th>Role</th><th>Status & Login</th><th class="text-center">Aksi</th></tr></thead><tbody id="listAkun"></tbody></table></div>
+                    <div class="overflow-x-auto rounded-xl border border-gray-100"><table class="w-full text-left"><thead><tr><th>Username/NIK</th><th>Nama Pengguna</th><th>Password</th><th>Role</th><th>Status & Login</th><th class="text-center">Aksi</th></tr></thead><tbody id="listAkun"></tbody></table></div>
                 </div>
             </section>
 
@@ -940,6 +961,11 @@
                 title: "Layanan CAPD",
                 image: "2.jpg",
                 desc: "CAPD (Continuous Ambulatory Peritoneal Dialysis) menawarkan kebebasan dan fleksibilitas bagi Anda untuk melakukan proses dialisis secara mandiri di rumah maupun tempat kerja. RS Airan Raya siap memfasilitasi kebutuhan ini melalui pelatihan intensif bagi pasien dan keluarga, pendampingan medis yang suportif, serta monitoring berkala agar Anda tetap bisa beraktivitas secara produktif dengan kualitas kesehatan yang terjaga."
+            },
+            kualitas: {
+                title: "Kualitas Layanan Terstandar",
+                image: "2.jpg", 
+                desc: "Di RS Airan Raya, keselamatan dan adekuasi pasien adalah prioritas mutlak. Kami menerapkan protokol hemodialisis berstandar tinggi: kalibrasi mesin Fresenius & Nipro secara berkala, penggunaan dializer efisiensi tinggi (High-Flux) untuk bersihan toksin yang maksimal, serta pemantauan ketat rasio Kt/V di setiap sesi. Seluruh prosedur dikawal oleh perawat tersertifikasi dengan zero-infection protocol untuk menunjang perbaikan kualitas hidup pasien seutuhnya."
             }
         };
 
@@ -1004,6 +1030,50 @@
             }
         }
 
+        // --- FITUR PREVIEW DOKUMEN ---
+        function openPreviewBerkas(id) {
+            let b = db.berkas.find(x => x.id === id);
+            if(!b) return;
+            document.getElementById('previewBerkasTitle').innerHTML = `<i class="fas fa-file-alt text-brand-blue"></i> ${b.name}`;
+            let modal = document.getElementById('previewBerkasModal');
+            let frame = document.getElementById('previewBerkasFrame');
+            let errBox = document.getElementById('previewBerkasError');
+            let dlBtn = document.getElementById('previewBerkasDownloadBtn');
+
+            if(b.type.includes('pdf') || b.type.includes('image')) {
+                frame.src = b.data;
+                frame.classList.remove('hidden');
+                errBox.classList.add('hidden');
+            } else {
+                frame.classList.add('hidden');
+                errBox.classList.remove('hidden');
+                dlBtn.href = b.data;
+                dlBtn.download = b.name;
+            }
+            modal.classList.remove('hidden');
+        }
+        function closePreviewBerkas() {
+            document.getElementById('previewBerkasModal').classList.add('hidden');
+            document.getElementById('previewBerkasFrame').src = '';
+        }
+
+        // --- FITUR VIEW PASSWORD ---
+        function togglePasswordView(btn) {
+            let span = btn.previousElementSibling;
+            let icon = btn.querySelector('i');
+            if (span.innerText === '••••••') {
+                span.innerText = span.getAttribute('data-password');
+                span.classList.remove('tracking-widest', 'text-lg', 'leading-none');
+                span.classList.add('font-mono', 'text-sm', 'text-gray-800', 'font-bold');
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                span.innerText = '••••••';
+                span.classList.remove('font-mono', 'text-sm', 'text-gray-800', 'font-bold');
+                span.classList.add('tracking-widest', 'text-lg', 'leading-none');
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
         // --- 1. INISIALISASI FIREBASE CLOUD DATABASE ---
         const firebaseConfig = {
             apiKey: "AIzaSyD52_K5GYNkUvtppMuee0IGIey5LauZOQg",
@@ -1023,7 +1093,6 @@
         
         const database = firebase.database();
 
-        // TAMBAHAN BERKAS ARRAY
         let db = { users: [], nurses: [], patients: [], schedules: [], sessions: [], lemburs: [], bedStatus: {}, photos: [], berkas: [] };
         let currentUser = JSON.parse(sessionStorage.getItem('rs_current_user')) || null;
         
@@ -1052,7 +1121,7 @@
                 db.schedules = data.schedules || []; db.sessions = data.sessions || []; db.lemburs = data.lemburs || []; 
                 db.bedStatus = data.bedStatus || getDefaultBedStatus();
                 db.photos = data.photos || [];
-                db.berkas = data.berkas || []; // Fetch berkas dokumen
+                db.berkas = data.berkas || []; 
 
                 let adminAcc = db.users.find(u => u.username === 'admin');
                 if (adminAcc && adminAcc.status === 'suspended') {
@@ -1840,7 +1909,7 @@
                     img.src = event.target.result;
                     img.onload = function() {
                         let canvas = document.createElement('canvas');
-                        let max_size = 1920; // RESOLUSI DITINGKATKAN KE HD
+                        let max_size = 1920; 
                         let width = img.width;
                         let height = img.height;
 
@@ -1855,7 +1924,7 @@
                         let ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
                         
-                        let dataUrl = canvas.toDataURL('image/jpeg', 0.9); // KUALITAS GAMBAR 90%
+                        let dataUrl = canvas.toDataURL('image/jpeg', 0.9); 
                         db.photos.push({ id: 'img_' + Date.now() + Math.floor(Math.random()*1000), data: dataUrl, name: file.name });
                         
                         processedCount++;
@@ -1950,7 +2019,7 @@
             document.getElementById('loading-data').style.display = 'flex';
             document.querySelector('#loading-data p').innerText = 'Mengunggah Dokumen...';
 
-            let file = files[0]; // Ambil 1 file saja untuk keamanan memori
+            let file = files[0]; 
             let reader = new FileReader();
             
             if(file.size > 5 * 1024 * 1024) {
@@ -1997,6 +2066,7 @@
                 else if (b.type.includes('excel') || b.type.includes('spreadsheet') || b.name.endsWith('.xls') || b.name.endsWith('.xlsx')) icon = 'fa-file-excel text-emerald-500';
 
                 let actionBtns = `
+                    <button onclick="openPreviewBerkas('${b.id}')" class="text-emerald-600 bg-emerald-50 hover:bg-emerald-100 p-2 rounded-lg mr-2 transition inline-flex" title="Preview"><i class="fas fa-eye"></i></button>
                     <a href="${b.data}" download="${b.name}" class="text-brand-blue bg-blue-50 hover:bg-blue-100 p-2 rounded-lg mr-2 transition inline-flex" title="Download"><i class="fas fa-download"></i></a>
                 `;
                 if (isAdminOrKaTim) {
@@ -2027,7 +2097,7 @@
             if (!currentUser || !db.users) return;
             
             renderPhotos();
-            renderBerkas(); // Render Berkas
+            renderBerkas(); 
             renderAdminStatusMesin();
             renderDenahMesin();
 
@@ -2038,7 +2108,13 @@
                 let actionBtns = `<button onclick="setEditAkun('${u.username}')" class="text-brand-blue bg-blue-50 hover:bg-blue-100 p-2 rounded-lg mr-2 transition"><i class="fas fa-edit"></i></button>`;
                 if (u.status === 'suspended') actionBtns += `<button onclick="aktifkanAkun('${u.username}')" class="text-emerald-600 bg-emerald-50 hover:bg-emerald-100 p-2 rounded-lg mr-2 transition"><i class="fas fa-unlock"></i></button>`;
                 if (u.username !== currentUser.username) actionBtns += `<button onclick="hapusAkun('${u.username}')" class="text-rose-500 bg-rose-50 hover:bg-rose-100 p-2 rounded-lg transition"><i class="fas fa-trash"></i></button>`;
-                return `<tr><td class="p-4 font-semibold text-gray-800">${u.username}</td><td class="p-4">${u.nama}</td><td class="p-4"><span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs font-medium">${u.role}</span></td><td class="p-4">${st} <div class="text-[10px] text-gray-400 mt-1.5"><i class="fas fa-shield-alt"></i> ${att}</div></td><td class="p-4 text-center">${actionBtns}</td></tr>`;
+                
+                let passDisplay = `<div class="flex items-center gap-2">
+                    <span class="text-gray-400 select-none tracking-widest text-lg leading-none" data-password="${u.password}">••••••</span>
+                    <button onclick="togglePasswordView(this)" class="text-gray-400 hover:text-brand-blue transition"><i class="fas fa-eye"></i></button>
+                </div>`;
+
+                return `<tr><td class="p-4 font-semibold text-gray-800">${u.username}</td><td class="p-4">${u.nama}</td><td class="p-4">${passDisplay}</td><td class="p-4"><span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs font-medium">${u.role}</span></td><td class="p-4">${st} <div class="text-[10px] text-gray-400 mt-1.5"><i class="fas fa-shield-alt"></i> ${att}</div></td><td class="p-4 text-center">${actionBtns}</td></tr>`;
             }).join('');
 
             // Pegawai PJ
