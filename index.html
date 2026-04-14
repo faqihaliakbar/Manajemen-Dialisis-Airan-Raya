@@ -315,6 +315,7 @@
             </form>
         </div>
     </div>
+    
     <div id="denahMesinModal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center backdrop-blur-sm transition-opacity" onclick="closeDenahModal()">
         <div class="bg-gray-50 rounded-2xl shadow-2xl w-[95%] max-w-5xl max-h-[90vh] overflow-hidden flex flex-col relative" onclick="event.stopPropagation()">
             <div class="bg-gradient-to-r from-brand-dark to-brand-blue p-4 sm:p-5 flex justify-between items-center text-white shrink-0">
@@ -375,9 +376,29 @@
 
     <div id="armadaModal" class="fixed inset-0 bg-black/90 z-[9999] hidden flex items-center justify-center backdrop-blur-sm transition-opacity" onclick="closeArmadaModal()">
         <button onclick="closeArmadaModal()" class="fixed top-6 right-6 text-white bg-red-500/50 hover:bg-red-500 rounded-full w-12 h-12 flex items-center justify-center text-2xl transition z-[10000] shadow-lg"><i class="fas fa-times"></i></button>
-        <div class="relative max-w-6xl max-h-[90vh] w-[95%] p-2 flex flex-col md:flex-row justify-center items-center gap-6 overflow-y-auto" onclick="event.stopPropagation()">
-            <img src="FR.jpeg" alt="Mesin Fresenius" class="max-h-[80vh] w-auto object-contain rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.5)] border-4 border-white/20">
-            <img src="NPR.jpeg" alt="Mesin Nipro" class="max-h-[80vh] w-auto object-contain rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.5)] border-4 border-white/20">
+        <div class="relative w-full max-w-5xl h-full max-h-[90vh] p-4 flex flex-col md:flex-row justify-center items-center gap-6 overflow-y-auto" onclick="event.stopPropagation()">
+            <div class="flex-1 flex justify-center items-center w-full h-full min-h-[40vh] md:min-h-full">
+                <img src="FR.jpeg" alt="Mesin Fresenius" class="max-w-full max-h-full object-contain rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.5)] border-4 border-white/20">
+            </div>
+            <div class="flex-1 flex justify-center items-center w-full h-full min-h-[40vh] md:min-h-full">
+                <img src="NPR.jpeg" alt="Mesin Nipro" class="max-w-full max-h-full object-contain rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.5)] border-4 border-white/20">
+            </div>
+        </div>
+    </div>
+
+    <div id="previewBerkasModal" class="fixed inset-0 bg-black/80 z-[10000] hidden flex flex-col items-center justify-center backdrop-blur-sm transition-opacity" onclick="closePreviewBerkas()">
+        <div class="w-full max-w-5xl bg-white rounded-t-2xl flex justify-between items-center p-4 border-b" onclick="event.stopPropagation()">
+            <h3 id="previewBerkasTitle" class="font-bold text-lg text-brand-dark flex items-center gap-2"><i class="fas fa-file-alt text-brand-blue"></i> Preview Dokumen</h3>
+            <button onclick="closePreviewBerkas()" class="text-gray-500 hover:text-red-500 text-2xl transition"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="w-full max-w-5xl h-[80vh] bg-gray-100 rounded-b-2xl overflow-hidden relative flex items-center justify-center" onclick="event.stopPropagation()">
+            <iframe id="previewBerkasFrame" class="w-full h-full hidden border-none bg-white"></iframe>
+            <div id="previewBerkasError" class="hidden text-center p-8 flex flex-col items-center justify-center h-full w-full bg-gray-50">
+                <i class="fas fa-file-excel text-6xl text-gray-300 mb-4"></i>
+                <h4 class="text-lg font-bold text-gray-600 mb-2">Preview Tidak Tersedia</h4>
+                <p class="text-gray-500 text-sm mb-4">Format Word/Excel tidak dapat ditampilkan langsung di browser. Silakan unduh dokumen untuk melihat isinya.</p>
+                <a id="previewBerkasDownloadBtn" href="#" download class="bg-brand-blue hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl shadow-md transition font-medium flex items-center gap-2 w-max mx-auto"><i class="fas fa-download"></i> Unduh Dokumen Saja</a>
+            </div>
         </div>
     </div>
 
@@ -564,7 +585,7 @@
                         <h4 class="font-bold text-brand-dark mb-2 leading-tight text-lg">Kualitas<br>Terbaik</h4>
                         <p class="text-sm text-gray-500 mb-6 px-2">Layanan Dialisis Terstandar</p>
                     </div>
-                    <button type="button" class="bg-[#a3e635] hover:bg-[#84cc16] text-brand-dark text-xs font-bold py-2.5 px-6 rounded-full transition w-max mx-auto">LEARN MORE</button>
+                    <button type="button" onclick="openLayananModal('kualitas')" class="bg-[#a3e635] hover:bg-[#84cc16] text-brand-dark text-xs font-bold py-2.5 px-6 rounded-full transition w-max mx-auto">LEARN MORE</button>
                 </div>
                 <div class="bg-white rounded-2xl p-6 text-center shadow-xl transform transition hover:-translate-y-1 flex flex-col justify-between h-full">
                     <div>
@@ -694,7 +715,7 @@
 
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4"><h3 class="font-bold text-xl text-brand-dark">Daftar Akun Pengguna</h3><button onclick="toggleFormTambahAkun()" class="bg-brand-neon hover:bg-brand-neonHover text-white px-4 py-2 rounded-xl font-medium shadow-sm transition flex items-center gap-2"><i class="fas fa-plus"></i> Tambah Akun</button></div>
-                    <div class="overflow-x-auto rounded-xl border border-gray-100"><table class="w-full text-left"><thead><tr><th>Username/NIK</th><th>Nama Pengguna</th><th>Role</th><th>Status & Login</th><th class="text-center">Aksi</th></tr></thead><tbody id="listAkun"></tbody></table></div>
+                    <div class="overflow-x-auto rounded-xl border border-gray-100"><table class="w-full text-left"><thead><tr><th>Username/NIK</th><th>Nama Pengguna</th><th>Password</th><th>Role</th><th>Status & Login</th><th class="text-center">Aksi</th></tr></thead><tbody id="listAkun"></tbody></table></div>
                 </div>
             </section>
 
@@ -940,6 +961,11 @@
                 title: "Layanan CAPD",
                 image: "2.jpg",
                 desc: "CAPD (Continuous Ambulatory Peritoneal Dialysis) menawarkan kebebasan dan fleksibilitas bagi Anda untuk melakukan proses dialisis secara mandiri di rumah maupun tempat kerja. RS Airan Raya siap memfasilitasi kebutuhan ini melalui pelatihan intensif bagi pasien dan keluarga, pendampingan medis yang suportif, serta monitoring berkala agar Anda tetap bisa beraktivitas secara produktif dengan kualitas kesehatan yang terjaga."
+            },
+            kualitas: {
+                title: "Kualitas Layanan Terstandar",
+                image: "2.jpg", 
+                desc: "Di RS Airan Raya, keselamatan dan adekuasi pasien adalah prioritas mutlak. Kami menerapkan protokol hemodialisis berstandar tinggi: kalibrasi mesin Fresenius & Nipro secara berkala, penggunaan dializer efisiensi tinggi (High-Flux) untuk bersihan toksin yang maksimal, serta pemantauan ketat rasio Kt/V di setiap sesi. Seluruh prosedur dikawal oleh perawat tersertifikasi dengan zero-infection protocol untuk menunjang perbaikan kualitas hidup pasien seutuhnya."
             }
         };
 
@@ -997,10 +1023,54 @@
             let userIndex = db.users.findIndex(u => u.username === currentUser.username);
             if (userIndex !== -1) {
                 db.users[userIndex].password = newPass;
-                saveData();
+                saveData('users');
                 alert('Password berhasil diubah!');
                 closeModalGantiPassword();
                 document.getElementById('formGantiPassword').reset();
+            }
+        }
+
+        // --- FITUR PREVIEW DOKUMEN ---
+        function openPreviewBerkas(id) {
+            let b = db.berkas.find(x => x.id === id);
+            if(!b) return;
+            document.getElementById('previewBerkasTitle').innerHTML = `<i class="fas fa-file-alt text-brand-blue"></i> ${b.name}`;
+            let modal = document.getElementById('previewBerkasModal');
+            let frame = document.getElementById('previewBerkasFrame');
+            let errBox = document.getElementById('previewBerkasError');
+            let dlBtn = document.getElementById('previewBerkasDownloadBtn');
+
+            if(b.type.includes('pdf') || b.type.includes('image')) {
+                frame.src = b.data;
+                frame.classList.remove('hidden');
+                errBox.classList.add('hidden');
+            } else {
+                frame.classList.add('hidden');
+                errBox.classList.remove('hidden');
+                dlBtn.href = b.data;
+                dlBtn.download = b.name;
+            }
+            modal.classList.remove('hidden');
+        }
+        function closePreviewBerkas() {
+            document.getElementById('previewBerkasModal').classList.add('hidden');
+            document.getElementById('previewBerkasFrame').src = '';
+        }
+
+        // --- FITUR VIEW PASSWORD ---
+        function togglePasswordView(btn) {
+            let span = btn.previousElementSibling;
+            let icon = btn.querySelector('i');
+            if (span.innerText === '••••••') {
+                span.innerText = span.getAttribute('data-password');
+                span.classList.remove('tracking-widest', 'text-lg', 'leading-none');
+                span.classList.add('font-mono', 'text-sm', 'text-gray-800', 'font-bold');
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                span.innerText = '••••••';
+                span.classList.remove('font-mono', 'text-sm', 'text-gray-800', 'font-bold');
+                span.classList.add('tracking-widest', 'text-lg', 'leading-none');
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
             }
         }
 
@@ -1023,7 +1093,6 @@
         
         const database = firebase.database();
 
-        // TAMBAHAN BERKAS ARRAY
         let db = { users: [], nurses: [], patients: [], schedules: [], sessions: [], lemburs: [], bedStatus: {}, photos: [], berkas: [] };
         let currentUser = JSON.parse(sessionStorage.getItem('rs_current_user')) || null;
         
@@ -1048,11 +1117,16 @@
         database.ref('rs_airan_raya').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
-                db.users = data.users || []; db.nurses = data.nurses || []; db.patients = data.patients || [];
-                db.schedules = data.schedules || []; db.sessions = data.sessions || []; db.lemburs = data.lemburs || []; 
-                db.bedStatus = data.bedStatus || getDefaultBedStatus();
-                db.photos = data.photos || [];
-                db.berkas = data.berkas || []; // Fetch berkas dokumen
+                // MODIFIKASI: Menggunakan Object.values agar array yang rusak bisa kembali menjadi format Array
+                db.users = data.users ? Object.values(data.users) : []; 
+                db.nurses = data.nurses ? Object.values(data.nurses) : []; 
+                db.patients = data.patients ? Object.values(data.patients) : [];
+                db.schedules = data.schedules ? Object.values(data.schedules) : []; 
+                db.sessions = data.sessions ? Object.values(data.sessions) : []; 
+                db.lemburs = data.lemburs ? Object.values(data.lemburs) : []; 
+                db.bedStatus = data.bedStatus ? data.bedStatus : getDefaultBedStatus();
+                db.photos = data.photos ? Object.values(data.photos) : [];
+                db.berkas = data.berkas ? Object.values(data.berkas) : []; 
 
                 let adminAcc = db.users.find(u => u.username === 'admin');
                 if (adminAcc && adminAcc.status === 'suspended') {
@@ -1091,12 +1165,21 @@
             renderDenahMesin(); 
         });
 
-        function saveData() {
+        // MODIFIKASI: saveData sekarang bisa menargetkan hanya satu tabel spesifik
+        function saveData(nodeToUpdate = null) {
             refreshUI(); 
             
             document.getElementById('server-status').innerHTML = '<i class="fas fa-sync fa-spin"></i> Menyimpan...';
             document.getElementById('server-status').className = 'text-yellow-400 flex items-center gap-1.5 font-medium';
-            database.ref('rs_airan_raya').set(db).then(() => {
+            
+            let request;
+            if (nodeToUpdate) {
+                request = database.ref(`rs_airan_raya/${nodeToUpdate}`).set(db[nodeToUpdate]);
+            } else {
+                request = database.ref('rs_airan_raya').set(db);
+            }
+
+            request.then(() => {
                 document.getElementById('server-status').innerHTML = '<i class="fas fa-check-circle"></i> Tersimpan';
                 document.getElementById('server-status').className = 'text-brand-neon flex items-center gap-1.5 font-medium';
             }).catch((error) => {
@@ -1151,7 +1234,7 @@
         function updateBedStatus(bedId, status) {
             if(!db.bedStatus) db.bedStatus = getDefaultBedStatus();
             db.bedStatus[bedId] = status;
-            saveData();
+            saveData('bedStatus');
         }
 
         function renderAdminStatusMesin() {
@@ -1413,19 +1496,6 @@
             doc.setFont("helvetica", "bold");
             doc.text("Ns.Indah Pralistiawati, S.Kep.", 155, startY + 50, {align: 'center'});
 
-            let row2Y = startY + 65;
-            doc.setFont("helvetica", "normal");
-            doc.text("Menyetujui,", 55, row2Y, {align: 'center'});
-            doc.text("Kabid Pelayanan Medis", 55, row2Y + 5, {align: 'center'});
-            doc.setFont("helvetica", "bold");
-            doc.text("dr. Titi Multi Sari, M.M", 55, row2Y + 30, {align: 'center'});
-
-            doc.setFont("helvetica", "normal");
-            doc.text("Menyetujui,", 155, row2Y, {align: 'center'});
-            doc.text("Kabag Umum, SDM dan Keuangan", 155, row2Y + 5, {align: 'center'});
-            doc.setFont("helvetica", "bold");
-            doc.text("dr. Chinta Ariestassia, MMRS", 155, row2Y + 30, {align: 'center'});
-
             doc.save(`Surat_Perintah_Lembur_${namaBulan}.pdf`);
         }
 
@@ -1465,11 +1535,11 @@
                 } else { 
                     alert(`Password salah! Sisa percobaan: ${3 - foundUser.attempts}`); 
                 } 
-                saveData(); 
+                saveData('users'); 
                 return; 
             }
             foundUser.attempts = 0; 
-            saveData(); 
+            saveData('users'); 
             currentUser = { username: foundUser.username, nama: foundUser.nama, role: foundUser.role }; 
             sessionStorage.setItem('rs_current_user', JSON.stringify(currentUser)); 
             document.getElementById('formLogin').reset(); 
@@ -1527,7 +1597,7 @@
                 db.lemburs.push(data); 
             } 
             resetFormLembur(); 
-            saveData(); 
+            saveData('lemburs'); 
             
             openModalMotivasi();
         }
@@ -1557,18 +1627,18 @@
                 db.lemburs[index].selesai = document.getElementById('editLmbSelesai').value;
                 db.lemburs[index].durasi = document.getElementById('editLmbDurasi').value;
                 db.lemburs[index].ket = document.getElementById('editLmbKet').value;
-                saveData();
+                saveData('lemburs');
                 closeModalEditLembur();
                 alert('Data Lembur Berhasil Diperbarui!');
             }
         }
         
-        function hapusLembur(id) { if(confirm('Yakin hapus data lembur ini?')) { db.lemburs = db.lemburs.filter(x => x.id !== id); saveData(); } }
+        function hapusLembur(id) { if(confirm('Yakin hapus data lembur ini?')) { db.lemburs = db.lemburs.filter(x => x.id !== id); saveData('lemburs'); } }
         function resetFormLembur() { document.getElementById('formLembur').reset(); document.getElementById('lmbId').value = ''; document.getElementById('lmbTgl').value = today; $('#lmbPerawat').val(null).trigger('change'); }
 
         // --- MANAJEMEN AKUN (MODAL) ---
         function toggleFormTambahAkun() { let container = document.getElementById('formTambahAkunContainer'); if(container.classList.contains('hidden')) { container.classList.remove('hidden'); document.getElementById('formTambahAkun').reset(); window.scrollTo(0, 0); } else { container.classList.add('hidden'); } }
-        function saveTambahAkun(e) { e.preventDefault(); let username = document.getElementById('tambahUsername').value; let nama = document.getElementById('tambahNama').value; let pass = document.getElementById('tambahPassword').value; let role = document.getElementById('tambahRole').value; if (db.users.find(u => u.username === username)) return alert('Username sudah terdaftar!'); db.users.push({ username: username, password: pass, nama: nama, role: role, status: 'active', attempts: 0 }); saveData(); toggleFormTambahAkun(); alert('Akun ditambahkan!'); }
+        function saveTambahAkun(e) { e.preventDefault(); let username = document.getElementById('tambahUsername').value; let nama = document.getElementById('tambahNama').value; let pass = document.getElementById('tambahPassword').value; let role = document.getElementById('tambahRole').value; if (db.users.find(u => u.username === username)) return alert('Username sudah terdaftar!'); db.users.push({ username: username, password: pass, nama: nama, role: role, status: 'active', attempts: 0 }); saveData('users'); toggleFormTambahAkun(); alert('Akun ditambahkan!'); }
         
         function setEditAkun(username) { 
             let u = db.users.find(x => x.username === username); 
@@ -1597,16 +1667,16 @@
                     sessionStorage.setItem('rs_current_user', JSON.stringify(currentUser)); 
                     applyRoleUI(); 
                 } 
-                saveData(); 
+                saveData('users'); 
                 closeModalEditAkun(); 
                 alert('Akun di-update!'); 
             } 
         }
-        function hapusAkun(username) { if(username === currentUser.username) return alert('Tidak bisa menghapus akun sendiri!'); if(confirm(`Yakin hapus akun "${username}"?`)) { db.users = db.users.filter(x => x.username !== username); saveData(); } }
-        function aktifkanAkun(username) { let u = db.users.find(x => x.username === username); if(u && confirm(`Aktifkan akun "${username}"?`)) { u.status = 'active'; u.attempts = 0; saveData(); alert(`Akun diaktifkan!`); } }
+        function hapusAkun(username) { if(username === currentUser.username) return alert('Tidak bisa menghapus akun sendiri!'); if(confirm(`Yakin hapus akun "${username}"?`)) { db.users = db.users.filter(x => x.username !== username); saveData('users'); } }
+        function aktifkanAkun(username) { let u = db.users.find(x => x.username === username); if(u && confirm(`Aktifkan akun "${username}"?`)) { u.status = 'active'; u.attempts = 0; saveData('users'); alert(`Akun diaktifkan!`); } }
 
         // --- MANAJEMEN PEGAWAI (MODAL) ---
-        function savePerawat(e) { e.preventDefault(); let data = { nama: document.getElementById('prwNama').value, nik: document.getElementById('prwNik').value, jabatan: document.getElementById('prwJabatan').value, pendidikan: document.getElementById('prwPendidikan').value }; data.id = Date.now().toString(); db.nurses.push(data); resetFormPerawat(); saveData(); alert('Pegawai baru ditambahkan!'); }
+        function savePerawat(e) { e.preventDefault(); let data = { nama: document.getElementById('prwNama').value, nik: document.getElementById('prwNik').value, jabatan: document.getElementById('prwJabatan').value, pendidikan: document.getElementById('prwPendidikan').value }; data.id = Date.now().toString(); db.nurses.push(data); resetFormPerawat(); saveData('nurses'); alert('Pegawai baru ditambahkan!'); }
         
         function editPerawat(id) { 
             let p = db.nurses.find(x => x.id === id); 
@@ -1632,12 +1702,12 @@
             let index = db.nurses.findIndex(x => x.id === id); 
             if(index !== -1) { 
                 db.nurses[index] = { ...db.nurses[index], ...data }; 
-                saveData(); 
+                saveData('nurses'); 
                 closeModalEditPerawat();
                 alert('Data Pegawai Berhasil Diperbarui!'); 
             } 
         }
-        function hapusPerawat(id) { if(confirm('Yakin hapus?')) { db.nurses = db.nurses.filter(x => x.id !== id); saveData(); } }
+        function hapusPerawat(id) { if(confirm('Yakin hapus?')) { db.nurses = db.nurses.filter(x => x.id !== id); saveData('nurses'); } }
         function resetFormPerawat() { document.getElementById('formPerawat').reset(); }
         
         // --- MANAJEMEN PASIEN (MODAL) ---
@@ -1661,7 +1731,7 @@
             data.id = Date.now().toString(); 
             db.patients.push(data); 
             resetFormPasien(); 
-            saveData(); 
+            saveData('patients'); 
             alert('Pasien baru ditambahkan!'); 
         }
         
@@ -1708,12 +1778,12 @@
             let index = db.patients.findIndex(x => x.id === id); 
             if(index !== -1) {
                 db.patients[index] = { ...db.patients[index], ...data }; 
-                saveData(); 
+                saveData('patients'); 
                 closeModalEditPasien();
                 alert('Data Pasien Diperbarui!'); 
             }
         }
-        function hapusPasien(id) { if(confirm('Yakin hapus?')) { db.patients = db.patients.filter(x => x.id !== id); saveData(); } }
+        function hapusPasien(id) { if(confirm('Yakin hapus?')) { db.patients = db.patients.filter(x => x.id !== id); saveData('patients'); } }
         function resetFormPasien() { document.getElementById('formPasien').reset(); document.getElementById('psnId').value = ''; }
 
         // --- MANAJEMEN JADWAL (MODAL) ---
@@ -1729,7 +1799,7 @@
             } 
             jadwal.id = Date.now().toString() + Math.floor(Math.random()*1000); 
             db.schedules.push(jadwal); 
-            resetFormJadwal(); saveData(); 
+            resetFormJadwal(); saveData('schedules'); 
             alert('Plot Jadwal ditambahkan!');
         }
         function resetFormJadwal() { document.getElementById('formJadwal').reset(); $('#jdwPasien').val('').trigger('change.select2'); toggleManualInput(); }
@@ -1790,19 +1860,19 @@
             let index = db.schedules.findIndex(x => x.id === id); 
             if(index !== -1) {
                 db.schedules[index] = { ...db.schedules[index], ...jadwal }; 
-                saveData(); 
+                saveData('schedules'); 
                 closeModalEditJadwal();
                 alert("Data Jadwal Diperbarui!");
             }
         }
-        function updateStatusJadwal(id, selectElement) { let jdw = db.schedules.find(x => x.id === id); if(jdw) { jdw.status = selectElement.value; saveData(); } }
-        function hapusJadwal(id) { if(confirm('Yakin hapus?')) { db.schedules = db.schedules.filter(x => x.id !== id); saveData(); } }
+        function updateStatusJadwal(id, selectElement) { let jdw = db.schedules.find(x => x.id === id); if(jdw) { jdw.status = selectElement.value; saveData('schedules'); } }
+        function hapusJadwal(id) { if(confirm('Yakin hapus?')) { db.schedules = db.schedules.filter(x => x.id !== id); saveData('schedules'); } }
 
         function setModeSesi(mode) { document.getElementById('sesiTipeInput').value = mode; if (mode === 'master') { document.getElementById('btnSesiMaster').className = "flex-1 sm:flex-none bg-brand-blue text-white px-6 py-2.5 rounded-lg font-semibold transition shadow-md border-2 border-brand-blue"; document.getElementById('btnSesiManual').className = "flex-1 sm:flex-none bg-white text-gray-600 px-6 py-2.5 rounded-lg font-semibold transition hover:bg-gray-50 border-2 border-gray-200"; } else { document.getElementById('btnSesiManual').className = "flex-1 sm:flex-none bg-brand-blue text-white px-6 py-2.5 rounded-lg font-semibold transition shadow-md border-2 border-brand-blue"; document.getElementById('btnSesiMaster').className = "flex-1 sm:flex-none bg-white text-gray-600 px-6 py-2.5 rounded-lg font-semibold transition hover:bg-gray-50 border-2 border-gray-200"; } toggleSesiInput(); }
         function toggleSesiInput() { let tipe = document.getElementById('sesiTipeInput').value; if (tipe === 'manual') { document.getElementById('wrapSesiMaster').classList.add('hidden'); document.getElementById('wrapSesiManual').classList.remove('hidden'); document.getElementById('sesiPasien').removeAttribute('required'); document.getElementById('sesiNamaManual').setAttribute('required', 'true'); document.getElementById('sesiRmManual').setAttribute('required', 'true'); document.getElementById('sesiV').value = ''; } else { document.getElementById('wrapSesiMaster').classList.remove('hidden'); document.getElementById('wrapSesiManual').classList.add('hidden'); document.getElementById('sesiPasien').setAttribute('required', 'true'); document.getElementById('sesiNamaManual').removeAttribute('required'); document.getElementById('sesiRmManual').removeAttribute('required'); } }
         function autoFillSesi() { let tipe = document.getElementById('sesiTipeInput').value; if (tipe === 'manual') return; let pId = document.getElementById('sesiPasien').value; if(pId && pId.startsWith('manual_')) { let sId = pId.replace('manual_', ''); let j = db.schedules.find(x => x.id === sId); if(j) { document.getElementById('sesiRm').value = j.rm; let ket = j.keterangan ? ` - ${j.keterangan}` : ''; document.getElementById('sesiRiwayat').value = "Rawat Inap (" + j.asal + ")" + ket; document.getElementById('sesiBbKering').value = "-"; document.getElementById('sesiTgl').value = today; document.getElementById('sesiAkses').value = j.akses || 'Cimino'; } } else { let p = db.patients.find(x => x.id === pId); if(p) { document.getElementById('sesiRm').value = p.rm; document.getElementById('sesiRiwayat').value = p.diag; document.getElementById('sesiBbKering').value = p.bb; document.getElementById('sesiTgl').value = today; let j = db.schedules.find(x => x.patientId === pId && x.date === today); if(j && j.mesin && j.mesin !== 'Rawat Inap') document.getElementById('sesiMesin').value = j.mesin; } else { ['sesiRm', 'sesiRiwayat', 'sesiBbKering'].forEach(id => document.getElementById(id).value = ''); } } calculateKtv(); }
-        function saveSesi(e) { e.preventDefault(); let id = document.getElementById('sesiId').value; let hasilKtv = document.getElementById('sesiKtv').value; let catatanManual = document.getElementById('sesiCatatan').value; let catatanFinal = hasilKtv ? (catatanManual ? `${catatanManual} | Info: Est Kt/V = ${hasilKtv}` : `Info: Est Kt/V = ${hasilKtv}`) : catatanManual; let data = { tgl: document.getElementById('sesiTgl').value, mesin: document.getElementById('sesiMesin').value, jenis: document.getElementById('sesiJenis').value, waktu: document.getElementById('sesiWaktu').value, pre: document.getElementById('sesiPre').value, post: document.getElementById('sesiPost').value, uf: document.getElementById('sesiUf').value, qb: document.getElementById('sesiQb').value, qd: document.getElementById('sesiQd').value, clearance: document.getElementById('sesiClearance').value, v: document.getElementById('sesiV').value, ktv: hasilKtv, akses: document.getElementById('sesiAkses').value, heparin: document.getElementById('sesiHeparin').value, catatan: catatanFinal }; let tipeInput = document.getElementById('sesiTipeInput').value; if (tipeInput === 'manual') { data.isManualSesi = true; data.namaManual = document.getElementById('sesiNamaManual').value; data.rmManual = document.getElementById('sesiRmManual').value; data.asalManual = document.getElementById('sesiAsalManual').value; data.patientId = 'manual_direct_' + Date.now(); } else { data.isManualSesi = false; data.patientId = document.getElementById('sesiPasien').value; } if(id) { let index = db.sessions.findIndex(x => x.id === id); if(index !== -1) db.sessions[index] = { ...db.sessions[index], ...data }; } else { data.id = Date.now().toString() + Math.floor(Math.random()*1000); db.sessions.push(data); } resetFormSesi(); saveData(); alert('Disimpan!'); }
-        function hapusSesi(id) { if(confirm('Yakin hapus?')) { db.sessions = db.sessions.filter(x => x.id !== id); saveData(); } }
+        function saveSesi(e) { e.preventDefault(); let id = document.getElementById('sesiId').value; let hasilKtv = document.getElementById('sesiKtv').value; let catatanManual = document.getElementById('sesiCatatan').value; let catatanFinal = hasilKtv ? (catatanManual ? `${catatanManual} | Info: Est Kt/V = ${hasilKtv}` : `Info: Est Kt/V = ${hasilKtv}`) : catatanManual; let data = { tgl: document.getElementById('sesiTgl').value, mesin: document.getElementById('sesiMesin').value, jenis: document.getElementById('sesiJenis').value, waktu: document.getElementById('sesiWaktu').value, pre: document.getElementById('sesiPre').value, post: document.getElementById('sesiPost').value, uf: document.getElementById('sesiUf').value, qb: document.getElementById('sesiQb').value, qd: document.getElementById('sesiQd').value, clearance: document.getElementById('sesiClearance').value, v: document.getElementById('sesiV').value, ktv: hasilKtv, akses: document.getElementById('sesiAkses').value, heparin: document.getElementById('sesiHeparin').value, catatan: catatanFinal }; let tipeInput = document.getElementById('sesiTipeInput').value; if (tipeInput === 'manual') { data.isManualSesi = true; data.namaManual = document.getElementById('sesiNamaManual').value; data.rmManual = document.getElementById('sesiRmManual').value; data.asalManual = document.getElementById('sesiAsalManual').value; data.patientId = 'manual_direct_' + Date.now(); } else { data.isManualSesi = false; data.patientId = document.getElementById('sesiPasien').value; } if(id) { let index = db.sessions.findIndex(x => x.id === id); if(index !== -1) db.sessions[index] = { ...db.sessions[index], ...data }; } else { data.id = Date.now().toString() + Math.floor(Math.random()*1000); db.sessions.push(data); } resetFormSesi(); saveData('sessions'); alert('Disimpan!'); }
+        function hapusSesi(id) { if(confirm('Yakin hapus?')) { db.sessions = db.sessions.filter(x => x.id !== id); saveData('sessions'); } }
         function resetFormSesi() { document.getElementById('formSesi').reset(); document.getElementById('sesiId').value = ''; $('#sesiPasien').val('').trigger('change.select2'); setModeSesi('master'); }
 
         // --- FITUR GALERI FOTO (KHUSUS ADMIN & KATIM) ---
@@ -1840,7 +1910,7 @@
                     img.src = event.target.result;
                     img.onload = function() {
                         let canvas = document.createElement('canvas');
-                        let max_size = 1920; // RESOLUSI DITINGKATKAN KE HD
+                        let max_size = 1920; 
                         let width = img.width;
                         let height = img.height;
 
@@ -1855,7 +1925,7 @@
                         let ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
                         
-                        let dataUrl = canvas.toDataURL('image/jpeg', 0.9); // KUALITAS GAMBAR 90%
+                        let dataUrl = canvas.toDataURL('image/jpeg', 0.9); 
                         db.photos.push({ id: 'img_' + Date.now() + Math.floor(Math.random()*1000), data: dataUrl, name: file.name });
                         
                         processedCount++;
@@ -1863,7 +1933,7 @@
                             document.getElementById('loading-data').style.display = 'none';
                             document.querySelector('#loading-data p').innerText = 'Menyinkronkan Data...';
                             document.getElementById('photoInput').value = ''; 
-                            saveData(); 
+                            saveData('photos'); 
                         }
                     }
                 }
@@ -1877,7 +1947,7 @@
                 let newTitle = prompt("Masukkan judul baru untuk foto ini:", photo.name);
                 if(newTitle !== null && newTitle.trim() !== "") {
                     photo.name = newTitle.trim();
-                    saveData();
+                    saveData('photos');
                 }
             }
         }
@@ -1886,7 +1956,7 @@
             if (!currentUser || (currentUser.role !== 'Admin' && currentUser.role !== 'Ka Tim')) return;
             if(confirm('Hapus foto ini dari galeri?')) {
                 db.photos = db.photos.filter(p => p.id !== id);
-                saveData();
+                saveData('photos');
             }
         }
 
@@ -1950,7 +2020,7 @@
             document.getElementById('loading-data').style.display = 'flex';
             document.querySelector('#loading-data p').innerText = 'Mengunggah Dokumen...';
 
-            let file = files[0]; // Ambil 1 file saja untuk keamanan memori
+            let file = files[0]; 
             let reader = new FileReader();
             
             if(file.size > 5 * 1024 * 1024) {
@@ -1971,7 +2041,7 @@
                 
                 document.getElementById('loading-data').style.display = 'none';
                 document.getElementById('berkasInput').value = ''; 
-                saveData();
+                saveData('berkas');
             };
             reader.onerror = function(error) {
                 alert("Gagal membaca file!");
@@ -1997,6 +2067,7 @@
                 else if (b.type.includes('excel') || b.type.includes('spreadsheet') || b.name.endsWith('.xls') || b.name.endsWith('.xlsx')) icon = 'fa-file-excel text-emerald-500';
 
                 let actionBtns = `
+                    <button onclick="openPreviewBerkas('${b.id}')" class="text-emerald-600 bg-emerald-50 hover:bg-emerald-100 p-2 rounded-lg mr-2 transition inline-flex" title="Preview"><i class="fas fa-eye"></i></button>
                     <a href="${b.data}" download="${b.name}" class="text-brand-blue bg-blue-50 hover:bg-blue-100 p-2 rounded-lg mr-2 transition inline-flex" title="Download"><i class="fas fa-download"></i></a>
                 `;
                 if (isAdminOrKaTim) {
@@ -2018,7 +2089,7 @@
         function hapusBerkas(id) {
             if (confirm('Yakin ingin menghapus dokumen ini?')) {
                 db.berkas = db.berkas.filter(x => x.id !== id);
-                saveData();
+                saveData('berkas');
             }
         }
 
@@ -2027,7 +2098,7 @@
             if (!currentUser || !db.users) return;
             
             renderPhotos();
-            renderBerkas(); // Render Berkas
+            renderBerkas(); 
             renderAdminStatusMesin();
             renderDenahMesin();
 
@@ -2038,7 +2109,13 @@
                 let actionBtns = `<button onclick="setEditAkun('${u.username}')" class="text-brand-blue bg-blue-50 hover:bg-blue-100 p-2 rounded-lg mr-2 transition"><i class="fas fa-edit"></i></button>`;
                 if (u.status === 'suspended') actionBtns += `<button onclick="aktifkanAkun('${u.username}')" class="text-emerald-600 bg-emerald-50 hover:bg-emerald-100 p-2 rounded-lg mr-2 transition"><i class="fas fa-unlock"></i></button>`;
                 if (u.username !== currentUser.username) actionBtns += `<button onclick="hapusAkun('${u.username}')" class="text-rose-500 bg-rose-50 hover:bg-rose-100 p-2 rounded-lg transition"><i class="fas fa-trash"></i></button>`;
-                return `<tr><td class="p-4 font-semibold text-gray-800">${u.username}</td><td class="p-4">${u.nama}</td><td class="p-4"><span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs font-medium">${u.role}</span></td><td class="p-4">${st} <div class="text-[10px] text-gray-400 mt-1.5"><i class="fas fa-shield-alt"></i> ${att}</div></td><td class="p-4 text-center">${actionBtns}</td></tr>`;
+                
+                let passDisplay = `<div class="flex items-center gap-2">
+                    <span class="text-gray-400 select-none tracking-widest text-lg leading-none" data-password="${u.password}">••••••</span>
+                    <button onclick="togglePasswordView(this)" class="text-gray-400 hover:text-brand-blue transition"><i class="fas fa-eye"></i></button>
+                </div>`;
+
+                return `<tr><td class="p-4 font-semibold text-gray-800">${u.username}</td><td class="p-4">${u.nama}</td><td class="p-4">${passDisplay}</td><td class="p-4"><span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs font-medium">${u.role}</span></td><td class="p-4">${st} <div class="text-[10px] text-gray-400 mt-1.5"><i class="fas fa-shield-alt"></i> ${att}</div></td><td class="p-4 text-center">${actionBtns}</td></tr>`;
             }).join('');
 
             // Pegawai PJ
