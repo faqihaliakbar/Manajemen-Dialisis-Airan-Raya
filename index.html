@@ -1454,7 +1454,8 @@
                 let pNama = db.nurses.find(x => x.id === pId)?.nama || 'Unknown';
                 let dataLembur = groupedLembur[pId];
 
-                if (startY > 240) { doc.addPage(); startY = 20; }
+                // Mengurangi batas bawah agar tabel tidak mudah dipisah ke halaman baru
+                if (startY > 265) { doc.addPage(); startY = 20; }
 
                 const tableColumn = ["NO", "NAMA PEGAWAI", "TANGGAL", "JAM MULAI", "JAM SELESAI", "TOTAL (JAM)", "KEPERLUAN"];
                 let tableRows = [];
@@ -1505,10 +1506,12 @@
                     }
                 });
 
-                startY = doc.lastAutoTable.finalY + 12; 
+                // Jarak antar tabel dikurangi menjadi 8 agar lebih rapat (sebelumnya 12)
+                startY = doc.lastAutoTable.finalY + 8; 
             }
 
-            if (startY > 200) { doc.addPage(); startY = 20; }
+            // Mengecek apakah ruang untuk tanda tangan cukup (butuh sekitar 80mm)
+            if (startY > 195) { doc.addPage(); startY = 20; }
 
             doc.setFontSize(10);
             doc.setTextColor(0,0,0);
@@ -1519,16 +1522,34 @@
 
             doc.text(strDate, 155, startY + 12, {align: 'center'});
 
+            // --- BARIS 1: Kiri ---
+            doc.setFont("helvetica", "normal");
             doc.text("Mengetahui,", 55, startY + 20, {align: 'center'});
             doc.text("Kasie / Kasubag", 55, startY + 25, {align: 'center'});
             doc.setFont("helvetica", "bold");
-            doc.text("Ns.Forna Apriyani.S.Kep", 55, startY + 50, {align: 'center'});
+            doc.text("Ns.Forna Apriyani.S.Kep", 55, startY + 45, {align: 'center'});
 
+            // --- BARIS 1: Kanan ---
             doc.setFont("helvetica", "normal");
             doc.text("Dibuat Oleh,", 155, startY + 20, {align: 'center'});
             doc.text("Karu / Kaur / PJ", 155, startY + 25, {align: 'center'});
             doc.setFont("helvetica", "bold");
-            doc.text("Ns.Indah Pralistiawati, S.Kep.", 155, startY + 50, {align: 'center'});
+            doc.text("Ns.Indah Pralistiawati, S.Kep.", 155, startY + 45, {align: 'center'});
+
+            // --- BARIS 2: Kiri ---
+            doc.setFont("helvetica", "normal");
+            // Jarak baris kedua dirapatkan dari +65 ke +60
+            doc.text("Menyetujui,", 55, startY + 60, {align: 'center'});
+            doc.text("Kabid Pelayanan Medis", 55, startY + 65, {align: 'center'});
+            doc.setFont("helvetica", "bold");
+            doc.text("dr. Titi Multi Sari, M.M", 55, startY + 85, {align: 'center'});
+
+            // --- BARIS 2: Kanan ---
+            doc.setFont("helvetica", "normal");
+            doc.text("Menyetujui,", 155, startY + 60, {align: 'center'});
+            doc.text("Kabag Umum, SDM dan Keuangan", 155, startY + 65, {align: 'center'});
+            doc.setFont("helvetica", "bold");
+            doc.text("dr. Chinta Ariestassia, MMRS", 155, startY + 85, {align: 'center'});
 
             doc.save(`Surat_Perintah_Lembur_${namaBulan}.pdf`);
         }
