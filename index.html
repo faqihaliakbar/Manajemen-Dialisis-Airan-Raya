@@ -104,6 +104,39 @@
 
     <img id="logoPdfLembur" src="11.png" style="display:none;" crossorigin="anonymous">
 
+    <div id="modalAuthExportCodeBlue" class="fixed inset-0 bg-black/70 z-[10000] hidden items-center justify-center backdrop-blur-sm px-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-emerald-100 overflow-hidden">
+            <div class="bg-gradient-to-r from-brand-dark to-emerald-700 px-6 py-5 text-white flex items-center justify-between">
+                <div>
+                    <h3 class="font-bold text-lg flex items-center gap-2"><i class="fas fa-user-shield"></i> Verifikasi Admin</h3>
+                    <p class="text-xs text-emerald-100 mt-1">Masukkan akun Admin untuk export Buku Lembur Code Blue.</p>
+                </div>
+                <button type="button" onclick="closeAuthExportCodeBlue()" class="text-white/80 hover:text-white text-xl"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="formAuthExportCodeBlue" onsubmit="authorizeExportCodeBlue(event)" class="p-6 space-y-4">
+                <div>
+                    <label>Username Admin</label>
+                    <input type="text" id="exportCBUsername" autocomplete="username" placeholder="Masukkan username admin" required>
+                </div>
+                <div>
+                    <label>Sandi / Password</label>
+                    <div class="relative">
+                        <input type="password" id="exportCBPassword" autocomplete="current-password" placeholder="Masukkan password admin" required class="pr-12">
+                        <button type="button" onclick="toggleExportCBPassword()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-brand-dark"><i id="iconExportCBPassword" class="fas fa-eye"></i></button>
+                    </div>
+                </div>
+                <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-3 text-xs text-emerald-800">
+                    <i class="fas fa-info-circle mr-1"></i> Hanya pengguna dengan hak akses <b>Admin</b> yang dapat melakukan export.
+                </div>
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="closeAuthExportCodeBlue()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-xl font-semibold">Batal</button>
+                    <button type="submit" class="flex-1 bg-brand-dark hover:bg-emerald-800 text-white px-4 py-2.5 rounded-xl font-semibold flex items-center justify-center gap-2"><i class="fas fa-file-pdf"></i> Verifikasi & Export</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
     <div id="modalEditAkun" class="fixed inset-0 bg-black/60 z-[100] hidden flex items-center justify-center backdrop-blur-sm transition-opacity">
         <div class="bg-white rounded-2xl shadow-2xl p-6 md:p-8 w-[600px] max-w-[95%] border border-blue-100">
             <div class="flex justify-between items-center mb-6 border-b pb-3">
@@ -483,6 +516,48 @@
         </div>
     </div>
 
+    <!-- MODAL INPUTAN LEMBUR CODE BLUE -->
+    <div id="modalLemburCodeBlue" class="fixed inset-0 bg-black/70 z-[10000] hidden flex items-center justify-center backdrop-blur-sm transition-opacity overflow-y-auto p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-[850px] max-w-[96%] max-h-[92vh] overflow-y-auto border border-emerald-100">
+            <div class="sticky top-0 z-10 bg-gradient-to-r from-brand-dark to-brand-blue text-white px-6 py-5 flex justify-between items-center rounded-t-2xl">
+                <div>
+                    <h3 class="font-bold text-xl flex items-center gap-2"><i class="fas fa-clock text-lime-300"></i> INPUTAN LEMBUR CODE BLUE</h3>
+                    <p class="text-xs text-white/80 mt-1">Form input lembur Code Blue dengan format yang sama seperti Buku Lembur HD</p>
+                </div>
+                <button type="button" onclick="closeLemburCodeBlue()" class="text-white/80 hover:text-white text-2xl transition"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div class="p-6 md:p-8">
+                <form id="formLemburCodeBlue" onsubmit="saveLemburCodeBlue(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <input type="hidden" id="cbLmbId">
+                    <div><label>Tanggal Lembur</label><input type="date" id="cbLmbTgl" required></div>
+                    <div><label>Nama Pegawai</label><select id="cbLmbPerawat" required class="w-full"></select></div>
+                    <div><label>Jam Mulai</label><input type="time" id="cbLmbMulai" required onchange="hitungDurasiLemburCodeBlue()"></div>
+                    <div><label>Jam Selesai</label><input type="time" id="cbLmbSelesai" required onchange="hitungDurasiLemburCodeBlue()"></div>
+                    <div><label class="text-brand-blue">Total Durasi (Jam)</label><input type="number" step="any" id="cbLmbDurasi" required class="bg-blue-50/50 border-blue-200 font-bold text-blue-800" readonly placeholder="Otomatis"></div>
+                    <div class="md:col-span-2"><label>Keterangan / Tugas Pokok</label><input type="text" id="cbLmbKet" required placeholder="Contoh: Pelaksanaan simulasi Code Blue / Penanganan Code Blue"></div>
+                    <div class="md:col-span-2 flex justify-end gap-3 mt-2 border-t pt-6">
+                        <button type="button" onclick="resetFormLemburCodeBlue()" class="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 font-medium transition">Batal</button>
+                        <button type="submit" class="bg-brand-blue hover:bg-blue-800 text-white px-6 py-2.5 rounded-xl shadow-md font-medium transition flex items-center gap-2"><i class="fas fa-save"></i> Simpan Lembur Code Blue</button>
+                    </div>
+                </form>
+
+                <div class="mt-8 border-t pt-6">
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                        <h4 class="font-bold text-lg text-brand-dark"><i class="fas fa-list text-brand-neon mr-2"></i>Data Lembur Code Blue</h4>
+                        <button type="button" onclick="openAuthExportCodeBlue()" class="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2.5 rounded-xl font-medium shadow-sm transition flex items-center gap-2"><i class="fas fa-file-pdf"></i> Export Buku Lembur</button>
+                    </div>
+                    <div class="overflow-x-auto rounded-xl border border-gray-100">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-gray-50"><tr><th class="p-3">No</th><th class="p-3">Tanggal</th><th class="p-3">Nama Pegawai</th><th class="p-3">Jam</th><th class="p-3">Durasi</th><th class="p-3">Keterangan</th><th class="p-3 text-center">Aksi</th></tr></thead>
+                            <tbody id="listLemburCodeBlue"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="auth-overlay" class="fixed inset-0 z-50 flex flex-col justify-between bg-cover bg-center overflow-y-auto" style="background-image: linear-gradient(rgba(6, 78, 59, 0.8), rgba(14, 165, 233, 0.7)), url('RUMAH-SAKIT-AIRAN-RAYA-MEDICASTORE (1).jpg');">
         <div class="w-full max-w-7xl mx-auto pt-2 z-20 relative">
             <div class="flex justify-between items-center px-6 md:px-10 py-2 text-white/90 text-xs">
@@ -502,6 +577,10 @@
                 </div>
                 <div class="hidden lg:flex items-center gap-6 text-xs font-bold text-gray-600 tracking-wide">
                     <a href="#" class="text-brand-neon">HOME</a>
+                    <span class="text-gray-300">|</span>
+                    <a href="javascript:void(0)" onclick="openLemburCodeBlue()" class="hover:text-brand-neon transition flex items-center gap-1 text-rose-600">
+                        <i class="fas fa-user-clock text-[11px]"></i> INPUTAN LEMBUR CODE BLUE
+                    </a>
                     <span class="text-gray-300">|</span>
                     
                     <div class="relative group">
@@ -589,6 +668,7 @@
                         </div>
                         <button type="submit" class="w-full bg-[#a3e635] hover:bg-[#84cc16] text-brand-dark text-lg font-extrabold py-3.5 rounded-xl transition-all shadow-[0_0_15px_rgba(163,230,53,0.5)] hover:-translate-y-0.5 mt-4">LOG IN</button>
                     </form>
+
                 </div>
             </div>
 
@@ -755,7 +835,7 @@
                             </div>
                         </div>
 
-                        <div id="menu-perawat" onclick="switchPage('perawat', null)" class="dash-menu-card bg-white p-4 rounded-2xl border border-gray-200 cursor-pointer flex items-center gap-4 group hover:border-brand-neon hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all relative overflow-hidden">
+                        <div id="menu-perawat" onclick="switchPage('perawatChoice', null)" class="dash-menu-card bg-white p-4 rounded-2xl border border-gray-200 cursor-pointer flex items-center gap-4 group hover:border-brand-neon hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all relative overflow-hidden">
                             <div class="absolute -right-2 -bottom-4 opacity-5 group-hover:opacity-10 transition-transform transform group-hover:scale-110 duration-500"><i class="fas fa-id-badge text-6xl text-teal-500"></i></div>
                             <div class="w-12 h-12 bg-teal-50 rounded-xl flex items-center justify-center shrink-0 border border-teal-100 group-hover:bg-teal-500 group-hover:shadow-lg group-hover:shadow-teal-500/30 transition-all z-10">
                                 <i class="fas fa-id-badge text-xl text-teal-600 group-hover:text-white transition-colors"></i>
@@ -853,36 +933,80 @@
                 </div>
             </section>
 
+            <section id="perawatChoice" class="page-section">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
+                    <div class="text-center mb-8">
+                        <div class="w-16 h-16 mx-auto bg-teal-50 rounded-2xl flex items-center justify-center border border-teal-100 mb-4">
+                            <i class="fas fa-id-badge text-3xl text-teal-600"></i>
+                        </div>
+                        <h3 class="font-bold text-2xl text-brand-dark">Data Pegawai</h3>
+                        <p class="text-sm text-gray-500 mt-2">Pilih kelompok data pegawai yang ingin dikelola.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                        <button type="button" onclick="switchPage('perawat', null)" class="text-left bg-white border-2 border-blue-100 hover:border-brand-blue rounded-2xl p-6 transition-all hover:shadow-lg group">
+                            <div class="flex items-center gap-5">
+                                <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center group-hover:bg-brand-blue transition-colors">
+                                    <i class="fas fa-user-nurse text-2xl text-brand-blue group-hover:text-white"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg text-gray-800 group-hover:text-brand-blue">Data Pegawai Dialisis</h4>
+                                    <p class="text-sm text-gray-500 mt-1">Kelola data pegawai/perawat Unit Dialisis.</p>
+                                </div>
+                            </div>
+                        </button>
+                        <button type="button" onclick="switchPage('perawatCodeBlue', null)" class="text-left bg-white border-2 border-rose-100 hover:border-rose-500 rounded-2xl p-6 transition-all hover:shadow-lg group">
+                            <div class="flex items-center gap-5">
+                                <div class="w-14 h-14 bg-rose-50 rounded-2xl flex items-center justify-center group-hover:bg-rose-500 transition-colors">
+                                    <i class="fas fa-heartbeat text-2xl text-rose-500 group-hover:text-white"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg text-gray-800 group-hover:text-rose-600">Data Pegawai Code Blue</h4>
+                                    <p class="text-sm text-gray-500 mt-1">Kelola daftar khusus petugas Code Blue.</p>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
             <section id="perawat" class="page-section">
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
-                    <h3 class="font-bold text-xl mb-6 text-brand-dark border-b border-gray-100 pb-3">Form Data Pegawai Dialisis</h3>
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                        <div><h3 class="font-bold text-xl text-brand-dark">Form Data Pegawai Dialisis</h3><p class="text-sm text-gray-500 mt-1">Data pegawai Unit Dialisis.</p></div>
+                        <button type="button" onclick="switchPage('perawatChoice', null)" class="px-4 py-2 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 font-medium"><i class="fas fa-arrow-left mr-2"></i>Pilihan Data Pegawai</button>
+                    </div>
                     <form id="formPerawat" onsubmit="savePerawat(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div><label>Nama Lengkap</label><input type="text" id="prwNama" required></div>
                         <div><label>NIK</label><input type="text" id="prwNik" required></div>
-                        <div>
-                            <label>Jabatan</label>
-                            <select id="prwJabatan" required>
-                                <option value="Kepala Ruangan">Kepala Ruangan</option>
-                                <option value="Ka.Tim">Ka.Tim</option>
-                                <option value="Perawat Pelaksana">Perawat Pelaksana</option>
-                                <option value="Pramusiwi">Pramusiwi</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label>Pendidikan Terakhir</label>
-                            <select id="prwPendidikan">
-                                <option value="SMA">SMA</option>
-                                <option value="D3 Keperawatan">D3 Keperawatan</option>
-                                <option value="S1 Keperawatan">S1 Keperawatan</option>
-                                <option value="Ners">Ners</option>
-                            </select>
-                        </div>
-                        <div class="md:col-span-2 flex justify-end gap-3 mt-4 border-t pt-6"><button type="button" onclick="resetFormPerawat()" class="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 font-medium transition">Batal</button><button type="submit" class="bg-brand-blue hover:bg-blue-800 text-white px-6 py-2.5 rounded-xl shadow-md font-medium transition flex items-center gap-2"><i class="fas fa-save"></i> Simpan Data</button></div>
+                        <div><label>Jabatan</label><select id="prwJabatan" required><option value="Kepala Ruangan">Kepala Ruangan</option><option value="Ka.Tim">Ka.Tim</option><option value="Perawat Pelaksana">Perawat Pelaksana</option><option value="Pramusiwi">Pramusiwi</option></select></div>
+                        <div><label>Pendidikan Terakhir</label><select id="prwPendidikan"><option value="SMA">SMA</option><option value="D3 Keperawatan">D3 Keperawatan</option><option value="S1 Keperawatan">S1 Keperawatan</option><option value="Ners">Ners</option></select></div>
+                        <div class="md:col-span-2 flex justify-end gap-3 mt-4 border-t pt-6"><button type="button" onclick="resetFormPerawat()" class="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 font-medium">Batal</button><button type="submit" class="bg-brand-blue hover:bg-blue-800 text-white px-6 py-2.5 rounded-xl shadow-md font-medium flex items-center gap-2"><i class="fas fa-save"></i> Simpan Data</button></div>
                     </form>
                 </div>
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-                    <h3 class="font-bold text-xl mb-6 text-brand-dark">Daftar Pegawai</h3>
+                    <h3 class="font-bold text-xl mb-6 text-brand-dark">Daftar Pegawai Dialisis</h3>
                     <div class="overflow-x-auto rounded-xl border border-gray-100"><table class="w-full text-left"><thead><tr><th>Nama</th><th>NIK</th><th>Jabatan</th><th>Pendidikan</th><th class="text-center">Aksi</th></tr></thead><tbody id="listPerawat"></tbody></table></div>
+                </div>
+            </section>
+
+            <section id="perawatCodeBlue" class="page-section">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                        <div><h3 class="font-bold text-xl text-brand-dark">Form Data Pegawai Code Blue</h3><p class="text-sm text-gray-500 mt-1">Data ini terpisah dari pegawai Unit Dialisis dan digunakan pada Inputan Lembur Code Blue.</p></div>
+                        <button type="button" onclick="switchPage('perawatChoice', null)" class="px-4 py-2 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 font-medium"><i class="fas fa-arrow-left mr-2"></i>Pilihan Data Pegawai</button>
+                    </div>
+                    <form id="formCodeBluePegawai" onsubmit="saveCodeBluePegawai(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <input type="hidden" id="cbPegawaiId">
+                        <div><label>Nama Lengkap</label><input type="text" id="cbPegawaiNama" required></div>
+                        <div><label>NIK</label><input type="text" id="cbPegawaiNik" required></div>
+                        <div><label>Jabatan</label><select id="cbPegawaiJabatan" required><option value="Dokter">Dokter</option><option value="Perawat">Perawat</option><option value="Bidan">Bidan</option><option value="Tenaga Kesehatan Lainnya">Tenaga Kesehatan Lainnya</option></select></div>
+                        <div><label>Pendidikan Terakhir</label><input type="text" id="cbPegawaiPendidikan" placeholder="Contoh: Ners / Sp.JP"></div>
+                        <div class="md:col-span-2 flex justify-end gap-3 mt-4 border-t pt-6"><button type="button" onclick="resetFormCodeBluePegawai()" class="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 font-medium">Batal</button><button type="submit" class="bg-rose-500 hover:bg-rose-600 text-white px-6 py-2.5 rounded-xl shadow-md font-medium flex items-center gap-2"><i class="fas fa-save"></i> Simpan Pegawai Code Blue</button></div>
+                    </form>
+                </div>
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+                    <div class="flex justify-between items-center mb-6"><div><h3 class="font-bold text-xl text-brand-dark">Daftar Pegawai Code Blue</h3><p class="text-sm text-gray-500 mt-1">Hanya data dari daftar ini yang muncul pada inputan lembur Code Blue.</p></div><span class="bg-rose-50 text-rose-600 px-3 py-2 rounded-xl text-sm font-bold"><i class="fas fa-heartbeat mr-1"></i> Code Blue</span></div>
+                    <div class="overflow-x-auto rounded-xl border border-gray-100"><table class="w-full text-left"><thead><tr><th>Nama</th><th>NIK</th><th>Jabatan</th><th>Pendidikan</th><th class="text-center">Aksi</th></tr></thead><tbody id="listCodeBluePegawai"></tbody></table></div>
                 </div>
             </section>
             
@@ -1223,7 +1347,7 @@
         
         const database = firebase.database();
 
-        let db = { users: [], nurses: [], patients: [], schedules: [], sessions: [], lemburs: [], bedStatus: {}, photos: [], berkas: [], lockedPeriods: [], loginDisplay: null };
+        let db = { users: [], nurses: [], codeBlueEmployees: [], patients: [], schedules: [], sessions: [], lemburs: [], lemburCodeBlue: [], bedStatus: {}, photos: [], berkas: [], lockedPeriods: [], loginDisplay: null };
         let currentUser = JSON.parse(sessionStorage.getItem('rs_current_user')) || null;
         
         const today = new Date().toISOString().split('T')[0];
@@ -1270,17 +1394,25 @@
             const data = snapshot.val();
             if (data) {
                 db.users = data.users ? Object.values(data.users) : []; 
-                db.nurses = data.nurses ? Object.values(data.nurses) : []; 
+                db.nurses = data.nurses ? Object.values(data.nurses) : [];
+                db.codeBlueEmployees = data.codeBlueEmployees ? Object.values(data.codeBlueEmployees) : [];
+                if (db.codeBlueEmployees.length === 0) {
+                    const legacyCB = db.nurses.filter(n => n.codeBlue === true || n.codeBlue === 'true');
+                    db.codeBlueEmployees = legacyCB.map(n => ({ id: 'cb_' + n.id, nama: n.nama, nik: n.nik, jabatan: n.jabatan || 'Perawat', pendidikan: n.pendidikan || '' }));
+                } 
                 db.patients = data.patients ? Object.values(data.patients) : [];
                 db.schedules = data.schedules ? Object.values(data.schedules) : []; 
                 db.sessions = data.sessions ? Object.values(data.sessions) : []; 
                 db.lemburs = data.lemburs ? Object.values(data.lemburs) : []; 
+                db.lemburCodeBlue = data.lemburCodeBlue ? Object.values(data.lemburCodeBlue) : []; 
                 db.bedStatus = data.bedStatus ? data.bedStatus : getDefaultBedStatus();
                 db.photos = data.photos ? Object.values(data.photos) : [];
                 db.berkas = data.berkas ? Object.values(data.berkas) : []; 
                 db.lockedPeriods = data.lockedPeriods ? Object.values(data.lockedPeriods) : [];
                 
                 db.loginDisplay = data.loginDisplay || { photo: '', title: 'RS Airan Raya Dialisis' };
+                renderLemburCodeBluePerawat();
+                renderLemburCodeBlueList();
 
                 let adminAcc = db.users.find(u => u.username === 'admin');
                 if (adminAcc && adminAcc.status === 'suspended') {
@@ -1550,6 +1682,210 @@
             }
         }
 
+        function openLemburCodeBlue() {
+            document.getElementById('modalLemburCodeBlue').classList.remove('hidden');
+            document.getElementById('cbLmbTgl').value = today;
+            renderLemburCodeBluePerawat();
+            renderLemburCodeBlueList();
+        }
+
+        function closeLemburCodeBlue() {
+            document.getElementById('modalLemburCodeBlue').classList.add('hidden');
+            resetFormLemburCodeBlue();
+        }
+
+        function renderLemburCodeBluePerawat() {
+            const select = document.getElementById('cbLmbPerawat');
+            if (!select) return;
+            const current = select.value;
+            const pegawaiCodeBlue = db.codeBlueEmployees || [];
+            select.innerHTML = '<option value="">-- Pilih Pegawai Code Blue --</option>' + pegawaiCodeBlue.map(n => `<option value="${n.id}">${n.nama}</option>`).join('');
+            if (current && pegawaiCodeBlue.some(n => n.id === current)) select.value = current;
+            if (select.dataset.select2 === '1') {
+                $('#cbLmbPerawat').trigger('change');
+            } else {
+                $('#cbLmbPerawat').select2({ placeholder: '-- Cari Pegawai Code Blue --', allowClear: true, width: '100%', dropdownParent: $('#modalLemburCodeBlue') });
+                select.dataset.select2 = '1';
+            }
+        }
+
+        function hitungDurasiLemburCodeBlue() {
+            const mulai = document.getElementById('cbLmbMulai').value;
+            const selesai = document.getElementById('cbLmbSelesai').value;
+            if (!mulai || !selesai) return;
+            const m = mulai.split(':');
+            const s = selesai.split(':');
+            const startDate = new Date(0, 0, 0, m[0], m[1], 0);
+            const endDate = new Date(0, 0, 0, s[0], s[1], 0);
+            let diff = endDate.getTime() - startDate.getTime();
+            if (diff < 0) diff += 24 * 60 * 60 * 1000;
+            document.getElementById('cbLmbDurasi').value = Number((diff / (1000 * 60 * 60)).toFixed(2));
+        }
+
+        function resetFormLemburCodeBlue() {
+            const form = document.getElementById('formLemburCodeBlue');
+            if (!form) return;
+            form.reset();
+            document.getElementById('cbLmbId').value = '';
+            document.getElementById('cbLmbTgl').value = today;
+            $('#cbLmbPerawat').val(null).trigger('change');
+        }
+
+        function saveLemburCodeBlue(e) {
+            e.preventDefault();
+            const perawatId = document.getElementById('cbLmbPerawat').value;
+            if (!perawatId) return alert('Silakan pilih nama pegawai terlebih dahulu!');
+            const id = document.getElementById('cbLmbId').value || 'cb_' + Date.now();
+            const data = {
+                id,
+                tgl: document.getElementById('cbLmbTgl').value,
+                perawatId,
+                mulai: document.getElementById('cbLmbMulai').value,
+                selesai: document.getElementById('cbLmbSelesai').value,
+                durasi: document.getElementById('cbLmbDurasi').value,
+                ket: document.getElementById('cbLmbKet').value,
+                jenis: 'Code Blue'
+            };
+            if (!db.lemburCodeBlue) db.lemburCodeBlue = [];
+            const index = db.lemburCodeBlue.findIndex(x => x.id === id);
+            if (index >= 0) db.lemburCodeBlue[index] = data;
+            else db.lemburCodeBlue.push(data);
+            saveData('lemburCodeBlue');
+            resetFormLemburCodeBlue();
+            renderLemburCodeBlueList();
+            alert('Data lembur Code Blue berhasil disimpan.');
+        }
+
+        function editLemburCodeBlue(id) {
+            const l = (db.lemburCodeBlue || []).find(x => x.id === id);
+            if (!l) return;
+            document.getElementById('cbLmbId').value = l.id;
+            document.getElementById('cbLmbTgl').value = l.tgl;
+            renderLemburCodeBluePerawat();
+            $('#cbLmbPerawat').val(l.perawatId).trigger('change');
+            document.getElementById('cbLmbMulai').value = l.mulai;
+            document.getElementById('cbLmbSelesai').value = l.selesai;
+            document.getElementById('cbLmbDurasi').value = l.durasi;
+            document.getElementById('cbLmbKet').value = l.ket;
+        }
+
+        function hapusLemburCodeBlue(id) {
+            if (!confirm('Yakin ingin menghapus data lembur Code Blue ini?')) return;
+            db.lemburCodeBlue = (db.lemburCodeBlue || []).filter(x => x.id !== id);
+            saveData('lemburCodeBlue');
+            renderLemburCodeBlueList();
+        }
+
+        function renderLemburCodeBlueList() {
+            const tbody = document.getElementById('listLemburCodeBlue');
+            if (!tbody) return;
+            const data = [...(db.lemburCodeBlue || [])].sort((a,b) => new Date(b.tgl) - new Date(a.tgl));
+            if (!data.length) {
+                tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-gray-400">Belum ada data lembur Code Blue</td></tr>';
+                return;
+            }
+            tbody.innerHTML = data.map((l, i) => {
+                const nama = db.nurses.find(x => x.id === l.perawatId)?.nama || '-';
+                return `<tr class="border-t border-gray-100 hover:bg-gray-50"><td class="p-3">${i+1}</td><td class="p-3">${formatDateIndo(l.tgl)}</td><td class="p-3 font-semibold">${nama}</td><td class="p-3">${l.mulai} - ${l.selesai}</td><td class="p-3 font-bold text-brand-blue">${l.durasi} jam</td><td class="p-3">${l.ket || '-'}</td><td class="p-3 text-center whitespace-nowrap"><button type="button" onclick="editLemburCodeBlue('${l.id}')" class="text-brand-blue bg-blue-50 hover:bg-blue-100 p-1.5 rounded mr-1"><i class="fas fa-edit"></i></button><button type="button" onclick="hapusLemburCodeBlue('${l.id}')" class="text-rose-500 bg-rose-50 hover:bg-rose-100 p-1.5 rounded"><i class="fas fa-trash"></i></button></td></tr>`;
+            }).join('');
+        }
+
+        function openAuthExportCodeBlue() {
+            const modal = document.getElementById('modalAuthExportCodeBlue');
+            const form = document.getElementById('formAuthExportCodeBlue');
+            if (form) form.reset();
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                setTimeout(() => document.getElementById('exportCBUsername')?.focus(), 100);
+            }
+        }
+
+        function closeAuthExportCodeBlue() {
+            const modal = document.getElementById('modalAuthExportCodeBlue');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function toggleExportCBPassword() {
+            const input = document.getElementById('exportCBPassword');
+            const icon = document.getElementById('iconExportCBPassword');
+            if (!input || !icon) return;
+            input.type = input.type === 'password' ? 'text' : 'password';
+            icon.className = input.type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+        }
+
+        function authorizeExportCodeBlue(e) {
+            e.preventDefault();
+            const username = (document.getElementById('exportCBUsername')?.value || '').trim();
+            const password = document.getElementById('exportCBPassword')?.value || '';
+            const admin = (db.users || []).find(u => u.username === username);
+
+            if (!admin) {
+                alert('Username Admin tidak ditemukan.');
+                return;
+            }
+            if (admin.status === 'suspended') {
+                alert('Akun Admin sedang ditangguhkan.');
+                return;
+            }
+            if (admin.role !== 'Admin') {
+                alert('Akses ditolak. Export Buku Lembur Code Blue hanya dapat dilakukan oleh Admin.');
+                return;
+            }
+            if (admin.password !== password) {
+                alert('Password Admin salah.');
+                return;
+            }
+
+            closeAuthExportCodeBlue();
+            downloadPDFLemburCodeBlue();
+        }
+
+        function downloadPDFLemburCodeBlue() {
+            const data = [...(db.lemburCodeBlue || [])].sort((a,b) => new Date(a.tgl) - new Date(b.tgl));
+            if (!data.length) return alert('Belum ada data lembur Code Blue untuk dibuat PDF!');
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4');
+            const monthNames = ['JANUARI','FEBRUARI','MARET','APRIL','MEI','JUNI','JULI','AGUSTUS','SEPTEMBER','OKTOBER','NOVEMBER','DESEMBER'];
+            const firstDate = new Date(data[0].tgl);
+            const namaBulan = prompt('Masukkan nama BULAN untuk judul laporan PDF:', monthNames[firstDate.getMonth()]);
+            if (namaBulan === null) return;
+            const logoData = getBase64Logo();
+            if (logoData) doc.addImage(logoData, 'PNG', 14, 12, 18, 18);
+            doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.setTextColor(0,0,0);
+            doc.text('RUMAH SAKIT AIRAN RAYA', 35, 18);
+            doc.setFontSize(9); doc.text('WAY HUWI - LAMPUNG SELATAN', 35, 23); doc.text('TELP (0721) 5617799', 35, 28);
+            doc.setLineWidth(0.5); doc.line(14, 35, 196, 35); doc.setLineWidth(1); doc.line(14, 36, 196, 36);
+            doc.setFontSize(14); doc.text('SURAT PERINTAH LEMBUR CODE BLUE', 105, 45, {align:'center'});
+            doc.setFontSize(11); doc.text('BULAN', 14, 55); doc.text(':', 30, 55); doc.text(String(namaBulan).toUpperCase(), 33, 55);
+            doc.text('UNIT', 14, 61); doc.text(':', 30, 61); doc.text('CODE BLUE', 33, 61);
+            doc.setFont('helvetica','normal'); doc.setFontSize(10);
+            doc.text(doc.splitTextToSize('Dengan surat ini, kami menugaskan beberapa karyawan di bawah ini untuk melakukan pekerjaan lembur Code Blue sesuai dengan rincian di bawah ini :', 182), 14, 70);
+            let startY = 80;
+            const grouped = {};
+            data.forEach(l => { (grouped[l.perawatId] ||= []).push(l); });
+            for (const pId in grouped) {
+                const pNama = (db.codeBlueEmployees || []).find(x => x.id === pId)?.nama || db.nurses.find(x => x.id === pId)?.nama || 'Unknown';
+                const rows = []; let total = 0;
+                grouped[pId].forEach((l, idx) => { const d = parseFloat(l.durasi)||0; total += d; rows.push([idx+1, idx===0 ? {rowSpan:grouped[pId].length,content:pNama,styles:{valign:'middle',fontStyle:'bold'}} : '', formatDateIndo(l.tgl), l.mulai, l.selesai, Number(d.toFixed(2)), l.ket || '-']); });
+                rows.push([{content:'TOTAL JAM LEMBUR',colSpan:5,styles:{halign:'right',fontStyle:'bold',fillColor:[230,230,230]}},{content:Number(total.toFixed(2)),styles:{halign:'center',fontStyle:'bold',fillColor:[230,230,230]}},{content:'',styles:{fillColor:[230,230,230]}}]);
+                if (startY > 255) { doc.addPage(); startY = 20; }
+                doc.autoTable({head:[['NO','NAMA PEGAWAI','TANGGAL','JAM MULAI','JAM SELESAI','TOTAL (JAM)','KEPERLUAN']],body:rows,startY,theme:'grid',styles:{fontSize:9,textColor:[0,0,0],lineColor:[0,0,0],lineWidth:0.2},headStyles:{fillColor:[211,211,211],textColor:[0,0,0],fontStyle:'bold',halign:'center'},columnStyles:{0:{cellWidth:10,halign:'center'},1:{cellWidth:35,valign:'middle'},2:{cellWidth:22,halign:'center'},3:{cellWidth:22,halign:'center'},4:{cellWidth:22,halign:'center'},5:{cellWidth:22,halign:'center'},6:{cellWidth:49}}});
+                startY = doc.lastAutoTable.finalY + 8;
+            }
+            if (startY > 195) { doc.addPage(); startY = 20; }
+            const now = new Date(); const monthIndo=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+            doc.setFontSize(10); doc.setFont('helvetica','normal');
+            doc.text('Demikian surat tugas lembur Code Blue ini disampaikan. Atas perhatian dan kerjasamanya diucapkan terimakasih.',14,startY);
+            doc.text(`WAY HUWI, ${String(now.getDate()).padStart(2,'0')} ${monthIndo[now.getMonth()]} ${now.getFullYear()}`,105,startY+12,{align:'center'});
+            doc.text('Mengetahui,',55,startY+25,{align:'center'}); doc.text('Kasie / Kasubag',55,startY+30,{align:'center'}); doc.setFont('helvetica','bold'); doc.text('Ns. Forna Apriyani, S.Kep.',55,startY+50,{align:'center'});
+            doc.setFont('helvetica','normal'); doc.text('Menyetujui,',155,startY+25,{align:'center'}); doc.text('Kabid Pelayanan Medis',155,startY+30,{align:'center'}); doc.setFont('helvetica','bold'); doc.text('dr. Titi Multi Sari, M.M',155,startY+50,{align:'center'});
+            doc.save(`Surat_Perintah_Lembur_Code_Blue_${String(namaBulan).toUpperCase()}.pdf`);
+        }
+
         function downloadPDFLembur() {
             let tglMulai = document.getElementById('filterTglMulai').value;
             let tglAkhir = document.getElementById('filterTglAkhir').value;
@@ -1793,7 +2129,7 @@
             let activeSection = document.querySelector('.page-section.active')?.id || 'dashboard';
             
             let sectionAccess = {
-                'Admin': ['dashboard', 'akun', 'pasien', 'perawat', 'jadwal', 'lembur', 'statusMesin', 'galeri', 'berkas'],
+                'Admin': ['dashboard', 'akun', 'pasien', 'perawatChoice', 'perawat', 'perawatCodeBlue', 'jadwal', 'lembur', 'statusMesin', 'galeri', 'berkas'],
                 'Ka Tim': ['dashboard', 'pasien', 'jadwal', 'lembur', 'statusMesin', 'galeri', 'berkas'],
                 'Perawat': ['dashboard', 'jadwal', 'lembur', 'galeri', 'berkas'],
                 'Pramusiwi': ['dashboard', 'lembur', 'galeri']
@@ -1809,7 +2145,7 @@
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active')); 
             document.getElementById(pageId).classList.add('active');
             
-            const titles = { 'dashboard': 'Dashboard Utama', 'akun': 'Manajemen Akun Sistem', 'pasien': 'Master Data Pasien', 'perawat': 'Data Pegawai', 'jadwal': 'Jadwal Harian', 'lembur': 'Buku Lembur Pegawai', 'statusMesin': 'Status Denah Mesin', 'galeri': 'Galeri Dokumentasi Kegiatan', 'berkas': 'Arsip Dokumen & Rekam Medis' };
+            const titles = { 'dashboard': 'Dashboard Utama', 'akun': 'Manajemen Akun Sistem', 'pasien': 'Master Data Pasien', 'perawatChoice': 'Pilihan Data Pegawai', 'perawat': 'Data Pegawai Dialisis', 'perawatCodeBlue': 'Data Pegawai Code Blue', 'jadwal': 'Jadwal Harian', 'lembur': 'Buku Lembur Pegawai', 'statusMesin': 'Status Denah Mesin', 'galeri': 'Galeri Dokumentasi Kegiatan', 'berkas': 'Arsip Dokumen & Rekam Medis' };
             document.getElementById('pageTitle').innerText = titles[pageId]; 
             
             const btnBack = document.getElementById('btnBackToMenu');
@@ -1953,40 +2289,45 @@
         function hapusAkun(username) { if(username === currentUser.username) return alert('Tidak bisa menghapus akun sendiri!'); if(confirm(`Yakin hapus akun "${username}"?`)) { db.users = db.users.filter(x => x.username !== username); saveData('users'); } }
         function aktifkanAkun(username) { let u = db.users.find(x => x.username === username); if(u && confirm(`Aktifkan akun "${username}"?`)) { u.status = 'active'; u.attempts = 0; saveData('users'); alert(`Akun diaktifkan!`); } }
 
-        function savePerawat(e) { e.preventDefault(); let data = { nama: document.getElementById('prwNama').value, nik: document.getElementById('prwNik').value, jabatan: document.getElementById('prwJabatan').value, pendidikan: document.getElementById('prwPendidikan').value }; data.id = Date.now().toString(); db.nurses.push(data); resetFormPerawat(); saveData('nurses'); alert('Pegawai baru ditambahkan!'); }
-        
-        function editPerawat(id) { 
-            let p = db.nurses.find(x => x.id === id); 
-            if(p) { 
-                document.getElementById('editPrwId').value = p.id; 
-                document.getElementById('editPrwNama').value = p.nama; 
-                document.getElementById('editPrwNik').value = p.nik; 
-                document.getElementById('editPrwJabatan').value = p.jabatan; 
-                document.getElementById('editPrwPendidikan').value = p.pendidikan; 
-                document.getElementById('modalEditPerawat').classList.remove('hidden');
-            } 
+        function savePerawat(e) {
+            e.preventDefault();
+            let data = { nama: document.getElementById('prwNama').value, nik: document.getElementById('prwNik').value, jabatan: document.getElementById('prwJabatan').value, pendidikan: document.getElementById('prwPendidikan').value };
+            data.id = Date.now().toString();
+            db.nurses.push(data);
+            resetFormPerawat(); saveData('nurses'); alert('Pegawai Dialisis baru ditambahkan!');
+        }
+        function editPerawat(id) {
+            let p = db.nurses.find(x => x.id === id);
+            if(p) {
+                document.getElementById('editPrwId').value = p.id; document.getElementById('editPrwNama').value = p.nama; document.getElementById('editPrwNik').value = p.nik; document.getElementById('editPrwJabatan').value = p.jabatan; document.getElementById('editPrwPendidikan').value = p.pendidikan; document.getElementById('modalEditPerawat').classList.remove('hidden');
+            }
         }
         function closeModalEditPerawat() { document.getElementById('modalEditPerawat').classList.add('hidden'); }
-        function saveEditPerawat(e) { 
-            e.preventDefault(); 
-            let id = document.getElementById('editPrwId').value; 
-            let data = { 
-                nama: document.getElementById('editPrwNama').value, 
-                nik: document.getElementById('editPrwNik').value, 
-                jabatan: document.getElementById('editPrwJabatan').value, 
-                pendidikan: document.getElementById('editPrwPendidikan').value 
-            }; 
-            let index = db.nurses.findIndex(x => x.id === id); 
-            if(index !== -1) { 
-                db.nurses[index] = { ...db.nurses[index], ...data }; 
-                saveData('nurses'); 
-                closeModalEditPerawat();
-                alert('Data Pegawai Berhasil Diperbarui!'); 
-            } 
+        function saveEditPerawat(e) {
+            e.preventDefault(); let id = document.getElementById('editPrwId').value;
+            let data = { nama: document.getElementById('editPrwNama').value, nik: document.getElementById('editPrwNik').value, jabatan: document.getElementById('editPrwJabatan').value, pendidikan: document.getElementById('editPrwPendidikan').value };
+            let index = db.nurses.findIndex(x => x.id === id); if(index !== -1) { db.nurses[index] = { ...db.nurses[index], ...data }; saveData('nurses'); closeModalEditPerawat(); alert('Data Pegawai Dialisis Berhasil Diperbarui!'); }
         }
-        function hapusPerawat(id) { if(confirm('Yakin hapus?')) { db.nurses = db.nurses.filter(x => x.id !== id); saveData('nurses'); } }
+        function hapusPerawat(id) { if(confirm('Yakin hapus pegawai Dialisis ini?')) { db.nurses = db.nurses.filter(x => x.id !== id); saveData('nurses'); } }
         function resetFormPerawat() { document.getElementById('formPerawat').reset(); }
-        
+
+        function saveCodeBluePegawai(e) {
+            e.preventDefault();
+            const id = document.getElementById('cbPegawaiId').value;
+            const data = { nama: document.getElementById('cbPegawaiNama').value, nik: document.getElementById('cbPegawaiNik').value, jabatan: document.getElementById('cbPegawaiJabatan').value, pendidikan: document.getElementById('cbPegawaiPendidikan').value };
+            if (!db.codeBlueEmployees) db.codeBlueEmployees = [];
+            if (id) { const idx = db.codeBlueEmployees.findIndex(x => x.id === id); if (idx !== -1) db.codeBlueEmployees[idx] = { ...db.codeBlueEmployees[idx], ...data }; }
+            else { data.id = 'cb_' + Date.now().toString(); db.codeBlueEmployees.push(data); }
+            resetFormCodeBluePegawai(); saveData('codeBlueEmployees'); alert('Data Pegawai Code Blue berhasil disimpan!');
+        }
+        function editCodeBluePegawai(id) {
+            const p = (db.codeBlueEmployees || []).find(x => x.id === id); if (!p) return;
+            document.getElementById('cbPegawaiId').value = p.id; document.getElementById('cbPegawaiNama').value = p.nama || ''; document.getElementById('cbPegawaiNik').value = p.nik || ''; document.getElementById('cbPegawaiJabatan').value = p.jabatan || 'Perawat'; document.getElementById('cbPegawaiPendidikan').value = p.pendidikan || '';
+            switchPage('perawatCodeBlue', null);
+        }
+        function hapusCodeBluePegawai(id) { if(confirm('Yakin hapus pegawai Code Blue ini?')) { db.codeBlueEmployees = (db.codeBlueEmployees || []).filter(x => x.id !== id); saveData('codeBlueEmployees'); } }
+        function resetFormCodeBluePegawai() { const f=document.getElementById('formCodeBluePegawai'); if(f) f.reset(); document.getElementById('cbPegawaiId').value=''; }
+
         function savePasien(e) { 
             e.preventDefault(); 
             let data = { 
@@ -2492,7 +2833,8 @@
             $('#jdwPasien').select2({ placeholder: '-- Pilih Pasien --', allowClear: true, width: '100%' });
             $('#editJdwPasien').select2({ placeholder: '-- Pilih Pasien --', allowClear: true, width: '100%', dropdownParent: $('#modalEditJadwal') });
 
-            document.getElementById('listPerawat').innerHTML = db.nurses.map(n => `<tr><td class="p-4 font-medium">${n.nama}</td><td class="p-4 text-gray-500">${n.nik}</td><td class="p-4"><span class="bg-indigo-50 text-indigo-700 px-2 py-1 rounded text-xs">${n.jabatan}</span></td><td class="p-4 text-gray-600">${n.pendidikan}</td><td class="p-4 text-center"><button onclick="editPerawat('${n.id}')" class="text-brand-blue bg-blue-50 hover:bg-blue-100 p-2 rounded-lg mr-2 transition"><i class="fas fa-edit"></i></button><button onclick="hapusPerawat('${n.id}')" class="text-rose-500 bg-rose-50 hover:bg-rose-100 p-2 rounded-lg transition"><i class="fas fa-trash"></i></button></td></tr>`).join('') || '<tr><td colspan="5" class="p-8 text-center text-gray-400">Belum ada data</td></tr>';
+            document.getElementById('listPerawat').innerHTML = db.nurses.map(n => `<tr><td class="p-4 font-medium">${n.nama}</td><td class="p-4 text-gray-500">${n.nik}</td><td class="p-4"><span class="bg-indigo-50 text-indigo-700 px-2 py-1 rounded text-xs">${n.jabatan}</span></td><td class="p-4 text-gray-600">${n.pendidikan || '-'}</td><td class="p-4 text-center"><button onclick="editPerawat('${n.id}')" class="text-brand-blue bg-blue-50 hover:bg-blue-100 p-2 rounded-lg mr-2 transition"><i class="fas fa-edit"></i></button><button onclick="hapusPerawat('${n.id}')" class="text-rose-500 bg-rose-50 hover:bg-rose-100 p-2 rounded-lg transition"><i class="fas fa-trash"></i></button></td></tr>`).join('') || '<tr><td colspan="5" class="p-8 text-center text-gray-400">Belum ada data pegawai Dialisis</td></tr>';
+            document.getElementById('listCodeBluePegawai').innerHTML = (db.codeBlueEmployees || []).map(n => `<tr><td class="p-4 font-medium">${n.nama}</td><td class="p-4 text-gray-500">${n.nik}</td><td class="p-4"><span class="bg-rose-50 text-rose-700 px-2 py-1 rounded text-xs">${n.jabatan}</span></td><td class="p-4 text-gray-600">${n.pendidikan || '-'}</td><td class="p-4 text-center"><button onclick="editCodeBluePegawai('${n.id}')" class="text-brand-blue bg-blue-50 hover:bg-blue-100 p-2 rounded-lg mr-2 transition"><i class="fas fa-edit"></i></button><button onclick="hapusCodeBluePegawai('${n.id}')" class="text-rose-500 bg-rose-50 hover:bg-rose-100 p-2 rounded-lg transition"><i class="fas fa-trash"></i></button></td></tr>`).join('') || '<tr><td colspan="5" class="p-8 text-center text-gray-400">Belum ada data pegawai Code Blue</td></tr>';
             
             let isAdminOrKaTim = (currentUser.role === 'Admin' || currentUser.role === 'Ka Tim');
             document.getElementById('listPasien').innerHTML = db.patients.map(p => {
