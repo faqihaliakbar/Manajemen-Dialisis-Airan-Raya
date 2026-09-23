@@ -98,13 +98,16 @@
         .bed-box:hover { transform: translateY(-3px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
 
         .dash-menu-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .mobile-nav-drawer { transform: translateX(-110%); transition: transform .25s ease; }
+        .mobile-nav-drawer.open { transform: translateX(0); }
+        @media (min-width: 768px) { .mobile-nav-trigger, .mobile-nav-drawer, .mobile-nav-backdrop { display:none !important; } }
     </style>
 </head>
 <body class="bg-gray-50 flex h-screen overflow-hidden text-sm font-sans text-gray-700 relative">
 
     <img id="logoPdfLembur" src="11.png" style="display:none;" crossorigin="anonymous">
 
-    <div id="modalAuthExportCodeBlue" class="fixed inset-0 bg-black/70 z-[10000] hidden items-center justify-center backdrop-blur-sm px-4">
+    <div id="modalAuthExportCodeBlue" class="fixed inset-0 bg-black/70 z-[10000] hidden items-start justify-center backdrop-blur-sm px-4 pt-6 md:pt-10">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-emerald-100 overflow-hidden">
             <div class="bg-gradient-to-r from-brand-dark to-emerald-700 px-6 py-5 text-white flex items-center justify-between">
                 <div>
@@ -116,7 +119,7 @@
             <form id="formAuthExportCodeBlue" onsubmit="authorizeExportCodeBlue(event)" class="p-6 space-y-4">
                 <div>
                     <label>Username Admin</label>
-                    <input type="text" id="exportCBUsername" autocomplete="username" placeholder="Masukkan username admin" required>
+                    <select id="exportCBUsername" required><option value="">-- Pilih Akun Admin --</option></select>
                 </div>
                 <div>
                     <label>Sandi / Password</label>
@@ -712,6 +715,18 @@
         </div>
     </div>
 
+    <div id="mobile-nav-backdrop" class="mobile-nav-backdrop hidden fixed inset-0 bg-black/50 z-[90]" onclick="toggleMobileNav(false)"></div>
+    <div id="mobile-nav-drawer" class="mobile-nav-drawer fixed left-0 top-0 bottom-0 w-72 max-w-[85vw] gradient-sidebar text-white z-[100] shadow-2xl overflow-y-auto">
+        <div class="p-5 border-b border-white/10 flex items-center justify-between">
+            <div><div class="font-bold text-lg">RS Airan Raya</div><div class="text-xs text-brand-neon">Navigasi Sistem</div></div>
+            <button type="button" onclick="toggleMobileNav(false)" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="mobile-nav-menu" class="p-3 space-y-1"></div>
+        <div class="p-4 border-t border-white/10 mt-3">
+            <button type="button" onclick="handleLogout()" class="w-full bg-red-500/10 hover:bg-red-500 text-red-300 hover:text-white border border-red-500/30 py-2.5 rounded-lg text-sm font-medium"><i class="fas fa-sign-out-alt mr-2"></i> Logout</button>
+        </div>
+    </div>
+
     <aside class="w-64 gradient-sidebar text-gray-100 flex flex-col h-full shadow-2xl z-20 shrink-0">
         <div class="p-6 flex flex-col items-center justify-center border-b border-white/10 relative overflow-hidden">
             <div class="absolute -right-4 -top-4 w-20 h-20 bg-brand-neon/20 rounded-full blur-xl"></div>
@@ -738,6 +753,7 @@
 
     <main class="flex-1 flex flex-col h-full overflow-hidden relative">
         <header class="bg-white/80 backdrop-blur-md shadow-sm border-b border-gray-100 px-8 py-4 flex justify-between items-center z-10 sticky top-0">
+            <button type="button" onclick="toggleMobileNav(true)" class="mobile-nav-trigger md:hidden fixed left-4 top-3 w-11 h-11 rounded-xl bg-brand-dark text-white shadow-lg flex items-center justify-center z-[80]" aria-label="Buka menu navigasi"><i class="fas fa-bars"></i></button>
             <div class="flex items-center gap-4">
                 <button id="btnBackToMenu" onclick="switchPage('dashboard', null)" class="hidden bg-gray-50 hover:bg-gray-200 text-gray-600 border border-gray-200 w-10 h-10 rounded-full flex items-center justify-center transition-all shadow-sm">
                     <i class="fas fa-arrow-left"></i>
@@ -1694,10 +1710,31 @@
             resetFormLemburCodeBlue();
         }
 
+        function getCodeBlueEmployeeName(id, fallbackName='-') {
+            const cb = db.codeBlueEmployees || [];
+            const nurses = db.nurses || [];
+            const direct = cb.find(x => x.id === id);
+            if (direct?.nama) return direct.nama;
+            const nurse = nurses.find(x => x.id === id);
+            if (nurse?.nama) return nurse.nama;
+            const stripped = String(id || '').replace(/^cb_/, '');
+            const legacy = cb.find(x => x.id === stripped || String(x.id).replace(/^cb_/, '') === stripped);
+            if (legacy?.nama) return legacy.nama;
+            return fallbackName || '-';
+        }
+
+        function resolveCodeBlueEmployeeId(id) {
+            const cb = db.codeBlueEmployees || [];
+            if (cb.some(x => x.id === id)) return id;
+            const stripped = String(id || '').replace(/^cb_/, '');
+            const match = cb.find(x => String(x.id).replace(/^cb_/, '') === stripped);
+            return match?.id || id;
+        }
+
         function renderLemburCodeBluePerawat() {
             const select = document.getElementById('cbLmbPerawat');
             if (!select) return;
-            const current = select.value;
+            const current = resolveCodeBlueEmployeeId(select.value);
             const pegawaiCodeBlue = db.codeBlueEmployees || [];
             select.innerHTML = '<option value="">-- Pilih Pegawai Code Blue --</option>' + pegawaiCodeBlue.map(n => `<option value="${n.id}">${n.nama}</option>`).join('');
             if (current && pegawaiCodeBlue.some(n => n.id === current)) select.value = current;
@@ -1733,13 +1770,14 @@
 
         function saveLemburCodeBlue(e) {
             e.preventDefault();
-            const perawatId = document.getElementById('cbLmbPerawat').value;
+            const perawatId = resolveCodeBlueEmployeeId(document.getElementById('cbLmbPerawat').value);
             if (!perawatId) return alert('Silakan pilih nama pegawai terlebih dahulu!');
             const id = document.getElementById('cbLmbId').value || 'cb_' + Date.now();
             const data = {
                 id,
                 tgl: document.getElementById('cbLmbTgl').value,
                 perawatId,
+                perawatNama: getCodeBlueEmployeeName(perawatId),
                 mulai: document.getElementById('cbLmbMulai').value,
                 selesai: document.getElementById('cbLmbSelesai').value,
                 durasi: document.getElementById('cbLmbDurasi').value,
@@ -1762,7 +1800,7 @@
             document.getElementById('cbLmbId').value = l.id;
             document.getElementById('cbLmbTgl').value = l.tgl;
             renderLemburCodeBluePerawat();
-            $('#cbLmbPerawat').val(l.perawatId).trigger('change');
+            $('#cbLmbPerawat').val(resolveCodeBlueEmployeeId(l.perawatId)).trigger('change');
             document.getElementById('cbLmbMulai').value = l.mulai;
             document.getElementById('cbLmbSelesai').value = l.selesai;
             document.getElementById('cbLmbDurasi').value = l.durasi;
@@ -1785,15 +1823,28 @@
                 return;
             }
             tbody.innerHTML = data.map((l, i) => {
-                const nama = db.nurses.find(x => x.id === l.perawatId)?.nama || '-';
+                const nama = getCodeBlueEmployeeName(l.perawatId, l.perawatNama);
                 return `<tr class="border-t border-gray-100 hover:bg-gray-50"><td class="p-3">${i+1}</td><td class="p-3">${formatDateIndo(l.tgl)}</td><td class="p-3 font-semibold">${nama}</td><td class="p-3">${l.mulai} - ${l.selesai}</td><td class="p-3 font-bold text-brand-blue">${l.durasi} jam</td><td class="p-3">${l.ket || '-'}</td><td class="p-3 text-center whitespace-nowrap"><button type="button" onclick="editLemburCodeBlue('${l.id}')" class="text-brand-blue bg-blue-50 hover:bg-blue-100 p-1.5 rounded mr-1"><i class="fas fa-edit"></i></button><button type="button" onclick="hapusLemburCodeBlue('${l.id}')" class="text-rose-500 bg-rose-50 hover:bg-rose-100 p-1.5 rounded"><i class="fas fa-trash"></i></button></td></tr>`;
             }).join('');
         }
 
         function openAuthExportCodeBlue() {
+            // Tutup popup Inputan Lembur Code Blue terlebih dahulu agar popup
+            // verifikasi Admin tidak bertumpuk dengan popup sebelumnya.
+            const inputModal = document.getElementById('modalLemburCodeBlue');
+            if (inputModal) {
+                inputModal.classList.add('hidden');
+                inputModal.classList.remove('flex');
+            }
+
             const modal = document.getElementById('modalAuthExportCodeBlue');
             const form = document.getElementById('formAuthExportCodeBlue');
             if (form) form.reset();
+            const userSelect = document.getElementById('exportCBUsername');
+            if (userSelect) {
+                const admins = (db.users || []).filter(u => u.role === 'Admin' && u.status !== 'suspended');
+                userSelect.innerHTML = '<option value="">-- Pilih Akun Admin --</option>' + admins.map(u => `<option value="${u.username}">${u.username} - ${u.nama || 'Admin'}</option>`).join('');
+            }
             if (modal) {
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
@@ -1836,10 +1887,19 @@
                 return;
             }
             if (admin.password !== password) {
-                alert('Password Admin salah.');
+                admin.attempts = (admin.attempts || 0) + 1;
+                if (admin.attempts >= 3) {
+                    admin.status = 'suspended';
+                    saveData('users');
+                    alert('Akun Admin ditangguhkan setelah 3 kali password salah.');
+                } else {
+                    saveData('users');
+                    alert(`Password salah! Sisa percobaan: ${3 - admin.attempts}`);
+                }
                 return;
             }
-
+            admin.attempts = 0;
+            saveData('users');
             closeAuthExportCodeBlue();
             downloadPDFLemburCodeBlue();
         }
@@ -1853,36 +1913,115 @@
             const firstDate = new Date(data[0].tgl);
             const namaBulan = prompt('Masukkan nama BULAN untuk judul laporan PDF:', monthNames[firstDate.getMonth()]);
             if (namaBulan === null) return;
+
+            // Format dibuat mengikuti Buku Lembur Dialisis, dengan Perihal Code Blue.
             const logoData = getBase64Logo();
-            if (logoData) doc.addImage(logoData, 'PNG', 14, 12, 18, 18);
-            doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.setTextColor(0,0,0);
+            if (logoData) { doc.addImage(logoData, 'PNG', 14, 12, 18, 18); }
+
+            doc.setFontSize(11);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(0,0,0);
             doc.text('RUMAH SAKIT AIRAN RAYA', 35, 18);
-            doc.setFontSize(9); doc.text('WAY HUWI - LAMPUNG SELATAN', 35, 23); doc.text('TELP (0721) 5617799', 35, 28);
-            doc.setLineWidth(0.5); doc.line(14, 35, 196, 35); doc.setLineWidth(1); doc.line(14, 36, 196, 36);
-            doc.setFontSize(14); doc.text('SURAT PERINTAH LEMBUR CODE BLUE', 105, 45, {align:'center'});
-            doc.setFontSize(11); doc.text('BULAN', 14, 55); doc.text(':', 30, 55); doc.text(String(namaBulan).toUpperCase(), 33, 55);
-            doc.text('UNIT', 14, 61); doc.text(':', 30, 61); doc.text('CODE BLUE', 33, 61);
-            doc.setFont('helvetica','normal'); doc.setFontSize(10);
-            doc.text(doc.splitTextToSize('Dengan surat ini, kami menugaskan beberapa karyawan di bawah ini untuk melakukan pekerjaan lembur Code Blue sesuai dengan rincian di bawah ini :', 182), 14, 70);
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'normal');
+            doc.text('JL AIRAN RAYA NO 99 WAY HUI', 35, 22);
+            doc.text('LAMPUNG SELATAN', 35, 27);
+            doc.text('TELP (0721) 5617799', 35, 32);
+
+            doc.setLineWidth(0.5);
+            doc.line(14, 35, 196, 35);
+            doc.setLineWidth(1.0);
+            doc.line(14, 36, 196, 36);
+
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'bold');
+            doc.text('SURAT PERINTAH LEMBUR', 105, 45, {align:'center'});
+
+            doc.setFontSize(11);
+            doc.setFont('helvetica', 'bold');
+            doc.text('BULAN', 14, 55); doc.text(':', 30, 55); doc.text(String(namaBulan).toUpperCase(), 33, 55);
+            doc.text('PERIHAL', 14, 61); doc.text(':', 32, 61); doc.text('CODE BLUE', 38, 61);
+
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(10);
+            const introText = 'Dengan surat ini, kami menugaskan beberapa karyawan di bawah ini untuk melakukan pekerjaan lembur. Pekerjaan lembur dilaksanakan sesuai dengan rincian di bawah ini :';
+            const splitIntro = doc.splitTextToSize(introText, 182);
+            doc.text(splitIntro, 14, 70);
+
             let startY = 80;
             const grouped = {};
             data.forEach(l => { (grouped[l.perawatId] ||= []).push(l); });
+
             for (const pId in grouped) {
-                const pNama = (db.codeBlueEmployees || []).find(x => x.id === pId)?.nama || db.nurses.find(x => x.id === pId)?.nama || 'Unknown';
-                const rows = []; let total = 0;
-                grouped[pId].forEach((l, idx) => { const d = parseFloat(l.durasi)||0; total += d; rows.push([idx+1, idx===0 ? {rowSpan:grouped[pId].length,content:pNama,styles:{valign:'middle',fontStyle:'bold'}} : '', formatDateIndo(l.tgl), l.mulai, l.selesai, Number(d.toFixed(2)), l.ket || '-']); });
-                rows.push([{content:'TOTAL JAM LEMBUR',colSpan:5,styles:{halign:'right',fontStyle:'bold',fillColor:[230,230,230]}},{content:Number(total.toFixed(2)),styles:{halign:'center',fontStyle:'bold',fillColor:[230,230,230]}},{content:'',styles:{fillColor:[230,230,230]}}]);
-                if (startY > 255) { doc.addPage(); startY = 20; }
-                doc.autoTable({head:[['NO','NAMA PEGAWAI','TANGGAL','JAM MULAI','JAM SELESAI','TOTAL (JAM)','KEPERLUAN']],body:rows,startY,theme:'grid',styles:{fontSize:9,textColor:[0,0,0],lineColor:[0,0,0],lineWidth:0.2},headStyles:{fillColor:[211,211,211],textColor:[0,0,0],fontStyle:'bold',halign:'center'},columnStyles:{0:{cellWidth:10,halign:'center'},1:{cellWidth:35,valign:'middle'},2:{cellWidth:22,halign:'center'},3:{cellWidth:22,halign:'center'},4:{cellWidth:22,halign:'center'},5:{cellWidth:22,halign:'center'},6:{cellWidth:49}}});
+                const pNama = getCodeBlueEmployeeName(pId, grouped[pId][0]?.perawatNama || 'Unknown');
+                const dataLembur = grouped[pId].sort((a,b) => new Date(a.tgl) - new Date(b.tgl));
+                const tableRows = [];
+                let totalDurasi = 0;
+
+                dataLembur.forEach((l, idx) => {
+                    const d = parseFloat(l.durasi) || 0;
+                    totalDurasi += d;
+                    const rowData = [idx + 1];
+                    if (idx === 0) {
+                        rowData.push({rowSpan:dataLembur.length, content:pNama, styles:{valign:'middle',fontStyle:'bold'}});
+                    }
+                    rowData.push(formatDateIndo(l.tgl), l.mulai, l.selesai, Number(d.toFixed(2)), l.ket || '-');
+                    tableRows.push(rowData);
+                });
+
+                tableRows.push([
+                    {content:'TOTAL JAM LEMBUR', colSpan:5, styles:{halign:'right',fontStyle:'bold',fillColor:[230,230,230]}},
+                    {content:Number(totalDurasi.toFixed(2)), styles:{halign:'center',fontStyle:'bold',fillColor:[230,230,230]}},
+                    {content:'', styles:{fillColor:[230,230,230]}}
+                ]);
+
+                if (startY > 265) { doc.addPage(); startY = 20; }
+                doc.autoTable({
+                    head:[['NO','NAMA PEGAWAI','TANGGAL','JAM MULAI','JAM SELESAI','TOTAL (JAM)','KEPERLUAN']],
+                    body:tableRows,
+                    startY,
+                    theme:'grid',
+                    styles:{fontSize:9,textColor:[0,0,0],lineColor:[0,0,0],lineWidth:0.2},
+                    headStyles:{fillColor:[211,211,211],textColor:[0,0,0],fontStyle:'bold',halign:'center',lineColor:[0,0,0],lineWidth:0.2},
+                    columnStyles:{
+                        0:{cellWidth:10,halign:'center'},
+                        1:{cellWidth:35,halign:'left',valign:'middle'},
+                        2:{cellWidth:22,halign:'center'},
+                        3:{cellWidth:22,halign:'center'},
+                        4:{cellWidth:22,halign:'center'},
+                        5:{cellWidth:22,halign:'center'},
+                        6:{cellWidth:49,halign:'left'}
+                    }
+                });
                 startY = doc.lastAutoTable.finalY + 8;
             }
+
+            // Bagian penutup mengikuti posisi Buku Lembur Dialisis:
+            // keterangan dan tanggal dibuat di sisi kanan.
             if (startY > 195) { doc.addPage(); startY = 20; }
-            const now = new Date(); const monthIndo=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-            doc.setFontSize(10); doc.setFont('helvetica','normal');
-            doc.text('Demikian surat tugas lembur Code Blue ini disampaikan. Atas perhatian dan kerjasamanya diucapkan terimakasih.',14,startY);
-            doc.text(`WAY HUWI, ${String(now.getDate()).padStart(2,'0')} ${monthIndo[now.getMonth()]} ${now.getFullYear()}`,105,startY+12,{align:'center'});
-            doc.text('Mengetahui,',55,startY+25,{align:'center'}); doc.text('Kasie / Kasubag',55,startY+30,{align:'center'}); doc.setFont('helvetica','bold'); doc.text('Ns. Forna Apriyani, S.Kep.',55,startY+50,{align:'center'});
-            doc.setFont('helvetica','normal'); doc.text('Menyetujui,',155,startY+25,{align:'center'}); doc.text('Kabid Pelayanan Medis',155,startY+30,{align:'center'}); doc.setFont('helvetica','bold'); doc.text('dr. Titi Multi Sari, M.M',155,startY+50,{align:'center'});
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(0,0,0);
+            const splitClose = doc.splitTextToSize('Demikian surat tugas lembur ini disampaikan. Atas perhatian dan kerjasamanya diucapkan terimakasih.', 182);
+            doc.text(splitClose, 14, startY);
+
+            const now = new Date();
+            const monthIndo = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+            const strDate = `WAY HUWI, ${String(now.getDate()).padStart(2,'0')} ${monthIndo[now.getMonth()]} ${now.getFullYear()}`;
+            doc.text(strDate, 155, startY + 12, {align:'center'});
+
+            // Hanya dua pejabat sesuai format Code Blue yang diminta sebelumnya.
+            doc.text('Mengetahui,', 55, startY + 20, {align:'center'});
+            doc.text('Kasie / Kasubag', 55, startY + 25, {align:'center'});
+            doc.setFont('helvetica','bold');
+            doc.text('Ns.Forna Apriyani.S.Kep', 55, startY + 45, {align:'center'});
+
+            doc.setFont('helvetica','normal');
+            doc.text('Menyetujui,', 155, startY + 20, {align:'center'});
+            doc.text('Kabid Pelayanan Medis', 155, startY + 25, {align:'center'});
+            doc.setFont('helvetica','bold');
+            doc.text('dr. Titi Multi Sari, M.M', 155, startY + 45, {align:'center'});
+
             doc.save(`Surat_Perintah_Lembur_Code_Blue_${String(namaBulan).toUpperCase()}.pdf`);
         }
 
@@ -2093,6 +2232,7 @@
         function applyRoleUI() {
             if(!currentUser) return; 
             document.getElementById('userInfoDisplay').innerHTML = `<span class="font-bold text-white tracking-wide">${currentUser.nama}</span><br><span class="text-brand-neon font-medium text-[10px] uppercase">${currentUser.role}</span>`;
+            renderMobileNav();
             
             let adminElements = document.querySelectorAll('.admin-only'); 
             let katimAdminElements = document.querySelectorAll('.katim-admin');
@@ -2141,6 +2281,29 @@
             }
         }
         
+        function toggleMobileNav(open) {
+            const drawer = document.getElementById('mobile-nav-drawer');
+            const backdrop = document.getElementById('mobile-nav-backdrop');
+            if (!drawer || !backdrop) return;
+            if (open) { drawer.classList.add('open'); backdrop.classList.remove('hidden'); }
+            else { drawer.classList.remove('open'); backdrop.classList.add('hidden'); }
+        }
+
+        function renderMobileNav() {
+            const menu = document.getElementById('mobile-nav-menu');
+            if (!menu || !currentUser) return;
+            const items = [
+                ['dashboard','fa-home','Home'], ['jadwal','fa-calendar-alt','Jadwal'], ['lembur','fa-clock','Buku Lembur'],
+                ['galeri','fa-images','Galeri'], ['berkas','fa-folder-open','Berkas']
+            ];
+            if (currentUser.role === 'Admin') {
+                items.push(['pasien','fa-user-injured','Data Pasien'], ['perawatChoice','fa-users','Data Pegawai'], ['akun','fa-user-shield','Manajemen Akun'], ['statusMesin','fa-cogs','Status Mesin']);
+            } else if (currentUser.role === 'Ka Tim') {
+                items.push(['pasien','fa-user-injured','Data Pasien'], ['statusMesin','fa-cogs','Status Mesin']);
+            }
+            menu.innerHTML = items.map(([id,icon,label]) => `<button type="button" onclick="switchPage('${id}',null); toggleMobileNav(false)" class="w-full text-left px-4 py-3 rounded-xl hover:bg-white/10 flex items-center gap-3 transition"><i class="fas ${icon} w-5 text-brand-neon"></i><span>${label}</span></button>`).join('');
+        }
+
         function switchPage(pageId, element) {
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active')); 
             document.getElementById(pageId).classList.add('active');
