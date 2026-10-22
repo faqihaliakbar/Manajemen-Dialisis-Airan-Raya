@@ -1958,16 +1958,33 @@
         function hitungDurasiLembur() { let mulai = document.getElementById('lmbMulai').value; let selesai = document.getElementById('lmbSelesai').value; if(mulai && selesai) { let m = mulai.split(':'); let s = selesai.split(':'); let startDate = new Date(0, 0, 0, m[0], m[1], 0); let endDate = new Date(0, 0, 0, s[0], s[1], 0); let diff = endDate.getTime() - startDate.getTime(); if (diff < 0) { diff += 24 * 60 * 60 * 1000; } let hours = diff / (1000 * 60 * 60); document.getElementById('lmbDurasi').value = Number(hours.toFixed(2)); } }
         function hitungDurasiEditLembur() { let mulai = document.getElementById('editLmbMulai').value; let selesai = document.getElementById('editLmbSelesai').value; if(mulai && selesai) { let m = mulai.split(':'); let s = selesai.split(':'); let startDate = new Date(0, 0, 0, m[0], m[1], 0); let endDate = new Date(0, 0, 0, s[0], s[1], 0); let diff = endDate.getTime() - startDate.getTime(); if (diff < 0) { diff += 24 * 60 * 60 * 1000; } let hours = diff / (1000 * 60 * 60); document.getElementById('editLmbDurasi').value = Number(hours.toFixed(2)); } }
         
+        // Cocokkan akun yang login dengan data pegawai. Akun non-Admin hanya boleh mengelola lemburnya sendiri.
+        function getCurrentUserNurse() {
+            if (!currentUser || !Array.isArray(db.nurses)) return null;
+            const namaAkun = String(currentUser.nama || '').trim().toLocaleLowerCase('id-ID');
+            return db.nurses.find(n => String(n.nama || '').trim().toLocaleLowerCase('id-ID') === namaAkun) || null;
+        }
+
         function saveLembur(e) { 
-            e.preventDefault(); 
+            e.preventDefault();
+            if (!currentUser) return alert('Akses ditolak. Silakan login kembali.');
             let tglInput = document.getElementById('lmbTgl').value;
             if (isDateLocked(tglInput)) return alert('GAGAL: Tanggal ini telah terverifikasi oleh Admin. Data tidak dapat ditambahkan!');
             
-            let id = document.getElementById('lmbId').value; 
-            let data = { tgl: tglInput, perawatId: document.getElementById('lmbPerawat').value, mulai: document.getElementById('lmbMulai').value, selesai: document.getElementById('lmbSelesai').value, durasi: document.getElementById('lmbDurasi').value, ket: document.getElementById('lmbKet').value }; 
-            if(id) { 
-                let index = db.lemburs.findIndex(x => x.id === id); 
-                if(index !== -1) db.lemburs[index] = { ...db.lemburs[index], ...data }; 
+            let id = document.getElementById('lmbId').value;
+            let selectedPerawatId = document.getElementById('lmbPerawat').value;
+            const isAdmin = currentUser.role === 'Admin';
+            const ownNurse = getCurrentUserNurse();
+            if (!isAdmin && (!ownNurse || selectedPerawatId !== ownNurse.id)) {
+                return alert(ownNurse ? 'Akses ditolak: Anda hanya dapat menginput lembur untuk akun/pegawai Anda sendiri.' : 'Akses ditolak: Nama akun Anda belum terhubung dengan data pegawai. Hubungi Admin.');
+            }
+            let data = { tgl: tglInput, perawatId: isAdmin ? selectedPerawatId : ownNurse.id, mulai: document.getElementById('lmbMulai').value, selesai: document.getElementById('lmbSelesai').value, durasi: document.getElementById('lmbDurasi').value, ket: document.getElementById('lmbKet').value }; 
+            if(id) {
+                let index = db.lemburs.findIndex(x => x.id === id);
+                if (index === -1) return alert('Data lembur tidak ditemukan.');
+                const existingNurse = db.nurses.find(n => n.id === db.lemburs[index].perawatId);
+                if (!isAdmin && (!ownNurse || !existingNurse || existingNurse.id !== ownNurse.id)) return alert('Akses ditolak: Anda hanya dapat mengubah data lembur sendiri.');
+                db.lemburs[index] = { ...db.lemburs[index], ...data };
             } else { 
                 data.id = 'lmb_' + Date.now().toString(); 
                 db.lemburs.push(data); 
@@ -2013,8 +2030,15 @@
 
             let index = db.lemburs.findIndex(x => x.id === id);
             if(index !== -1) {
+                const isAdmin = currentUser && currentUser.role === 'Admin';
+                const ownNurse = getCurrentUserNurse();
+                const existingNurse = db.nurses.find(n => n.id === db.lemburs[index].perawatId);
+                const selectedPerawatId = document.getElementById('editLmbPerawat').value;
+                if (!isAdmin && (!ownNurse || !existingNurse || existingNurse.id !== ownNurse.id || selectedPerawatId !== ownNurse.id)) {
+                    return alert('Akses ditolak: Anda hanya dapat mengubah data lembur milik sendiri.');
+                }
                 db.lemburs[index].tgl = tglBaru;
-                db.lemburs[index].perawatId = document.getElementById('editLmbPerawat').value;
+                db.lemburs[index].perawatId = isAdmin ? selectedPerawatId : ownNurse.id;
                 db.lemburs[index].mulai = document.getElementById('editLmbMulai').value;
                 db.lemburs[index].selesai = document.getElementById('editLmbSelesai').value;
                 db.lemburs[index].durasi = document.getElementById('editLmbDurasi').value;
@@ -2594,7 +2618,10 @@
                 return `<tr><td class="p-4 font-semibold text-gray-800">${u.username}</td><td class="p-4">${u.nama}</td><td class="p-4">${passDisplay}</td><td class="p-4"><span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs font-medium">${u.role}</span></td><td class="p-4">${st} <div class="text-[10px] text-gray-400 mt-1.5"><i class="fas fa-shield-alt"></i> ${att}</div></td><td class="p-4 text-center">${actionBtns}</td></tr>`;
             }).join('');
 
-            let allPegawaiOptions = '<option value=""></option>' + db.nurses.map(n => `<option value="${n.id}">${n.nama}</option>`).join('');
+            const isAdminLembur = currentUser.role === 'Admin';
+            const ownNurseLembur = getCurrentUserNurse();
+            const selectableLemburNurses = isAdminLembur ? db.nurses : (ownNurseLembur ? [ownNurseLembur] : []);
+            let allPegawaiOptions = '<option value=""></option>' + selectableLemburNurses.map(n => `<option value="${n.id}">${n.nama}</option>`).join('');
             let pjOptions = '<option value="">-- Pilih Pegawai PJ --</option>' + db.nurses.filter(n => n.jabatan !== 'Pramusiwi').map(n => `<option value="${n.id}">${n.nama}</option>`).join('');
             
             document.getElementById('jdwPerawat').innerHTML = pjOptions; 
@@ -2628,7 +2655,11 @@
                 return `<tr><td class="p-4 font-medium text-gray-600">${s.mesin} ${s.isManual ? ' <span class="text-[10px] uppercase tracking-wider text-rose-500 font-bold block mt-1"><i class="fas fa-bed"></i> '+s.asal+'</span>' : ''}</td><td class="p-4 font-bold text-gray-800">${nama} ${ketRawatInap}</td><td class="p-4 text-gray-500 font-medium">${rm}</td><td class="p-4"><span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs font-semibold mr-2">${shift}</span> <span class="text-sm text-gray-600">${pj}</span></td><td class="p-4"><select onchange="updateStatusJadwal('${s.id}', this)" class="border rounded-lg font-semibold text-xs px-2 py-1.5 w-full cursor-pointer transition ${colorClass}"><option value="Menunggu" ${st === 'Menunggu' ? 'selected' : ''}>Menunggu</option><option value="Running" ${st === 'Running' ? 'selected' : ''}>Running</option><option value="Selesai" ${st === 'Selesai' ? 'selected' : ''}>Selesai</option><option value="Batal" ${st === 'Batal' ? 'selected' : ''}>Batal</option></select></td><td class="p-4 text-center">${aksiBtns}</td></tr>`; 
             }).join('') || '<tr><td colspan="6" class="p-8 text-center text-gray-400">Belum ada jadwal ter-plot hari ini</td></tr>';
 
-            let tglMulai = document.getElementById('filterTglMulai').value; let tglAkhir = document.getElementById('filterTglAkhir').value; let searchKeyword = document.getElementById('searchLemburPerawat') ? document.getElementById('searchLemburPerawat').value.toLowerCase() : ''; let filteredLembur = db.lemburs.filter(l => l.tgl >= tglMulai && l.tgl <= tglAkhir); let groupedUI = {}; filteredLembur.forEach(l => { if(!groupedUI[l.perawatId]) groupedUI[l.perawatId] = []; groupedUI[l.perawatId].push(l); });
+            let tglMulai = document.getElementById('filterTglMulai').value; let tglAkhir = document.getElementById('filterTglAkhir').value; let searchKeyword = document.getElementById('searchLemburPerawat') ? document.getElementById('searchLemburPerawat').value.toLowerCase() : '';
+            const isAdminLihatLembur = currentUser.role === 'Admin';
+            const ownNurseLihatLembur = getCurrentUserNurse();
+            let filteredLembur = db.lemburs.filter(l => l.tgl >= tglMulai && l.tgl <= tglAkhir && (isAdminLihatLembur || (ownNurseLihatLembur && l.perawatId === ownNurseLihatLembur.id)));
+            let groupedUI = {}; filteredLembur.forEach(l => { if(!groupedUI[l.perawatId]) groupedUI[l.perawatId] = []; groupedUI[l.perawatId].push(l); });
             let htmlLembur = ''; let foundData = false;
             
             if (Object.keys(groupedUI).length === 0) { 
